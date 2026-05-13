@@ -30,3 +30,32 @@
 - Summarize information clearly before taking action
 - Always confirm before sending emails or making irreversible changes
 - Remember context within the session to avoid asking the same questions twice
+
+---
+
+## Workflows
+
+### "Plan my day"
+When Peet says "plan my day", follow these steps in order:
+
+1. **Discuss & lock in the schedule** — ask what's on Peet's plate today, suggest time blocks based on preferences (content work 10:30–15:00, deep thinking at night), confirm with Peet before proceeding
+2. **Update Google Calendar** — create events for the agreed schedule via `mcp__b505bb81` tools
+3. **Create a daily note** at `~/context/admin/daily-notes/YYYY/MM-Month/YYYY-MM-DD.md` using today's date
+
+#### Daily note template:
+```markdown
+# Daily Note — YYYY-MM-DD
+
+## Schedule
+
+| เวลา | งาน | สถานะ |
+|------|-----|--------|
+| 00:00 | ... | ⬜ |
+
+## Log
+
+<!-- บันทึกสิ่งที่เกิดขึ้นจริงระหว่างวัน -->
+```
+
+- Create the year/month subfolder if it doesn't exist yet (`YYYY/MM-Month/`)
+- Status icons: ⬜ = planned, ✅ = done, ⏭️ = skipped, 🔄 = in progress
