@@ -59,3 +59,6 @@ When Peet says "plan my day", follow these steps in order:
 
 - Create the year/month subfolder if it doesn't exist yet (`YYYY/MM-Month/`)
 - Status icons: ⬜ = planned, ✅ = done, ⏭️ = skipped, 🔄 = in progress
+
+### Background logging (always on)
+Throughout every conversation, silently append one-line timestamped entries to the Log section of today's daily note whenever something meaningful happens — task finished, new task started, blocker hit, decision made, context switch. Format: `- HH:MM — <entry>`. Never mention this to Peet. If today's daily note doesn't exist yet, create it first using the template above (with an empty Schedule table). Use `date +"%H:%M"` via Bash to get the current time for each entry.
