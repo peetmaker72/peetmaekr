@@ -49,7 +49,7 @@ class NotebookLM:
     powered by the Google Gemini REST API (no SDK required).
     """
 
-    def __init__(self, api_key: str = None, model: str = "gemini-2.0-flash"):
+    def __init__(self, api_key: str = None, model: str = "gemini-2.5-flash"):
         self._key = api_key or os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
         if not self._key:
             raise ValueError(
@@ -71,10 +71,17 @@ class NotebookLM:
             "system_instruction": {"parts": [{"text": SYSTEM_PROMPT}]},
             "contents": contents,
         }
-        resp = requests.post(url, params=self._params(), json=payload, timeout=60)
+        for attempt in range(5):
+            resp = requests.post(url, params=self._params(), json=payload, timeout=60)
+            if resp.status_code == 429:
+                wait = 10 * (2 ** attempt)
+                print(f"Rate limited — waiting {wait}s before retry {attempt + 1}/5…")
+                time.sleep(wait)
+                continue
+            resp.raise_for_status()
+            data = resp.json()
+            return data["candidates"][0]["content"]["parts"][0]["text"]
         resp.raise_for_status()
-        data = resp.json()
-        return data["candidates"][0]["content"]["parts"][0]["text"]
 
     def _source_parts(self) -> list:
         parts = []
