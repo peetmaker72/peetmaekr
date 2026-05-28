@@ -73,9 +73,10 @@ class NotebookLM:
         }
         for attempt in range(5):
             resp = requests.post(url, params=self._params(), json=payload, timeout=60)
-            if resp.status_code == 429:
+            if resp.status_code in (429, 503):
                 wait = 10 * (2 ** attempt)
-                print(f"Rate limited — waiting {wait}s before retry {attempt + 1}/5…")
+                label = "Rate limited" if resp.status_code == 429 else "Service unavailable"
+                print(f"{label} — waiting {wait}s before retry {attempt + 1}/5…")
                 time.sleep(wait)
                 continue
             resp.raise_for_status()
