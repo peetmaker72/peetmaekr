@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "notebooklm": {
+      "command": "python3",
+      "args": ["/home/user/peetmaekr/mcp_server.py"],
+      "env": {
+        "GEMINI_API_KEY": "AIzaSyAH9PDU74KokYGDZccuag8BYocrPRZR5Q8"
+      }
+    }
+  }
+}
