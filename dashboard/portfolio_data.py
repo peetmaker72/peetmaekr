@@ -1,0 +1,35 @@
+PORTFOLIOS = {
+    "core": {
+        "name": "Core Port",
+        "budget_thb": 600_000,
+        "holdings": [
+            {"ticker": "GOOGL", "qty": 4.903,  "buy_price": 218.322, "target_pct": 15},
+            {"ticker": "TSM",   "qty": 4.155,  "buy_price": 318.179, "target_pct": 13},
+            {"ticker": "NVDA",  "qty": 11.397, "buy_price": 128.393, "target_pct":  8},
+            {"ticker": "AMZN",  "qty": 6.553,  "buy_price": 223.530, "target_pct":  8},
+            {"ticker": "AVGO",  "qty": 3.005,  "buy_price": 319.839, "target_pct":  8},
+            {"ticker": "RKLB",  "qty": 18.223, "buy_price":  40.029, "target_pct":  7},
+            {"ticker": "ARM",   "qty": 0.360,  "buy_price": 212.500, "target_pct":  6},
+            {"ticker": "MRVL",  "qty": 1.986,  "buy_price": 201.138, "target_pct":  5},
+            {"ticker": "ALAB",  "qty": 4.073,  "buy_price": 123.762, "target_pct":  5},
+            {"ticker": "VRT",   "qty": 2.458,  "buy_price": 257.472, "target_pct":  4},
+            {"ticker": "ASML",  "qty": 0.544,  "buy_price":1133.822, "target_pct":  4},
+            {"ticker": "NBIS",  "qty": 6.468,  "buy_price":  92.455, "target_pct":  4},
+            {"ticker": "BTC-USD","qty": 0.014, "buy_price":71477.730,"target_pct":  5},
+        ],
+    },
+    "satellite": {
+        "name": "Satellite Port",
+        "budget_thb": 280_000,
+        "holdings": [
+            {"ticker": "NFLX", "qty": 1.24,   "buy_price": 121.020, "target_pct": 0},
+            {"ticker": "OKLO", "qty": 3.759,  "buy_price": 118.739, "target_pct": 0},
+            {"ticker": "IONQ", "qty": 36.646, "buy_price":  51.081, "target_pct": 0},
+            {"ticker": "PLTR", "qty": 2.540,  "buy_price": 164.626, "target_pct": 0},
+            {"ticker": "MELI", "qty": 0.239,  "buy_price":1964.400, "target_pct": 0},
+            {"ticker": "RBRK", "qty": 12.966, "buy_price":  57.547, "target_pct": 0},
+            {"ticker": "DRAM", "qty": 17.289, "buy_price":  53.985, "target_pct": 0},
+            {"ticker": "META", "qty": 1.880,  "buy_price": 644.095, "target_pct": 0},
+        ],
+    },
+}
