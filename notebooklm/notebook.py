@@ -1,12 +1,16 @@
+import json
+import mimetypes
 import os
 import time
-import mimetypes
 import urllib.request
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
-import google.generativeai as genai
+import requests
+
+GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta"
+UPLOAD_BASE = "https://generativelanguage.googleapis.com/upload/v1beta"
 
 SYSTEM_PROMPT = (
     "You are a helpful AI research assistant similar to NotebookLM. "
@@ -34,52 +38,117 @@ SUMMARY_PROMPTS = {
 class Source:
     name: str
     content: Optional[str] = None
-    file_ref: Optional[object] = None
+    file_uri: Optional[str] = None
+    file_name: Optional[str] = None
+    mime_type: Optional[str] = None
 
 
 class NotebookLM:
     """
     Python integration for NotebookLM-style document Q&A and summarization
-    powered by the Google Gemini API.
+    powered by the Google Gemini REST API (no SDK required).
     """
 
     def __init__(self, api_key: str = None, model: str = "gemini-2.0-flash"):
-        resolved_key = api_key or os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
-        if not resolved_key:
+        self._key = api_key or os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+        if not self._key:
             raise ValueError(
                 "API key required. Set the GEMINI_API_KEY environment variable "
                 "or pass api_key= to the constructor."
             )
-        genai.configure(api_key=resolved_key)
-        self._model = genai.GenerativeModel(
-            model_name=model,
-            system_instruction=SYSTEM_PROMPT,
-        )
+        self._model = model
         self._sources: list[Source] = []
-        self._chat = None
+        self._history: list[dict] = []
+
+    # ------------------------------------------------------------------ helpers
+
+    def _params(self) -> dict:
+        return {"key": self._key}
+
+    def _generate(self, contents: list) -> str:
+        url = f"{GEMINI_BASE}/models/{self._model}:generateContent"
+        payload = {
+            "system_instruction": {"parts": [{"text": SYSTEM_PROMPT}]},
+            "contents": contents,
+        }
+        resp = requests.post(url, params=self._params(), json=payload, timeout=60)
+        resp.raise_for_status()
+        data = resp.json()
+        return data["candidates"][0]["content"]["parts"][0]["text"]
+
+    def _source_parts(self) -> list:
+        parts = []
+        for source in self._sources:
+            if source.file_uri:
+                parts.append({
+                    "fileData": {
+                        "mimeType": source.mime_type or "application/octet-stream",
+                        "fileUri": source.file_uri,
+                    }
+                })
+            elif source.content:
+                parts.append({"text": f"[Source: {source.name}]\n{source.content}\n"})
+        return parts
+
+    def _require_sources(self) -> None:
+        if not self._sources:
+            raise RuntimeError(
+                "No sources added yet. Use add_file(), add_text(), or add_url() first."
+            )
 
     # ------------------------------------------------------------------ sources
 
     def add_file(self, file_path: str) -> Source:
-        """Upload a local file (PDF, TXT, DOCX, …) as a source."""
+        """Upload a local file (PDF, TXT, …) as a source via the Gemini Files API."""
         path = Path(file_path)
         if not path.exists():
             raise FileNotFoundError(f"File not found: {file_path}")
 
         mime_type, _ = mimetypes.guess_type(str(path))
+        mime_type = mime_type or "application/octet-stream"
+        file_bytes = path.read_bytes()
+
         print(f"Uploading {path.name}…")
-        uploaded = genai.upload_file(str(path), mime_type=mime_type)
 
-        while uploaded.state.name == "PROCESSING":
+        boundary = "gemini_upload_boundary"
+        metadata = json.dumps({"file": {"display_name": path.name}})
+        body = (
+            f"--{boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n"
+            f"{metadata}\r\n"
+            f"--{boundary}\r\nContent-Type: {mime_type}\r\n\r\n"
+        ).encode() + file_bytes + f"\r\n--{boundary}--".encode()
+
+        upload_url = f"{UPLOAD_BASE}/files"
+        resp = requests.post(
+            upload_url,
+            params={**self._params(), "uploadType": "multipart"},
+            headers={"Content-Type": f"multipart/related; boundary={boundary}"},
+            data=body,
+            timeout=120,
+        )
+        resp.raise_for_status()
+        file_info = resp.json()["file"]
+
+        while file_info.get("state") == "PROCESSING":
             time.sleep(2)
-            uploaded = genai.get_file(uploaded.name)
+            get_resp = requests.get(
+                f"{GEMINI_BASE}/{file_info['name']}",
+                params=self._params(),
+                timeout=30,
+            )
+            file_info = get_resp.json()
 
-        if uploaded.state.name == "FAILED":
+        if file_info.get("state") == "FAILED":
             raise RuntimeError(f"File processing failed: {path.name}")
 
-        source = Source(name=path.name, file_ref=uploaded)
+        source = Source(
+            name=path.name,
+            file_uri=file_info["uri"],
+            file_name=file_info["name"],
+            mime_type=mime_type,
+        )
         self._sources.append(source)
-        self._chat = None  # reset chat so new source is included
+        self._history.clear()
         print(f"✓ Added source: {path.name}")
         return source
 
@@ -87,7 +156,7 @@ class NotebookLM:
         """Add a plain-text string as a source."""
         source = Source(name=name, content=text)
         self._sources.append(source)
-        self._chat = None
+        self._history.clear()
         print(f"✓ Added source: {name}")
         return source
 
@@ -106,7 +175,7 @@ class NotebookLM:
             source = Source(name=name, content=f"Reference URL: {url}")
 
         self._sources.append(source)
-        self._chat = None
+        self._history.clear()
         print(f"✓ Added URL source: {name}")
         return source
 
@@ -115,51 +184,41 @@ class NotebookLM:
         return [s.name for s in self._sources]
 
     def clear_sources(self) -> None:
-        """Remove all sources and clean up uploaded files."""
+        """Remove all sources and delete any uploaded files from Gemini."""
         for source in self._sources:
-            if source.file_ref:
+            if source.file_name:
                 try:
-                    genai.delete_file(source.file_ref.name)
+                    requests.delete(
+                        f"{GEMINI_BASE}/{source.file_name}",
+                        params=self._params(),
+                        timeout=15,
+                    )
                 except Exception:
                     pass
         self._sources.clear()
-        self._chat = None
+        self._history.clear()
         print("All sources cleared.")
 
-    # --------------------------------------------------------------- core ops
-
-    def _parts(self, prompt: str = "") -> list:
-        parts = []
-        for source in self._sources:
-            if source.file_ref:
-                parts.append(source.file_ref)
-            elif source.content:
-                parts.append(f"[Source: {source.name}]\n{source.content}\n")
-        if prompt:
-            parts.append(prompt)
-        return parts
-
-    def _require_sources(self) -> None:
-        if not self._sources:
-            raise RuntimeError("No sources added yet. Use add_file(), add_text(), or add_url() first.")
+    # ----------------------------------------------------------------- core ops
 
     def query(self, question: str) -> str:
         """One-shot Q&A grounded in the loaded sources."""
         self._require_sources()
-        response = self._model.generate_content(self._parts(question))
-        return response.text
+        parts = self._source_parts() + [{"text": question}]
+        return self._generate([{"role": "user", "parts": parts}])
 
     def chat(self, message: str) -> str:
         """Multi-turn conversational Q&A grounded in the loaded sources."""
         self._require_sources()
-        if self._chat is None:
-            self._chat = self._model.start_chat()
-            init_parts = self._parts(
-                "I've shared these documents with you. Acknowledge you're ready to answer questions about them."
-            )
-            self._chat.send_message(init_parts)
-        response = self._chat.send_message(message)
-        return response.text
+        if not self._history:
+            first_parts = self._source_parts() + [{"text": message}]
+            self._history.append({"role": "user", "parts": first_parts})
+        else:
+            self._history.append({"role": "user", "parts": [{"text": message}]})
+
+        result = self._generate(self._history)
+        self._history.append({"role": "model", "parts": [{"text": result}]})
+        return result
 
     def summarize(self, style: str = "comprehensive") -> str:
         """
@@ -169,8 +228,8 @@ class NotebookLM:
         """
         self._require_sources()
         prompt = SUMMARY_PROMPTS.get(style, SUMMARY_PROMPTS["comprehensive"])
-        response = self._model.generate_content(self._parts(prompt))
-        return response.text
+        parts = self._source_parts() + [{"text": prompt}]
+        return self._generate([{"role": "user", "parts": parts}])
 
     def generate_notes(self) -> str:
         """Generate structured study notes from all sources."""
@@ -182,25 +241,23 @@ class NotebookLM:
             "- Main arguments or theories\n"
             "- Review questions"
         )
-        response = self._model.generate_content(self._parts(prompt))
-        return response.text
+        parts = self._source_parts() + [{"text": prompt}]
+        return self._generate([{"role": "user", "parts": parts}])
 
     def audio_overview(self) -> str:
         """
         Generate a podcast-style dialogue script from all sources.
 
-        Returns a Host 1 / Host 2 conversation script you can read aloud
-        or feed into a TTS engine.
+        Returns a Host 1 / Host 2 conversation script suitable for
+        reading aloud or feeding into a TTS engine.
         """
         self._require_sources()
         prompt = (
             "Create a natural, engaging podcast-style conversation script between two hosts "
             "discussing the key insights from these documents.\n\n"
-            "Format:\n"
-            "Host 1: [dialogue]\n"
-            "Host 2: [dialogue]\n\n"
+            "Format:\nHost 1: [dialogue]\nHost 2: [dialogue]\n\n"
             "Make it conversational, informative, and engaging. "
             "Target length: ~5-7 minutes of spoken dialogue."
         )
-        response = self._model.generate_content(self._parts(prompt))
-        return response.text
+        parts = self._source_parts() + [{"text": prompt}]
+        return self._generate([{"role": "user", "parts": parts}])
