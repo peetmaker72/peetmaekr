@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dividend Cash Flow Dashboard 2025–2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  :root {
+    --bg: #F2EFE9;
+    --card: #FFFFFF;
+    --navy: #0D2B3E;
+    --teal: #1A7A7A;
+    --teal-light: #E8F5F5;
+    --border: #E0DDD6;
+    --muted: #8A8680;
+    --text: #1A1A1A;
+
+    --c-sp500:    #C0392B;
+    --c-banking:  #D35400;
+    --c-ginfra:   #1A8A3A;
+    --c-scb:      #1A5CA8;
+    --c-tisco:    #6C3483;
+    --c-ktb:      #0E7B6A;
+
+    --bg-sp500:   #FDF0EE;
+    --bg-banking: #FEF2E8;
+    --bg-ginfra:  #EAF7ED;
+    --bg-scb:     #EBF3FB;
+    --bg-tisco:   #F5EEF8;
+    --bg-ktb:     #E8F6F3;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Sarabun', 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 40px 32px;
+  }
+
+  /* ── HEADER ─────────────────────────────────────── */
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 36px;
+  }
+  .page-header h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.5px;
+    border-left: 4px solid var(--teal);
+    padding-left: 14px;
+    line-height: 1.2;
+  }
+  .page-header .sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+    padding-left: 18px;
+  }
+  .page-header .date-badge {
+    background: var(--navy);
+    color: #fff;
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  /* ── SECTION LABEL ────────────────────────────────── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    margin-top: 32px;
+  }
+
+  /* ── YIELD CARDS ─────────────────────────────────── */
+  .yield-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  .yield-grid.row2 {
+    margin-top: 0;
+  }
+
+  .yield-card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 20px 22px;
+    border: 1.5px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .yield-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+  .yield-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .yield-card.sp500::before  { background: var(--c-sp500); }
+  .yield-card.banking::before { background: var(--c-banking); }
+  .yield-card.ginfra::before  { background: var(--c-ginfra); }
+  .yield-card.scb::before     { background: var(--c-scb); }
+  .yield-card.tisco::before   { background: var(--c-tisco); }
+  .yield-card.ktb::before     { background: var(--c-ktb); }
+
+  .yield-card .type-badge {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  .yield-card.sp500 .type-badge  { background: var(--bg-sp500);  color: var(--c-sp500); }
+  .yield-card.banking .type-badge { background: var(--bg-banking); color: var(--c-banking); }
+  .yield-card.ginfra .type-badge  { background: var(--bg-ginfra);  color: var(--c-ginfra); }
+  .yield-card.scb .type-badge     { background: var(--bg-scb);     color: var(--c-scb); }
+  .yield-card.tisco .type-badge   { background: var(--bg-tisco);   color: var(--c-tisco); }
+  .yield-card.ktb .type-badge     { background: var(--bg-ktb);     color: var(--c-ktb); }
+
+  .yield-card .fund-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 4px;
+    font-family: 'Inter', sans-serif;
+  }
+  .yield-card .fund-fullname {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    line-height: 1.4;
+  }
+
+  .yield-card .metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+  .metric { }
+  .metric .label {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+  }
+  .metric .value {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy);
+    font-family: 'Inter', sans-serif;
+  }
+  .metric .value.yield-big {
+    font-size: 20px;
+    font-weight: 800;
+  }
+  .metric.yield-big-container .value.yield-big {
+    font-size: 22px;
+  }
+
+  .yield-card.sp500 .value.yield-big    { color: var(--c-sp500); }
+  .yield-card.banking .value.yield-big  { color: var(--c-banking); }
+  .yield-card.ginfra .value.yield-big   { color: var(--c-ginfra); }
+  .yield-card.scb .value.yield-big      { color: var(--c-scb); }
+  .yield-card.tisco .value.yield-big    { color: var(--c-tisco); }
+  .yield-card.ktb .value.yield-big      { color: var(--c-ktb); }
+
+  .nav-note {
+    font-size: 10px;
+    color: #e67e22;
+    margin-top: 10px;
+    padding: 5px 8px;
+    background: #FEF9F0;
+    border-radius: 5px;
+    border-left: 2px solid #e67e22;
+  }
+
+  /* ── SOURCE NOTE ─────────────────────────────────── */
+  .source-note {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+  .source-note strong { color: var(--text); }
+
+  /* ── TIMELINE ────────────────────────────────────── */
+  .timeline-wrapper {
+    background: var(--card);
+    border-radius: 16px;
+    border: 1.5px solid var(--border);
+    overflow: hidden;
+    margin-top: 8px;
+  }
+
+  .timeline-header-row {
+    display: grid;
+    grid-template-columns: 140px repeat(12, 1fr);
+    background: var(--navy);
+    color: #fff;
+  }
+  .tl-corner {
+    padding: 12px 16px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+  }
+  .tl-month {
+    padding: 10px 4px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .tl-month .month-th {
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .tl-month .month-en {
+    font-size: 9px;
+    opacity: 0.7;
+    font-family: 'Inter', sans-serif;
+  }
+  .tl-month.has-payment {
+    background: rgba(255,255,255,0.08);
+  }
+
+  /* Asset rows */
+  .tl-row {
+    display: grid;
+    grid-template-columns: 140px repeat(12, 1fr);
+    border-top: 1px solid var(--border);
+  }
+  .tl-row:hover { background: #FAFAF8; }
+
+  .tl-asset {
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid var(--border);
+    background: #FAFAF8;
+  }
+  .tl-asset .asset-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    font-family: 'Inter', sans-serif;
+    margin-bottom: 2px;
+  }
+  .tl-asset .asset-type {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 600;
+  }
+  .tl-asset.sp500 .asset-name  { color: var(--c-sp500); }
+  .tl-asset.banking .asset-name { color: var(--c-banking); }
+  .tl-asset.ginfra .asset-name  { color: var(--c-ginfra); }
+  .tl-asset.scb .asset-name     { color: var(--c-scb); }
+  .tl-asset.tisco .asset-name   { color: var(--c-tisco); }
+  .tl-asset.ktb .asset-name     { color: var(--c-ktb); }
+
+  .tl-asset.sp500 .asset-type  { color: var(--c-sp500); }
+  .tl-asset.banking .asset-type { color: var(--c-banking); }
+  .tl-asset.ginfra .asset-type  { color: var(--c-ginfra); }
+  .tl-asset.scb .asset-type     { color: var(--c-scb); }
+  .tl-asset.tisco .asset-type   { color: var(--c-tisco); }
+  .tl-asset.ktb .asset-type     { color: var(--c-ktb); }
+
+  .tl-cell {
+    padding: 8px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid var(--border);
+    min-height: 56px;
+  }
+
+  .div-pill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px 8px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: default;
+    transition: transform 0.1s;
+    min-width: 48px;
+  }
+  .div-pill:hover { transform: scale(1.05); }
+  .div-pill .amount {
+    font-size: 13px;
+    font-weight: 800;
+    font-family: 'Inter', sans-serif;
+  }
+  .div-pill .unit {
+    font-size: 9px;
+    font-weight: 500;
+    margin-top: 1px;
+    opacity: 0.8;
+  }
+  .div-pill.upcoming {
+    opacity: 0.6;
+    border: 1.5px dashed;
+  }
+  .div-pill.upcoming::after {
+    content: 'คาด';
+    font-size: 8px;
+    margin-top: 1px;
+    opacity: 0.7;
+  }
+
+  .div-pill.sp500  { background: var(--bg-sp500);  color: var(--c-sp500); }
+  .div-pill.banking { background: var(--bg-banking); color: var(--c-banking); }
+  .div-pill.ginfra  { background: var(--bg-ginfra);  color: var(--c-ginfra); }
+  .div-pill.scb     { background: var(--bg-scb);     color: var(--c-scb); }
+  .div-pill.tisco   { background: var(--bg-tisco);   color: var(--c-tisco); }
+  .div-pill.ktb     { background: var(--bg-ktb);     color: var(--c-ktb); }
+
+  .div-pill.upcoming.sp500  { border-color: var(--c-sp500); background: transparent; }
+  .div-pill.upcoming.ktb    { border-color: var(--c-ktb);   background: transparent; }
+
+  /* Monthly total row */
+  .tl-total-row {
+    display: grid;
+    grid-template-columns: 140px repeat(12, 1fr);
+    border-top: 2px solid var(--border);
+    background: #F7F5F0;
+  }
+  .tl-total-label {
+    padding: 10px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid var(--border);
+  }
+  .tl-total-cell {
+    padding: 8px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid var(--border);
+    font-size: 12px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    color: var(--navy);
+    position: relative;
+  }
+  .tl-total-cell.active {
+    background: var(--teal-light);
+    color: var(--teal);
+  }
+  .tl-total-cell .bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(26,122,122,0.12);
+    border-radius: 0;
+  }
+  .tl-total-cell .bar-val {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── MONTHLY CHART ────────────────────────────────── */
+  .chart-section {
+    margin-top: 28px;
+    background: var(--card);
+    border-radius: 16px;
+    border: 1.5px solid var(--border);
+    padding: 24px 28px;
+  }
+  .chart-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .chart-bars {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 10px;
+    align-items: end;
+    height: 120px;
+  }
+  .bar-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    height: 100%;
+    justify-content: flex-end;
+  }
+  .bar-col .bar-stack {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .bar-seg {
+    width: 100%;
+    border-radius: 3px 3px 0 0;
+    min-height: 3px;
+    transition: opacity 0.2s;
+  }
+  .bar-seg:hover { opacity: 0.8; }
+  .bar-col .bar-total {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--navy);
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+  }
+  .bar-col .bar-label {
+    font-size: 9px;
+    color: var(--muted);
+    text-align: center;
+    white-space: nowrap;
+  }
+  .bar-col .bar-label.upcoming-label {
+    color: var(--teal);
+    font-style: italic;
+  }
+
+  /* ── LEGEND ──────────────────────────────────────── */
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--text);
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ── FOOTER NOTE ─────────────────────────────────── */
+  .footer-note {
+    margin-top: 20px;
+    font-size: 10.5px;
+    color: var(--muted);
+    line-height: 1.7;
+    padding: 12px 16px;
+    background: var(--card);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══════════════════════════════════════════ -->
+<div class="page-header">
+  <div>
+    <h1>12-Month Dividend Cash Flow Dashboard</h1>
+    <div class="sub">ก.ค. 2568 – มิ.ย. 2569 &nbsp;|&nbsp; Trailing 12 Months &nbsp;|&nbsp; 6 สินทรัพย์</div>
+  </div>
+  <div class="date-badge">ข้อมูล ณ มิ.ย. 2569</div>
+</div>
+
+<!-- ══ YIELD CARDS – FUNDS ══════════════════════════════ -->
+<div class="section-label">กองทุนรวม (Mutual Funds) — Dividend Yield TTM</div>
+<div class="yield-grid">
+
+  <!-- SCBS&P500 -->
+  <div class="yield-card sp500">
+    <span class="type-badge">กองทุน · US Equity</span>
+    <div class="fund-name">SCBS&P500</div>
+    <div class="fund-fullname">กองทุนเปิดไทยพาณิชย์หุ้นยูเอส (ชนิดจ่ายเงินปันผล)</div>
+    <div class="metrics">
+      <div class="metric">
+        <div class="label">NAV/หน่วย</div>
+        <div class="value">31.0946 ฿</div>
+      </div>
+      <div class="metric">
+        <div class="label">ปันผล TTM</div>
+        <div class="value">1.9400 ฿</div>
+      </div>
+      <div class="metric yield-big-container">
+        <div class="label">Dividend Yield</div>
+        <div class="value yield-big">6.24%</div>
+      </div>
+    </div>
+    <div style="margin-top:12px; font-size:11px; color:var(--muted)">
+      ก.ค. 68 – มิ.ย. 69 &nbsp;|&nbsp; จ่าย 2 ครั้ง/ปี (มิ.ย. + ธ.ค.)
+    </div>
+  </div>
+
+  <!-- SCBBANKING -->
+  <div class="yield-card banking">
+    <span class="type-badge">กองทุน · Banking Index</span>
+    <div class="fund-name">SCBBANKING</div>
+    <div class="fund-fullname">กองทุนเปิดไทยพาณิชย์ SET Banking Sector Index (ชนิดจ่ายเงินปันผล)</div>
+    <div class="metrics">
+      <div class="metric">
+        <div class="label">NAV/หน่วย</div>
+        <div class="value">13.0706 ฿</div>
+      </div>
+      <div class="metric">
+        <div class="label">ปันผล TTM</div>
+        <div class="value">1.1500 ฿</div>
+      </div>
+      <div class="metric yield-big-container">
+        <div class="label">Dividend Yield</div>
+        <div class="value yield-big">8.80%</div>
+      </div>
+    </div>
+    <div style="margin-top:12px; font-size:11px; color:var(--muted)">
+      ส.ค. 68 + ก.พ. 69 &nbsp;|&nbsp; จ่าย 2 ครั้ง/ปี (ก.พ. + ส.ค.)
+    </div>
+  </div>
+
+  <!-- K-GINFRA -->
+  <div class="yield-card ginfra">
+    <span class="type-badge">กองทุน · Global Infrastructure</span>
+    <div class="fund-name">K-GINFRA-A(D)</div>
+    <div class="fund-fullname">กองทุนเปิดเค โกลบอล อินฟราสตรัคเจอร์ หุ้นทุน-A ชนิดจ่ายเงินปันผล</div>
+    <div class="metrics">
+      <div class="metric">
+        <div class="label">NAV/หน่วย</div>
+        <div class="value" style="font-size:12px; color:#e67e22;">ยังไม่ยืนยัน</div>
+      </div>
+      <div class="metric">
+        <div class="label">ปันผล TTM</div>
+        <div class="value">0.8000 ฿</div>
+      </div>
+      <div class="metric yield-big-container">
+        <div class="label">Dividend Yield</div>
+        <div class="value yield-big" style="font-size:14px; color:#e67e22;">— %</div>
+      </div>
+    </div>
+    <div class="nav-note">⚠ NAV ยังไม่ได้รับการยืนยัน กรุณาตรวจสอบที่ kasikornasset.com เพื่อคำนวณ yield = 0.80 ÷ NAV</div>
+  </div>
+
+</div>
+
+<!-- ══ YIELD CARDS – STOCKS ══════════════════════════════ -->
+<div class="section-label" style="margin-top:20px">หุ้น (Stocks) — Dividend Yield TTM</div>
+<div class="yield-grid row2">
+
+  <!-- SCB -->
+  <div class="yield-card scb">
+    <span class="type-badge">หุ้น · ธนาคาร</span>
+    <div class="fund-name">SCB</div>
+    <div class="fund-fullname">ธนาคารไทยพาณิชย์ จำกัด (มหาชน) / SCB X PCL</div>
+    <div class="metrics">
+      <div class="metric">
+        <div class="label">ราคาหุ้น</div>
+        <div class="value">137.00 ฿</div>
+      </div>
+      <div class="metric">
+        <div class="label">ปันผล TTM</div>
+        <div class="value">11.28 ฿</div>
+      </div>
+      <div class="metric yield-big-container">
+        <div class="label">Dividend Yield</div>
+        <div class="value yield-big">8.23%</div>
+      </div>
+    </div>
+    <div style="margin-top:12px; font-size:11px; color:var(--muted)">
+      พ.ย. 68 (2.00) + พ.ค. 69 (9.28) &nbsp;|&nbsp; จ่าย 2 ครั้ง/ปี
+    </div>
+  </div>
+
+  <!-- TISCO -->
+  <div class="yield-card tisco">
+    <span class="type-badge">หุ้น · ธนาคาร</span>
+    <div class="fund-name">TISCO</div>
+    <div class="fund-fullname">ธนาคารทิสโก้ จำกัด (มหาชน)</div>
+    <div class="metrics">
+      <div class="metric">
+        <div class="label">ราคาหุ้น</div>
+        <div class="value">113.50 ฿</div>
+      </div>
+      <div class="metric">
+        <div class="label">ปันผล TTM</div>
+        <div class="value">7.75 ฿</div>
+      </div>
+      <div class="metric yield-big-container">
+        <div class="label">Dividend Yield</div>
+        <div class="value yield-big">6.83%</div>
+      </div>
+    </div>
+    <div style="margin-top:12px; font-size:11px; color:var(--muted)">
+      ก.ย. 68 (2.00) + พ.ค. 69 (5.75) &nbsp;|&nbsp; จ่าย 2 ครั้ง/ปี
+    </div>
+  </div>
+
+  <!-- KTB -->
+  <div class="yield-card ktb">
+    <span class="type-badge">หุ้น · ธนาคาร</span>
+    <div class="fund-name">KTB</div>
+    <div class="fund-fullname">ธนาคารกรุงไทย จำกัด (มหาชน)</div>
+    <div class="metrics">
+      <div class="metric">
+        <div class="label">ราคาหุ้น</div>
+        <div class="value">35.25 ฿</div>
+      </div>
+      <div class="metric">
+        <div class="label">ปันผล TTM</div>
+        <div class="value">2.24 ฿</div>
+      </div>
+      <div class="metric yield-big-container">
+        <div class="label">Dividend Yield</div>
+        <div class="value yield-big">6.35%</div>
+      </div>
+    </div>
+    <div style="margin-top:12px; font-size:11px; color:var(--muted)">
+      เม.ย. 69 (2.24) &nbsp;|&nbsp; จ่าย 1–2 ครั้ง/ปี (รอบ เม.ย.)
+    </div>
+  </div>
+
+</div>
+
+<!-- Source note -->
+<div class="source-note">
+  <strong>แหล่งข้อมูล NAV/ราคา:</strong>
+  SCBS&P500 NAV = 31.0946 ฿ (SCBAM, 4 มิ.ย. 2569) &nbsp;·&nbsp;
+  SCBBANKING NAV = 13.0706 ฿ (SCBAM, 12 พ.ค. 2569) &nbsp;·&nbsp;
+  SCB = 137.00 ฿ / TISCO = 113.50 ฿ / KTB = 35.25 ฿ (SET, 9 มิ.ย. 2569) &nbsp;·&nbsp;
+  K-GINFRA-A(D) NAV ยังไม่ได้รับการยืนยัน — กรุณาตรวจสอบที่ kasikornasset.com &nbsp;·&nbsp;
+  <strong>ข้อมูลปันผล:</strong> จากประวัติการจ่ายปันผลจริงในรูปภาพที่แนบ
+</div>
+
+<!-- ══ 12-MONTH SWIMLANE TIMELINE ══════════════════════ -->
+<div class="section-label">12-Month Dividend Calendar Timeline (ก.ค. 68 – มิ.ย. 69)</div>
+
+<div class="timeline-wrapper">
+
+  <!-- Month headers -->
+  <div class="timeline-header-row">
+    <div class="tl-corner">สินทรัพย์</div>
+    <div class="tl-month"><span class="month-th">ก.ค.</span><span class="month-en">Jul '25</span></div>
+    <div class="tl-month has-payment"><span class="month-th">ส.ค.</span><span class="month-en">Aug '25</span></div>
+    <div class="tl-month has-payment"><span class="month-th">ก.ย.</span><span class="month-en">Sep '25</span></div>
+    <div class="tl-month"><span class="month-th">ต.ค.</span><span class="month-en">Oct '25</span></div>
+    <div class="tl-month has-payment"><span class="month-th">พ.ย.</span><span class="month-en">Nov '25</span></div>
+    <div class="tl-month has-payment"><span class="month-th">ธ.ค.</span><span class="month-en">Dec '25</span></div>
+    <div class="tl-month"><span class="month-th">ม.ค.</span><span class="month-en">Jan '26</span></div>
+    <div class="tl-month has-payment"><span class="month-th">ก.พ.</span><span class="month-en">Feb '26</span></div>
+    <div class="tl-month has-payment"><span class="month-th">มี.ค.</span><span class="month-en">Mar '26</span></div>
+    <div class="tl-month has-payment"><span class="month-th">เม.ย.</span><span class="month-en">Apr '26</span></div>
+    <div class="tl-month has-payment"><span class="month-th">พ.ค.</span><span class="month-en">May '26</span></div>
+    <div class="tl-month has-payment" style="border-right:none"><span class="month-th">มิ.ย.</span><span class="month-en">Jun '26</span></div>
+  </div>
+
+  <!-- SCBS&P500 row -->
+  <div class="tl-row">
+    <div class="tl-asset sp500">
+      <div class="asset-name">SCBS&P500</div>
+      <div class="asset-type">กองทุน · US Equity</div>
+    </div>
+    <div class="tl-cell"></div><!-- Jul -->
+    <div class="tl-cell"></div><!-- Aug -->
+    <div class="tl-cell"></div><!-- Sep -->
+    <div class="tl-cell"></div><!-- Oct -->
+    <div class="tl-cell"></div><!-- Nov -->
+    <div class="tl-cell"><!-- Dec -->
+      <div class="div-pill sp500">
+        <span class="amount">+1.29</span>
+        <span class="unit">฿/หน่วย</span>
+      </div>
+    </div>
+    <div class="tl-cell"></div><!-- Jan -->
+    <div class="tl-cell"></div><!-- Feb -->
+    <div class="tl-cell"></div><!-- Mar -->
+    <div class="tl-cell"></div><!-- Apr -->
+    <div class="tl-cell"></div><!-- May -->
+    <div class="tl-cell"><!-- Jun - upcoming -->
+      <div class="div-pill sp500 upcoming">
+        <span class="amount">~0.65</span>
+        <span class="unit">฿/หน่วย</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCBBANKING row -->
+  <div class="tl-row">
+    <div class="tl-asset banking">
+      <div class="asset-name">SCBBANKING</div>
+      <div class="asset-type">กองทุน · Banking Index</div>
+    </div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"><!-- Aug -->
+      <div class="div-pill banking">
+        <span class="amount">+0.75</span>
+        <span class="unit">฿/หน่วย</span>
+      </div>
+    </div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"><!-- Feb -->
+      <div class="div-pill banking">
+        <span class="amount">+0.40</span>
+        <span class="unit">฿/หน่วย</span>
+      </div>
+    </div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+  </div>
+
+  <!-- K-GINFRA row -->
+  <div class="tl-row">
+    <div class="tl-asset ginfra">
+      <div class="asset-name">K-GINFRA-A(D)</div>
+      <div class="asset-type">กองทุน · Global Infra</div>
+    </div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"><!-- Sep -->
+      <div class="div-pill ginfra">
+        <span class="amount">+0.20</span>
+        <span class="unit">฿/หน่วย</span>
+      </div>
+    </div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"><!-- Dec -->
+      <div class="div-pill ginfra">
+        <span class="amount">+0.20</span>
+        <span class="unit">฿/หน่วย</span>
+      </div>
+    </div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"><!-- Mar -->
+      <div class="div-pill ginfra">
+        <span class="amount">+0.20</span>
+        <span class="unit">฿/หน่วย</span>
+      </div>
+    </div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"><!-- Jun upcoming -->
+      <div class="div-pill ginfra upcoming">
+        <span class="amount">~0.20</span>
+        <span class="unit">฿/หน่วย</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCB row -->
+  <div class="tl-row">
+    <div class="tl-asset scb">
+      <div class="asset-name">SCB</div>
+      <div class="asset-type">หุ้น · ธนาคาร</div>
+    </div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"><!-- Nov -->
+      <div class="div-pill scb">
+        <span class="amount">+2.00</span>
+        <span class="unit">฿/หุ้น</span>
+      </div>
+    </div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"><!-- May -->
+      <div class="div-pill scb">
+        <span class="amount">+9.28</span>
+        <span class="unit">฿/หุ้น</span>
+      </div>
+    </div>
+    <div class="tl-cell"></div>
+  </div>
+
+  <!-- TISCO row -->
+  <div class="tl-row">
+    <div class="tl-asset tisco">
+      <div class="asset-name">TISCO</div>
+      <div class="asset-type">หุ้น · ธนาคาร</div>
+    </div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"><!-- Sep -->
+      <div class="div-pill tisco">
+        <span class="amount">+2.00</span>
+        <span class="unit">฿/หุ้น</span>
+      </div>
+    </div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"><!-- May -->
+      <div class="div-pill tisco">
+        <span class="amount">+5.75</span>
+        <span class="unit">฿/หุ้น</span>
+      </div>
+    </div>
+    <div class="tl-cell"></div>
+  </div>
+
+  <!-- KTB row -->
+  <div class="tl-row">
+    <div class="tl-asset ktb">
+      <div class="asset-name">KTB</div>
+      <div class="asset-type">หุ้น · ธนาคาร</div>
+    </div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"><!-- Apr -->
+      <div class="div-pill ktb">
+        <span class="amount">+2.24</span>
+        <span class="unit">฿/หุ้น</span>
+      </div>
+    </div>
+    <div class="tl-cell"></div>
+    <div class="tl-cell"></div>
+  </div>
+
+  <!-- Monthly total row -->
+  <!-- Totals are approximate: funds use ฿/unit, stocks use ฿/share — for bar comparison we show "events count" instead of mixing units -->
+  <div class="tl-total-row">
+    <div class="tl-total-label"># จ่ายปันผล</div>
+    <div class="tl-total-cell">—</div>
+    <div class="tl-total-cell active" title="SCBBANKING 0.75"><div class="bar" style="height:30%"></div><span class="bar-val">1</span></div>
+    <div class="tl-total-cell active" title="K-GINFRA 0.20 + TISCO 2.00"><div class="bar" style="height:50%"></div><span class="bar-val">2</span></div>
+    <div class="tl-total-cell">—</div>
+    <div class="tl-total-cell active" title="SCB 2.00"><div class="bar" style="height:30%"></div><span class="bar-val">1</span></div>
+    <div class="tl-total-cell active" title="SCBS&P500 1.29 + K-GINFRA 0.20"><div class="bar" style="height:50%"></div><span class="bar-val">2</span></div>
+    <div class="tl-total-cell">—</div>
+    <div class="tl-total-cell active" title="SCBBANKING 0.40"><div class="bar" style="height:30%"></div><span class="bar-val">1</span></div>
+    <div class="tl-total-cell active" title="K-GINFRA 0.20"><div class="bar" style="height:30%"></div><span class="bar-val">1</span></div>
+    <div class="tl-total-cell active" title="KTB 2.24"><div class="bar" style="height:30%"></div><span class="bar-val">1</span></div>
+    <div class="tl-total-cell active" title="SCB 9.28 + TISCO 5.75"><div class="bar" style="height:100%"></div><span class="bar-val">2</span></div>
+    <div class="tl-total-cell active" title="SCBS&P500 ~0.65 + K-GINFRA ~0.20 (คาด)"><div class="bar" style="height:50%"></div><span class="bar-val">2*</span></div>
+  </div>
+
+</div>
+
+<!-- ══ BAR CHART SECTION ════════════════════════════════ -->
+<div class="chart-section">
+  <div class="chart-title">
+    <span style="width:12px; height:12px; background:var(--teal); border-radius:2px; display:inline-block"></span>
+    จำนวนสินทรัพย์ที่จ่ายปันผลแต่ละเดือน (ก.ค. 68 – มิ.ย. 69)
+  </div>
+  <div class="chart-bars">
+    <!-- Jul: 0 -->
+    <div class="bar-col">
+      <div class="bar-total" style="opacity:0.3">0</div>
+      <div class="bar-stack" style="height:0px"></div>
+      <div class="bar-label">ก.ค.</div>
+    </div>
+    <!-- Aug: 1 (SCBBANKING) -->
+    <div class="bar-col">
+      <div class="bar-total">1</div>
+      <div class="bar-stack" style="height:32px">
+        <div class="bar-seg" style="height:32px; background:var(--c-banking)"></div>
+      </div>
+      <div class="bar-label">ส.ค.</div>
+    </div>
+    <!-- Sep: 2 (K-GINFRA + TISCO) -->
+    <div class="bar-col">
+      <div class="bar-total">2</div>
+      <div class="bar-stack" style="height:64px">
+        <div class="bar-seg" style="height:32px; background:var(--c-ginfra)"></div>
+        <div class="bar-seg" style="height:32px; background:var(--c-tisco); border-radius:3px 3px 0 0"></div>
+      </div>
+      <div class="bar-label">ก.ย.</div>
+    </div>
+    <!-- Oct: 0 -->
+    <div class="bar-col">
+      <div class="bar-total" style="opacity:0.3">0</div>
+      <div class="bar-stack" style="height:0px"></div>
+      <div class="bar-label">ต.ค.</div>
+    </div>
+    <!-- Nov: 1 (SCB) -->
+    <div class="bar-col">
+      <div class="bar-total">1</div>
+      <div class="bar-stack" style="height:32px">
+        <div class="bar-seg" style="height:32px; background:var(--c-scb)"></div>
+      </div>
+      <div class="bar-label">พ.ย.</div>
+    </div>
+    <!-- Dec: 2 (SCBS&P500 + K-GINFRA) -->
+    <div class="bar-col">
+      <div class="bar-total">2</div>
+      <div class="bar-stack" style="height:64px">
+        <div class="bar-seg" style="height:32px; background:var(--c-ginfra)"></div>
+        <div class="bar-seg" style="height:32px; background:var(--c-sp500); border-radius:3px 3px 0 0"></div>
+      </div>
+      <div class="bar-label">ธ.ค.</div>
+    </div>
+    <!-- Jan: 0 -->
+    <div class="bar-col">
+      <div class="bar-total" style="opacity:0.3">0</div>
+      <div class="bar-stack" style="height:0px"></div>
+      <div class="bar-label">ม.ค.</div>
+    </div>
+    <!-- Feb: 1 (SCBBANKING) -->
+    <div class="bar-col">
+      <div class="bar-total">1</div>
+      <div class="bar-stack" style="height:32px">
+        <div class="bar-seg" style="height:32px; background:var(--c-banking)"></div>
+      </div>
+      <div class="bar-label">ก.พ.</div>
+    </div>
+    <!-- Mar: 1 (K-GINFRA) -->
+    <div class="bar-col">
+      <div class="bar-total">1</div>
+      <div class="bar-stack" style="height:32px">
+        <div class="bar-seg" style="height:32px; background:var(--c-ginfra)"></div>
+      </div>
+      <div class="bar-label">มี.ค.</div>
+    </div>
+    <!-- Apr: 1 (KTB) -->
+    <div class="bar-col">
+      <div class="bar-total">1</div>
+      <div class="bar-stack" style="height:32px">
+        <div class="bar-seg" style="height:32px; background:var(--c-ktb)"></div>
+      </div>
+      <div class="bar-label">เม.ย.</div>
+    </div>
+    <!-- May: 2 (SCB + TISCO) -->
+    <div class="bar-col">
+      <div class="bar-total">2</div>
+      <div class="bar-stack" style="height:64px">
+        <div class="bar-seg" style="height:32px; background:var(--c-tisco)"></div>
+        <div class="bar-seg" style="height:32px; background:var(--c-scb); border-radius:3px 3px 0 0"></div>
+      </div>
+      <div class="bar-label">พ.ค.</div>
+    </div>
+    <!-- Jun: 2* upcoming (SCBS&P500 + K-GINFRA) -->
+    <div class="bar-col">
+      <div class="bar-total" style="color:var(--teal)">2*</div>
+      <div class="bar-stack" style="height:64px; opacity:0.45">
+        <div class="bar-seg" style="height:32px; background:var(--c-ginfra)"></div>
+        <div class="bar-seg" style="height:32px; background:var(--c-sp500); border-radius:3px 3px 0 0"></div>
+      </div>
+      <div class="bar-label upcoming-label">มิ.ย.*</div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--c-sp500)"></div>SCBS&P500</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--c-banking)"></div>SCBBANKING</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--c-ginfra)"></div>K-GINFRA-A(D)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--c-scb)"></div>SCB</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--c-tisco)"></div>TISCO</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--c-ktb)"></div>KTB</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ccc; border:1px dashed #999"></div>* คาดการณ์ตามรูปแบบปีก่อน</div>
+  </div>
+</div>
+
+<!-- ══ YIELD RANKING ════════════════════════════════════ -->
+<div class="section-label">Dividend Yield Ranking (TTM)</div>
+<div style="background:var(--card); border-radius:14px; border:1.5px solid var(--border); overflow:hidden;">
+  <!-- rank rows -->
+  <div style="display:grid; grid-template-columns:36px 1fr 160px 120px 120px; padding:10px 20px; background:var(--navy); color:#fff; font-size:11px; font-weight:700; letter-spacing:0.5px; gap:0; align-items:center;">
+    <div>#</div>
+    <div>สินทรัพย์</div>
+    <div style="text-align:right">ราคา / NAV (฿)</div>
+    <div style="text-align:right">ปันผล TTM (฿)</div>
+    <div style="text-align:right">Yield TTM</div>
+  </div>
+
+  <!-- 1st: SCBBANKING 8.80% -->
+  <div style="display:grid; grid-template-columns:36px 1fr 160px 120px 120px; padding:12px 20px; border-top:1px solid var(--border); align-items:center; background:#FEF9F0;">
+    <div style="font-weight:800; color:var(--c-banking); font-family:'Inter'; font-size:16px">1</div>
+    <div>
+      <div style="font-weight:700; font-family:'Inter'; font-size:14px; color:var(--c-banking)">SCBBANKING</div>
+      <div style="font-size:10px; color:var(--muted)">กองทุน · Banking Index</div>
+    </div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600">13.0706</div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600">1.1500</div>
+    <div style="text-align:right">
+      <span style="background:var(--c-banking); color:#fff; padding:4px 12px; border-radius:20px; font-size:14px; font-weight:800; font-family:'Inter'">8.80%</span>
+    </div>
+  </div>
+
+  <!-- 2nd: SCB 8.23% -->
+  <div style="display:grid; grid-template-columns:36px 1fr 160px 120px 120px; padding:12px 20px; border-top:1px solid var(--border); align-items:center;">
+    <div style="font-weight:800; color:var(--c-scb); font-family:'Inter'; font-size:16px">2</div>
+    <div>
+      <div style="font-weight:700; font-family:'Inter'; font-size:14px; color:var(--c-scb)">SCB</div>
+      <div style="font-size:10px; color:var(--muted)">หุ้น · ธนาคาร</div>
+    </div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600">137.00</div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600">11.28</div>
+    <div style="text-align:right">
+      <span style="background:var(--bg-scb); color:var(--c-scb); padding:4px 12px; border-radius:20px; font-size:14px; font-weight:800; font-family:'Inter'; border:1px solid var(--c-scb)">8.23%</span>
+    </div>
+  </div>
+
+  <!-- 3rd: TISCO 6.83% -->
+  <div style="display:grid; grid-template-columns:36px 1fr 160px 120px 120px; padding:12px 20px; border-top:1px solid var(--border); align-items:center;">
+    <div style="font-weight:800; color:var(--c-tisco); font-family:'Inter'; font-size:16px">3</div>
+    <div>
+      <div style="font-weight:700; font-family:'Inter'; font-size:14px; color:var(--c-tisco)">TISCO</div>
+      <div style="font-size:10px; color:var(--muted)">หุ้น · ธนาคาร</div>
+    </div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600">113.50</div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600">7.75</div>
+    <div style="text-align:right">
+      <span style="background:var(--bg-tisco); color:var(--c-tisco); padding:4px 12px; border-radius:20px; font-size:14px; font-weight:800; font-family:'Inter'; border:1px solid var(--c-tisco)">6.83%</span>
+    </div>
+  </div>
+
+  <!-- 4th: SCBS&P500 6.24% -->
+  <div style="display:grid; grid-template-columns:36px 1fr 160px 120px 120px; padding:12px 20px; border-top:1px solid var(--border); align-items:center;">
+    <div style="font-weight:800; color:var(--c-sp500); font-family:'Inter'; font-size:16px">4</div>
+    <div>
+      <div style="font-weight:700; font-family:'Inter'; font-size:14px; color:var(--c-sp500)">SCBS&P500</div>
+      <div style="font-size:10px; color:var(--muted)">กองทุน · US Equity</div>
+    </div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600">31.0946</div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600">1.9400</div>
+    <div style="text-align:right">
+      <span style="background:var(--bg-sp500); color:var(--c-sp500); padding:4px 12px; border-radius:20px; font-size:14px; font-weight:800; font-family:'Inter'; border:1px solid var(--c-sp500)">6.24%</span>
+    </div>
+  </div>
+
+  <!-- 5th: KTB 6.35% -->
+  <div style="display:grid; grid-template-columns:36px 1fr 160px 120px 120px; padding:12px 20px; border-top:1px solid var(--border); align-items:center;">
+    <div style="font-weight:800; color:var(--c-ktb); font-family:'Inter'; font-size:16px">5</div>
+    <div>
+      <div style="font-weight:700; font-family:'Inter'; font-size:14px; color:var(--c-ktb)">KTB</div>
+      <div style="font-size:10px; color:var(--muted)">หุ้น · ธนาคาร</div>
+    </div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600">35.25</div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600">2.24</div>
+    <div style="text-align:right">
+      <span style="background:var(--bg-ktb); color:var(--c-ktb); padding:4px 12px; border-radius:20px; font-size:14px; font-weight:800; font-family:'Inter'; border:1px solid var(--c-ktb)">6.35%</span>
+    </div>
+  </div>
+
+  <!-- 6th: K-GINFRA N/A -->
+  <div style="display:grid; grid-template-columns:36px 1fr 160px 120px 120px; padding:12px 20px; border-top:1px solid var(--border); align-items:center; background:#FAFAF8;">
+    <div style="font-weight:800; color:var(--muted); font-family:'Inter'; font-size:16px">—</div>
+    <div>
+      <div style="font-weight:700; font-family:'Inter'; font-size:14px; color:var(--c-ginfra)">K-GINFRA-A(D)</div>
+      <div style="font-size:10px; color:var(--muted)">กองทุน · Global Infrastructure</div>
+    </div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600; color:#e67e22; font-size:12px">ยังไม่ยืนยัน</div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600">0.8000</div>
+    <div style="text-align:right">
+      <span style="background:#FEF9F0; color:#e67e22; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:700; font-family:'Inter'; border:1px dashed #e67e22">0.80 ÷ NAV</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FOOTER ════════════════════════════════════════════ -->
+<div class="footer-note">
+  <strong>หมายเหตุการคำนวณ:</strong>
+  Dividend Yield TTM = ปันผลรวม 12 เดือนย้อนหลัง (ก.ค. 2568 – มิ.ย. 2569) ÷ ราคา/NAV ล่าสุด × 100 &nbsp;·&nbsp;
+  SCBS&P500: (0.6500+1.2900)/31.0946 = 6.24% &nbsp;|&nbsp;
+  SCBBANKING: (0.7500+0.4000)/13.0706 = 8.80% &nbsp;|&nbsp;
+  SCB: (2.00+9.28)/137.00 = 8.23% &nbsp;|&nbsp;
+  TISCO: (2.00+5.75)/113.50 = 6.83% &nbsp;|&nbsp;
+  KTB: 2.24/35.25 = 6.35% &nbsp;·&nbsp;
+  * มิ.ย. 69 = คาดการณ์ตามรูปแบบปีก่อน ยังไม่มีประกาศอย่างเป็นทางการ &nbsp;·&nbsp;
+  ข้อมูลปันผลทั้งหมดมาจากประวัติการจ่ายจริงในภาพที่แนบ
+</div>
+
+</body>
+</html>
