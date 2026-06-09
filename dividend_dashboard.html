@@ -155,8 +155,8 @@
 
   .yield-card .metrics {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 10px;
   }
   .metric { }
   .metric .label {
@@ -178,7 +178,7 @@
     font-weight: 800;
   }
   .metric.yield-big-container .value.yield-big {
-    font-size: 22px;
+    font-size: 19px;
   }
 
   .yield-card.sp500 .value.yield-big    { color: var(--c-sp500); }
@@ -512,7 +512,7 @@
 </div>
 
 <!-- ══ YIELD CARDS – FUNDS ══════════════════════════════ -->
-<div class="section-label">กองทุนรวม (Mutual Funds) — Dividend Yield TTM</div>
+<div class="section-label">กองทุนรวม (Mutual Funds) — Dividend Yield: TTM &amp; Historical Average</div>
 <div class="yield-grid">
 
   <!-- SCBS&P500 -->
@@ -526,16 +526,20 @@
         <div class="value">31.0946 ฿</div>
       </div>
       <div class="metric">
-        <div class="label">ปันผล TTM</div>
-        <div class="value">1.9400 ฿</div>
+        <div class="label">ปันผลเฉลี่ย/ปี</div>
+        <div class="value">0.9875 ฿</div>
       </div>
       <div class="metric yield-big-container">
-        <div class="label">Dividend Yield</div>
-        <div class="value yield-big">6.24%</div>
+        <div class="label">Yield เฉลี่ย (7ปี)</div>
+        <div class="value yield-big">3.18%</div>
+      </div>
+      <div class="metric">
+        <div class="label">Yield TTM</div>
+        <div class="value" style="font-size:14px; font-weight:700">6.24%</div>
       </div>
     </div>
     <div style="margin-top:12px; font-size:11px; color:var(--muted)">
-      ก.ค. 68 – มิ.ย. 69 &nbsp;|&nbsp; จ่าย 2 ครั้ง/ปี (มิ.ย. + ธ.ค.)
+      ประวัติ 2562–2568 (7ปี) &nbsp;|&nbsp; TTM: ก.ค.68–มิ.ย.69 &nbsp;|&nbsp; จ่าย 2 ครั้ง/ปี (มิ.ย.+ธ.ค.)
     </div>
   </div>
 
@@ -550,16 +554,20 @@
         <div class="value">13.0706 ฿</div>
       </div>
       <div class="metric">
-        <div class="label">ปันผล TTM</div>
-        <div class="value">1.1500 ฿</div>
+        <div class="label">ปันผลเฉลี่ย/ปี</div>
+        <div class="value">0.5107 ฿</div>
       </div>
       <div class="metric yield-big-container">
-        <div class="label">Dividend Yield</div>
-        <div class="value yield-big">8.80%</div>
+        <div class="label">Yield เฉลี่ย (14ปี)</div>
+        <div class="value yield-big">3.91%</div>
+      </div>
+      <div class="metric">
+        <div class="label">Yield TTM</div>
+        <div class="value" style="font-size:14px; font-weight:700">8.80%</div>
       </div>
     </div>
     <div style="margin-top:12px; font-size:11px; color:var(--muted)">
-      ส.ค. 68 + ก.พ. 69 &nbsp;|&nbsp; จ่าย 2 ครั้ง/ปี (ก.พ. + ส.ค.)
+      ประวัติ 2555–2568 (14ปี) &nbsp;|&nbsp; TTM: ส.ค.68+ก.พ.69 &nbsp;|&nbsp; จ่าย 2 ครั้ง/ปี (ก.พ.+ส.ค.)
     </div>
   </div>
 
@@ -571,24 +579,30 @@
     <div class="metrics">
       <div class="metric">
         <div class="label">NAV/หน่วย</div>
-        <div class="value" style="font-size:12px; color:#e67e22;">ยังไม่ยืนยัน</div>
+        <div class="value">11.1410 ฿</div>
       </div>
       <div class="metric">
-        <div class="label">ปันผล TTM</div>
-        <div class="value">0.8000 ฿</div>
+        <div class="label">ปันผลเฉลี่ย/ปี</div>
+        <div class="value">0.3929 ฿</div>
       </div>
       <div class="metric yield-big-container">
-        <div class="label">Dividend Yield</div>
-        <div class="value yield-big" style="font-size:14px; color:#e67e22;">— %</div>
+        <div class="label">Yield เฉลี่ย (7ปี)</div>
+        <div class="value yield-big">3.53%</div>
+      </div>
+      <div class="metric">
+        <div class="label">Yield TTM</div>
+        <div class="value" style="font-size:14px; font-weight:700">7.18%</div>
       </div>
     </div>
-    <div class="nav-note">⚠ NAV ยังไม่ได้รับการยืนยัน กรุณาตรวจสอบที่ kasikornasset.com เพื่อคำนวณ yield = 0.80 ÷ NAV</div>
+    <div style="margin-top:12px; font-size:11px; color:var(--muted)">
+      ประวัติ 2562–2568 (7ปี) &nbsp;|&nbsp; TTM: ก.ย.68–มิ.ย.69 &nbsp;|&nbsp; จ่าย 4 ครั้ง/ปี (ราย ไตรมาส)
+    </div>
   </div>
 
 </div>
 
 <!-- ══ YIELD CARDS – STOCKS ══════════════════════════════ -->
-<div class="section-label" style="margin-top:20px">หุ้น (Stocks) — Dividend Yield TTM</div>
+<div class="section-label" style="margin-top:20px">หุ้น (Stocks) — Dividend Yield: TTM &amp; Historical Average</div>
 <div class="yield-grid row2">
 
   <!-- SCB -->
@@ -602,16 +616,20 @@
         <div class="value">137.00 ฿</div>
       </div>
       <div class="metric">
-        <div class="label">ปันผล TTM</div>
-        <div class="value">11.28 ฿</div>
+        <div class="label">ปันผลเฉลี่ย/ปี</div>
+        <div class="value">9.69 ฿</div>
       </div>
       <div class="metric yield-big-container">
-        <div class="label">Dividend Yield</div>
-        <div class="value yield-big">8.23%</div>
+        <div class="label">Yield เฉลี่ย (4ปี)</div>
+        <div class="value yield-big">7.07%</div>
+      </div>
+      <div class="metric">
+        <div class="label">Yield TTM</div>
+        <div class="value" style="font-size:14px; font-weight:700">8.23%</div>
       </div>
     </div>
     <div style="margin-top:12px; font-size:11px; color:var(--muted)">
-      พ.ย. 68 (2.00) + พ.ค. 69 (9.28) &nbsp;|&nbsp; จ่าย 2 ครั้ง/ปี
+      ประวัติ 2565–2568 (4ปี) &nbsp;|&nbsp; TTM: พ.ย.68+พ.ค.69 &nbsp;|&nbsp; จ่าย 2 ครั้ง/ปี
     </div>
   </div>
 
@@ -626,16 +644,20 @@
         <div class="value">113.50 ฿</div>
       </div>
       <div class="metric">
-        <div class="label">ปันผล TTM</div>
-        <div class="value">7.75 ฿</div>
+        <div class="label">ปันผลเฉลี่ย/ปี</div>
+        <div class="value">6.78 ฿</div>
       </div>
       <div class="metric yield-big-container">
-        <div class="label">Dividend Yield</div>
-        <div class="value yield-big">6.83%</div>
+        <div class="label">Yield เฉลี่ย (6ปี)</div>
+        <div class="value yield-big">5.97%</div>
+      </div>
+      <div class="metric">
+        <div class="label">Yield TTM</div>
+        <div class="value" style="font-size:14px; font-weight:700">6.83%</div>
       </div>
     </div>
     <div style="margin-top:12px; font-size:11px; color:var(--muted)">
-      ก.ย. 68 (2.00) + พ.ค. 69 (5.75) &nbsp;|&nbsp; จ่าย 2 ครั้ง/ปี
+      ประวัติ 2563–2568 (6ปี) &nbsp;|&nbsp; TTM: ก.ย.68+พ.ค.69 &nbsp;|&nbsp; จ่าย 2 ครั้ง/ปี
     </div>
   </div>
 
@@ -650,16 +672,20 @@
         <div class="value">35.25 ฿</div>
       </div>
       <div class="metric">
-        <div class="label">ปันผล TTM</div>
-        <div class="value">2.24 ฿</div>
+        <div class="label">ปันผลเฉลี่ย/ปี</div>
+        <div class="value">1.076 ฿</div>
       </div>
       <div class="metric yield-big-container">
-        <div class="label">Dividend Yield</div>
-        <div class="value yield-big">6.35%</div>
+        <div class="label">Yield เฉลี่ย (6ปี)</div>
+        <div class="value yield-big">3.05%</div>
+      </div>
+      <div class="metric">
+        <div class="label">Yield TTM</div>
+        <div class="value" style="font-size:14px; font-weight:700">6.35%</div>
       </div>
     </div>
     <div style="margin-top:12px; font-size:11px; color:var(--muted)">
-      เม.ย. 69 (2.24) &nbsp;|&nbsp; จ่าย 1–2 ครั้ง/ปี (รอบ เม.ย.)
+      ประวัติ 2563–2568 (6ปี) &nbsp;|&nbsp; TTM: เม.ย.69 &nbsp;|&nbsp; จ่าย 1–2 ครั้ง/ปี (รอบ เม.ย.)
     </div>
   </div>
 
@@ -670,9 +696,9 @@
   <strong>แหล่งข้อมูล NAV/ราคา:</strong>
   SCBS&P500 NAV = 31.0946 ฿ (SCBAM, 4 มิ.ย. 2569) &nbsp;·&nbsp;
   SCBBANKING NAV = 13.0706 ฿ (SCBAM, 12 พ.ค. 2569) &nbsp;·&nbsp;
+  K-GINFRA-A(D) NAV = 11.1410 ฿ (Finnomena, 5 มิ.ย. 2569 — ยืนยันจาก screenshot) &nbsp;·&nbsp;
   SCB = 137.00 ฿ / TISCO = 113.50 ฿ / KTB = 35.25 ฿ (SET, 9 มิ.ย. 2569) &nbsp;·&nbsp;
-  K-GINFRA-A(D) NAV ยังไม่ได้รับการยืนยัน — กรุณาตรวจสอบที่ kasikornasset.com &nbsp;·&nbsp;
-  <strong>ข้อมูลปันผล:</strong> จากประวัติการจ่ายปันผลจริงในรูปภาพที่แนบ
+  <strong>ข้อมูลปันผล:</strong> จากประวัติการจ่ายปันผลจริงในรูปภาพที่แนบทั้งหมด
 </div>
 
 <!-- ══ 12-MONTH SWIMLANE TIMELINE ══════════════════════ -->
@@ -1017,98 +1043,105 @@
 </div>
 
 <!-- ══ YIELD RANKING ════════════════════════════════════ -->
-<div class="section-label">Dividend Yield Ranking (TTM)</div>
+<div class="section-label">Dividend Yield Ranking — เรียงตาม Yield TTM (สูงสุดก่อน)</div>
 <div style="background:var(--card); border-radius:14px; border:1.5px solid var(--border); overflow:hidden;">
-  <!-- rank rows -->
-  <div style="display:grid; grid-template-columns:36px 1fr 160px 120px 120px; padding:10px 20px; background:var(--navy); color:#fff; font-size:11px; font-weight:700; letter-spacing:0.5px; gap:0; align-items:center;">
+  <!-- header row -->
+  <div style="display:grid; grid-template-columns:36px 1fr 130px 110px 110px 110px; padding:10px 20px; background:var(--navy); color:#fff; font-size:11px; font-weight:700; letter-spacing:0.5px; align-items:center;">
     <div>#</div>
     <div>สินทรัพย์</div>
     <div style="text-align:right">ราคา / NAV (฿)</div>
-    <div style="text-align:right">ปันผล TTM (฿)</div>
+    <div style="text-align:right">ปันผลเฉลี่ย/ปี</div>
+    <div style="text-align:right">Yield เฉลี่ย</div>
     <div style="text-align:right">Yield TTM</div>
   </div>
 
-  <!-- 1st: SCBBANKING 8.80% -->
-  <div style="display:grid; grid-template-columns:36px 1fr 160px 120px 120px; padding:12px 20px; border-top:1px solid var(--border); align-items:center; background:#FEF9F0;">
+  <!-- 1st: SCBBANKING 8.80% TTM / 3.91% avg -->
+  <div style="display:grid; grid-template-columns:36px 1fr 130px 110px 110px 110px; padding:12px 20px; border-top:1px solid var(--border); align-items:center; background:#FEF9F0;">
     <div style="font-weight:800; color:var(--c-banking); font-family:'Inter'; font-size:16px">1</div>
     <div>
       <div style="font-weight:700; font-family:'Inter'; font-size:14px; color:var(--c-banking)">SCBBANKING</div>
-      <div style="font-size:10px; color:var(--muted)">กองทุน · Banking Index</div>
+      <div style="font-size:10px; color:var(--muted)">กองทุน · Banking Index · 14ปี</div>
     </div>
     <div style="text-align:right; font-family:'Inter'; font-weight:600">13.0706</div>
-    <div style="text-align:right; font-family:'Inter'; font-weight:600">1.1500</div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600">0.5107 ฿</div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600; color:var(--c-banking)">3.91%</div>
     <div style="text-align:right">
-      <span style="background:var(--c-banking); color:#fff; padding:4px 12px; border-radius:20px; font-size:14px; font-weight:800; font-family:'Inter'">8.80%</span>
+      <span style="background:var(--c-banking); color:#fff; padding:4px 10px; border-radius:20px; font-size:14px; font-weight:800; font-family:'Inter'">8.80%</span>
     </div>
   </div>
 
-  <!-- 2nd: SCB 8.23% -->
-  <div style="display:grid; grid-template-columns:36px 1fr 160px 120px 120px; padding:12px 20px; border-top:1px solid var(--border); align-items:center;">
+  <!-- 2nd: SCB 8.23% TTM / 7.07% avg -->
+  <div style="display:grid; grid-template-columns:36px 1fr 130px 110px 110px 110px; padding:12px 20px; border-top:1px solid var(--border); align-items:center;">
     <div style="font-weight:800; color:var(--c-scb); font-family:'Inter'; font-size:16px">2</div>
     <div>
       <div style="font-weight:700; font-family:'Inter'; font-size:14px; color:var(--c-scb)">SCB</div>
-      <div style="font-size:10px; color:var(--muted)">หุ้น · ธนาคาร</div>
+      <div style="font-size:10px; color:var(--muted)">หุ้น · ธนาคาร · 4ปี</div>
     </div>
     <div style="text-align:right; font-family:'Inter'; font-weight:600">137.00</div>
-    <div style="text-align:right; font-family:'Inter'; font-weight:600">11.28</div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600">9.69 ฿</div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600; color:var(--c-scb)">7.07%</div>
     <div style="text-align:right">
-      <span style="background:var(--bg-scb); color:var(--c-scb); padding:4px 12px; border-radius:20px; font-size:14px; font-weight:800; font-family:'Inter'; border:1px solid var(--c-scb)">8.23%</span>
+      <span style="background:var(--bg-scb); color:var(--c-scb); padding:4px 10px; border-radius:20px; font-size:14px; font-weight:800; font-family:'Inter'; border:1px solid var(--c-scb)">8.23%</span>
     </div>
   </div>
 
-  <!-- 3rd: TISCO 6.83% -->
-  <div style="display:grid; grid-template-columns:36px 1fr 160px 120px 120px; padding:12px 20px; border-top:1px solid var(--border); align-items:center;">
-    <div style="font-weight:800; color:var(--c-tisco); font-family:'Inter'; font-size:16px">3</div>
+  <!-- 3rd: K-GINFRA 7.18% TTM / 3.53% avg -->
+  <div style="display:grid; grid-template-columns:36px 1fr 130px 110px 110px 110px; padding:12px 20px; border-top:1px solid var(--border); align-items:center;">
+    <div style="font-weight:800; color:var(--c-ginfra); font-family:'Inter'; font-size:16px">3</div>
+    <div>
+      <div style="font-weight:700; font-family:'Inter'; font-size:14px; color:var(--c-ginfra)">K-GINFRA-A(D)</div>
+      <div style="font-size:10px; color:var(--muted)">กองทุน · Global Infrastructure · 7ปี</div>
+    </div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600">11.1410</div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600">0.3929 ฿</div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600; color:var(--c-ginfra)">3.53%</div>
+    <div style="text-align:right">
+      <span style="background:var(--bg-ginfra); color:var(--c-ginfra); padding:4px 10px; border-radius:20px; font-size:14px; font-weight:800; font-family:'Inter'; border:1px solid var(--c-ginfra)">7.18%</span>
+    </div>
+  </div>
+
+  <!-- 4th: TISCO 6.83% TTM / 5.97% avg -->
+  <div style="display:grid; grid-template-columns:36px 1fr 130px 110px 110px 110px; padding:12px 20px; border-top:1px solid var(--border); align-items:center;">
+    <div style="font-weight:800; color:var(--c-tisco); font-family:'Inter'; font-size:16px">4</div>
     <div>
       <div style="font-weight:700; font-family:'Inter'; font-size:14px; color:var(--c-tisco)">TISCO</div>
-      <div style="font-size:10px; color:var(--muted)">หุ้น · ธนาคาร</div>
+      <div style="font-size:10px; color:var(--muted)">หุ้น · ธนาคาร · 6ปี</div>
     </div>
     <div style="text-align:right; font-family:'Inter'; font-weight:600">113.50</div>
-    <div style="text-align:right; font-family:'Inter'; font-weight:600">7.75</div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600">6.78 ฿</div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600; color:var(--c-tisco)">5.97%</div>
     <div style="text-align:right">
-      <span style="background:var(--bg-tisco); color:var(--c-tisco); padding:4px 12px; border-radius:20px; font-size:14px; font-weight:800; font-family:'Inter'; border:1px solid var(--c-tisco)">6.83%</span>
+      <span style="background:var(--bg-tisco); color:var(--c-tisco); padding:4px 10px; border-radius:20px; font-size:14px; font-weight:800; font-family:'Inter'; border:1px solid var(--c-tisco)">6.83%</span>
     </div>
   </div>
 
-  <!-- 4th: SCBS&P500 6.24% -->
-  <div style="display:grid; grid-template-columns:36px 1fr 160px 120px 120px; padding:12px 20px; border-top:1px solid var(--border); align-items:center;">
-    <div style="font-weight:800; color:var(--c-sp500); font-family:'Inter'; font-size:16px">4</div>
-    <div>
-      <div style="font-weight:700; font-family:'Inter'; font-size:14px; color:var(--c-sp500)">SCBS&P500</div>
-      <div style="font-size:10px; color:var(--muted)">กองทุน · US Equity</div>
-    </div>
-    <div style="text-align:right; font-family:'Inter'; font-weight:600">31.0946</div>
-    <div style="text-align:right; font-family:'Inter'; font-weight:600">1.9400</div>
-    <div style="text-align:right">
-      <span style="background:var(--bg-sp500); color:var(--c-sp500); padding:4px 12px; border-radius:20px; font-size:14px; font-weight:800; font-family:'Inter'; border:1px solid var(--c-sp500)">6.24%</span>
-    </div>
-  </div>
-
-  <!-- 5th: KTB 6.35% -->
-  <div style="display:grid; grid-template-columns:36px 1fr 160px 120px 120px; padding:12px 20px; border-top:1px solid var(--border); align-items:center;">
+  <!-- 5th: KTB 6.35% TTM / 3.05% avg -->
+  <div style="display:grid; grid-template-columns:36px 1fr 130px 110px 110px 110px; padding:12px 20px; border-top:1px solid var(--border); align-items:center;">
     <div style="font-weight:800; color:var(--c-ktb); font-family:'Inter'; font-size:16px">5</div>
     <div>
       <div style="font-weight:700; font-family:'Inter'; font-size:14px; color:var(--c-ktb)">KTB</div>
-      <div style="font-size:10px; color:var(--muted)">หุ้น · ธนาคาร</div>
+      <div style="font-size:10px; color:var(--muted)">หุ้น · ธนาคาร · 6ปี</div>
     </div>
     <div style="text-align:right; font-family:'Inter'; font-weight:600">35.25</div>
-    <div style="text-align:right; font-family:'Inter'; font-weight:600">2.24</div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600">1.076 ฿</div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600; color:var(--c-ktb)">3.05%</div>
     <div style="text-align:right">
-      <span style="background:var(--bg-ktb); color:var(--c-ktb); padding:4px 12px; border-radius:20px; font-size:14px; font-weight:800; font-family:'Inter'; border:1px solid var(--c-ktb)">6.35%</span>
+      <span style="background:var(--bg-ktb); color:var(--c-ktb); padding:4px 10px; border-radius:20px; font-size:14px; font-weight:800; font-family:'Inter'; border:1px solid var(--c-ktb)">6.35%</span>
     </div>
   </div>
 
-  <!-- 6th: K-GINFRA N/A -->
-  <div style="display:grid; grid-template-columns:36px 1fr 160px 120px 120px; padding:12px 20px; border-top:1px solid var(--border); align-items:center; background:#FAFAF8;">
-    <div style="font-weight:800; color:var(--muted); font-family:'Inter'; font-size:16px">—</div>
+  <!-- 6th: SCBS&P500 6.24% TTM / 3.18% avg -->
+  <div style="display:grid; grid-template-columns:36px 1fr 130px 110px 110px 110px; padding:12px 20px; border-top:1px solid var(--border); align-items:center;">
+    <div style="font-weight:800; color:var(--c-sp500); font-family:'Inter'; font-size:16px">6</div>
     <div>
-      <div style="font-weight:700; font-family:'Inter'; font-size:14px; color:var(--c-ginfra)">K-GINFRA-A(D)</div>
-      <div style="font-size:10px; color:var(--muted)">กองทุน · Global Infrastructure</div>
+      <div style="font-weight:700; font-family:'Inter'; font-size:14px; color:var(--c-sp500)">SCBS&P500</div>
+      <div style="font-size:10px; color:var(--muted)">กองทุน · US Equity · 7ปี</div>
     </div>
-    <div style="text-align:right; font-family:'Inter'; font-weight:600; color:#e67e22; font-size:12px">ยังไม่ยืนยัน</div>
-    <div style="text-align:right; font-family:'Inter'; font-weight:600">0.8000</div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600">31.0946</div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600">0.9875 ฿</div>
+    <div style="text-align:right; font-family:'Inter'; font-weight:600; color:var(--c-sp500)">3.18%</div>
     <div style="text-align:right">
-      <span style="background:#FEF9F0; color:#e67e22; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:700; font-family:'Inter'; border:1px dashed #e67e22">0.80 ÷ NAV</span>
+      <span style="background:var(--bg-sp500); color:var(--c-sp500); padding:4px 10px; border-radius:20px; font-size:14px; font-weight:800; font-family:'Inter'; border:1px solid var(--c-sp500)">6.24%</span>
     </div>
   </div>
 </div>
@@ -1116,14 +1149,15 @@
 <!-- ══ FOOTER ════════════════════════════════════════════ -->
 <div class="footer-note">
   <strong>หมายเหตุการคำนวณ:</strong>
-  Dividend Yield TTM = ปันผลรวม 12 เดือนย้อนหลัง (ก.ค. 2568 – มิ.ย. 2569) ÷ ราคา/NAV ล่าสุด × 100 &nbsp;·&nbsp;
-  SCBS&P500: (0.6500+1.2900)/31.0946 = 6.24% &nbsp;|&nbsp;
-  SCBBANKING: (0.7500+0.4000)/13.0706 = 8.80% &nbsp;|&nbsp;
-  SCB: (2.00+9.28)/137.00 = 8.23% &nbsp;|&nbsp;
-  TISCO: (2.00+5.75)/113.50 = 6.83% &nbsp;|&nbsp;
-  KTB: 2.24/35.25 = 6.35% &nbsp;·&nbsp;
-  * มิ.ย. 69 = คาดการณ์ตามรูปแบบปีก่อน ยังไม่มีประกาศอย่างเป็นทางการ &nbsp;·&nbsp;
-  ข้อมูลปันผลทั้งหมดมาจากประวัติการจ่ายจริงในภาพที่แนบ
+  <strong>Yield เฉลี่ย</strong> = ปันผลเฉลี่ยต่อปี (จากประวัติย้อนหลังทั้งหมดในรูปภาพแนบ) ÷ NAV/ราคาล่าสุด &nbsp;·&nbsp;
+  <strong>Yield TTM</strong> = ปันผลรวม 12 เดือน (ก.ค.68–มิ.ย.69) ÷ NAV/ราคาล่าสุด &nbsp;·&nbsp;
+  SCBS&P500 เฉลี่ย: 6.914/7ปี=0.9875/31.0946=<strong>3.18%</strong> | TTM: 1.94/31.0946=<strong>6.24%</strong> &nbsp;·&nbsp;
+  SCBBANKING เฉลี่ย: 7.15/14ปี=0.5107/13.0706=<strong>3.91%</strong> | TTM: 1.15/13.0706=<strong>8.80%</strong> &nbsp;·&nbsp;
+  K-GINFRA เฉลี่ย: 2.75/7ปี=0.3929/11.1410=<strong>3.53%</strong> | TTM: 0.80/11.1410=<strong>7.18%</strong> &nbsp;·&nbsp;
+  SCB เฉลี่ย: 38.75/4ปี=9.69/137.00=<strong>7.07%</strong> | TTM: 11.28/137.00=<strong>8.23%</strong> &nbsp;·&nbsp;
+  TISCO เฉลี่ย: 40.70/6ปี=6.78/113.50=<strong>5.97%</strong> | TTM: 7.75/113.50=<strong>6.83%</strong> &nbsp;·&nbsp;
+  KTB เฉลี่ย: 6.458/6ปี=1.076/35.25=<strong>3.05%</strong> | TTM: 2.24/35.25=<strong>6.35%</strong> &nbsp;·&nbsp;
+  * มิ.ย. 69 = คาดการณ์ตามรูปแบบปีก่อน ยังไม่มีประกาศอย่างเป็นทางการ
 </div>
 
 </body>
