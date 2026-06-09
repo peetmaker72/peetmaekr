@@ -3,570 +3,586 @@
 <head>
 <meta charset="UTF-8">
 <style>
-  @page { size: A4 landscape; margin: 8mm; }
+  @page { size: A4 landscape; margin: 13mm 15mm; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+
   body {
-    font-family: 'Loma', 'FreeSans', sans-serif;
-    background: #F2EFE9;
-    font-size: 8.5pt;
+    font-family: 'Loma', 'Liberation Sans', sans-serif;
+    background: #F8F7F5;
+    font-size: 8pt;
     color: #1A1A1A;
-    padding: 0;
+    line-height: 1.45;
   }
 
-  /* ── HEADER ── */
-  .header {
-    background: #0D2B3E;
-    color: #fff;
-    padding: 6px 14px;
+  .page { page-break-after: always; }
+  .page:last-child { page-break-after: auto; }
+
+  /* ── PAGE HEADER ── */
+  .pg-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1.5px solid #D8D5CE;
+  }
+  .pg-title { font-size: 13pt; font-weight: bold; color: #111; letter-spacing: -0.3px; }
+  .pg-sub   { font-size: 7pt; color: #9A9690; margin-top: 2px; }
+  .pg-badge {
+    font-size: 7pt; color: #6A6560;
+    background: #EDECEA; border-radius: 10px;
+    padding: 2px 10px;
+  }
+
+  /* ── SECTION LABEL ── */
+  .sec-label {
+    font-size: 6.5pt; font-weight: bold;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    color: #1A7A7A;
+    padding-left: 8px;
+    border-left: 2.5px solid #1A7A7A;
+    margin: 10px 0 5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 5px;
   }
-  .header h1 { font-size: 13pt; font-weight: bold; letter-spacing: -0.3px; }
-  .header .sub { font-size: 7.5pt; opacity: 0.7; margin-top: 1px; }
-  .header .badge { font-size: 7.5pt; background: rgba(255,255,255,0.15); padding: 3px 10px; border-radius: 12px; }
-
-  /* ── SECTION TITLE ── */
-  .section-title {
-    font-size: 9pt;
-    font-weight: bold;
-    color: #fff;
-    padding: 4px 10px;
-    border-radius: 3px 3px 0 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .section-title.funds  { background: #1A7A7A; }
-  .section-title.stocks { background: #1A3A6A; }
-  .section-title span { font-size: 7pt; font-weight: normal; opacity: 0.85; }
+  .sec-label.stock { color: #1A3A6A; border-color: #1A3A6A; }
+  .sec-nav-note { font-weight: normal; text-transform: none; letter-spacing: 0; font-size: 6.5pt; color: #9A9690; }
 
   /* ── TABLE ── */
-  table.main {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 8pt;
-    margin-bottom: 5px;
-  }
-  table.main th {
-    background: #E8E4DC;
-    color: #444;
-    padding: 4px 7px;
-    text-align: center;
-    font-size: 7pt;
-    font-weight: bold;
-    border: 1px solid #D0CBBF;
-    letter-spacing: 0.2px;
-  }
-  table.main th.left { text-align: left; }
-  table.main td {
-    padding: 4px 7px;
-    border: 1px solid #D8D4CC;
-    vertical-align: middle;
-    background: #fff;
-  }
-  table.main td.center { text-align: center; }
-  table.main td.name-cell { font-weight: bold; font-size: 9.5pt; border-left: 4px solid; }
-  table.main td.round-cell { text-align: center; font-weight: bold; }
-  table.main td.date-cell {
-    text-align: center;
+  table.data {
+    width: 100%; border-collapse: collapse;
     font-size: 7.5pt;
-    line-height: 1.4;
+    margin-bottom: 2px;
+  }
+  table.data th {
+    background: #F0EFEC;
+    color: #7A7670;
+    font-size: 6pt; font-weight: bold;
+    text-transform: uppercase; letter-spacing: 0.4px;
+    padding: 4px 8px;
+    border-bottom: 1px solid #D8D5CE;
     white-space: nowrap;
   }
-  table.main td.amount-cell {
-    text-align: right;
-    font-weight: bold;
-    font-family: monospace;
-  }
-  table.main td.yield-cell {
-    text-align: center;
-    font-weight: bold;
-    font-size: 9pt;
-  }
-  table.main td.avg-cell {
-    text-align: center;
-    font-size: 7.5pt;
-    color: #555;
-  }
-  table.main tr.sub-row td { background: #FAFAF7; }
-  table.main tr.sub-row td.name-cell { background: #FAFAF7; }
+  table.data th.c { text-align: center; }
+  table.data th.r { text-align: right; }
 
-  /* asset colors */
-  .c-sp500   { color: #C0392B; } .b-sp500   { border-color: #C0392B; }
-  .c-banking { color: #D35400; } .b-banking { border-color: #D35400; }
-  .c-ginfra  { color: #1A8A3A; } .b-ginfra  { border-color: #1A8A3A; }
-  .c-scb     { color: #1A5CA8; } .b-scb     { border-color: #1A5CA8; }
-  .c-tisco   { color: #6C3483; } .b-tisco   { border-color: #6C3483; }
-  .c-ktb     { color: #0E7B6A; } .b-ktb     { border-color: #0E7B6A; }
-
-  .badge-fund  { display:inline-block; font-size:6pt; padding:1px 5px; border-radius:3px; background:#E8F5F5; color:#1A7A7A; font-weight:bold; vertical-align:middle; }
-  .badge-stock { display:inline-block; font-size:6pt; padding:1px 5px; border-radius:3px; background:#EBF2FF; color:#1A3A6A; font-weight:bold; vertical-align:middle; }
-
-  .upcoming { opacity: 0.6; font-style: italic; }
-  .date-range { font-size: 8pt; font-weight: bold; color: #0D2B3E; }
-  .date-note  { font-size: 6.5pt; color: #888; display: block; }
-
-  /* ── TIMELINE ── */
-  .timeline-wrap {
-    background: #fff;
-    border-radius: 5px;
-    border: 1.5px solid #D0CBBF;
-    padding: 8px 10px;
-    margin-top: 4px;
-  }
-  .tl-title {
-    font-size: 9pt;
-    font-weight: bold;
-    color: #0D2B3E;
-    margin-bottom: 7px;
-    padding-bottom: 4px;
-    border-bottom: 1.5px solid #E0DDD6;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .tl-title::before {
-    content: '';
-    display: inline-block;
-    width: 4px;
-    height: 14px;
-    background: #1A7A7A;
-    border-radius: 2px;
-  }
-  .months-grid {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 3px;
-  }
-  .month-col {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-  }
-  .month-name {
-    font-size: 7.5pt;
-    font-weight: bold;
-    color: #0D2B3E;
-    background: #E8E4DC;
-    border-radius: 3px;
-    padding: 2px 0;
-    text-align: center;
-    width: 100%;
-  }
-  .month-name.has-pay { background: #0D2B3E; color: #fff; }
-  .month-name.future  { background: #B0A898; color: #fff; }
-  .pay-pill {
-    width: 100%;
-    border-radius: 3px;
-    padding: 2px 3px;
-    font-size: 6pt;
-    font-weight: bold;
-    text-align: center;
-    line-height: 1.3;
-  }
-  .pay-pill.upcoming { opacity: 0.55; border: 1px dashed; background: transparent !important; }
-
-  .pill-sp500   { background: #FDF0EE; color: #C0392B; }
-  .pill-banking { background: #FEF2E8; color: #D35400; }
-  .pill-ginfra  { background: #EAF7ED; color: #1A8A3A; }
-  .pill-scb     { background: #EBF3FB; color: #1A5CA8; }
-  .pill-tisco   { background: #F5EEF8; color: #6C3483; }
-  .pill-ktb     { background: #E8F6F3; color: #0E7B6A; }
-  .pill-empty   { height: 8px; }
-
-  .tl-legend {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-top: 5px;
-    padding-top: 4px;
-    border-top: 1px solid #E0DDD6;
-    font-size: 6.5pt;
-    color: #555;
-    align-items: center;
-  }
-  .legend-dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 2px;
-    margin-right: 3px;
+  table.data td {
+    padding: 5px 8px;
+    border-bottom: 1px solid #EEECEA;
     vertical-align: middle;
   }
+  table.data tr:last-child td { border-bottom: none; }
+  table.data tr.alt td { background: #FAFAF8; }
 
-  .footnote {
-    font-size: 6.5pt;
-    color: #888;
-    margin-top: 4px;
-    line-height: 1.6;
+  .asset-name {
+    font-size: 9pt; font-weight: bold;
+    display: flex; align-items: center; gap: 5px;
   }
+  .dot {
+    width: 7px; height: 7px; border-radius: 2px;
+    flex-shrink: 0; display: inline-block;
+  }
+  .asset-type-tag {
+    font-size: 6pt; color: #9A9690;
+    display: block; margin-top: 1px; padding-left: 12px;
+  }
+  .round-tag {
+    font-size: 7pt; font-weight: bold;
+    text-align: center; color: #3A3A3A;
+  }
+  .round-sub { font-size: 5.5pt; color: #9A9690; display: block; }
+
+  td.date-range {
+    font-size: 8pt; font-weight: bold;
+    white-space: nowrap; text-align: center;
+    color: #1A1A1A;
+  }
+  td.date-range .sub { font-size: 5.5pt; color: #9A9690; display: block; margin-top: 1px; }
+
+  td.amount {
+    text-align: right; font-weight: bold; font-size: 8.5pt;
+    font-family: 'Liberation Mono', monospace;
+  }
+
+  .yield-pill {
+    display: inline-block;
+    padding: 2px 9px; border-radius: 10px;
+    font-size: 8.5pt; font-weight: bold;
+    text-align: center;
+  }
+  td.yield-avg { text-align: center; font-size: 7.5pt; font-weight: bold; }
+  .years-tag { font-size: 5.5pt; color: #9A9690; display: block; }
+
+  /* asset colors */
+  .bg-sp500   { background: #FDF0EE; color: #C0392B; }
+  .bg-banking { background: #FEF2E8; color: #D35400; }
+  .bg-ginfra  { background: #EAF7ED; color: #1A8A3A; }
+  .bg-scb     { background: #EBF3FB; color: #1A5CA8; }
+  .bg-tisco   { background: #F5EEF8; color: #6C3483; }
+  .bg-ktb     { background: #E8F6F3; color: #0E7B6A; }
+
+  .c-sp500   { color: #C0392B; } .d-sp500   { background: #C0392B; }
+  .c-banking { color: #D35400; } .d-banking { background: #D35400; }
+  .c-ginfra  { color: #1A8A3A; } .d-ginfra  { background: #1A8A3A; }
+  .c-scb     { color: #1A5CA8; } .d-scb     { background: #1A5CA8; }
+  .c-tisco   { color: #6C3483; } .d-tisco   { background: #6C3483; }
+  .c-ktb     { color: #0E7B6A; } .d-ktb     { background: #0E7B6A; }
+
+  /* footnote */
+  .footnote {
+    font-size: 6pt; color: #9A9690; margin-top: 6px;
+    line-height: 1.6; border-top: 1px solid #EEECEA;
+    padding-top: 5px;
+  }
+
+  /* ── CALENDAR PAGE ── */
+  .cal-header {
+    margin-bottom: 10px;
+    padding-bottom: 7px;
+    border-bottom: 1.5px solid #D8D5CE;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .cal-month {
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #E8E6E1;
+    padding: 9px 10px 8px;
+    min-height: 50mm;
+    display: flex;
+    flex-direction: column;
+  }
+  .cal-month.empty {
+    background: #F5F4F1;
+    border-color: #ECEAE5;
+  }
+  .cal-month-head {
+    margin-bottom: 7px;
+  }
+  .cal-month-name {
+    font-size: 12pt;
+    font-weight: bold;
+    color: #1A1A1A;
+    line-height: 1;
+  }
+  .cal-month.empty .cal-month-name { color: #B0ADA8; }
+  .cal-month-year {
+    font-size: 7pt;
+    color: #9A9690;
+    margin-top: 1px;
+  }
+  .cal-chips {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+  }
+  .cal-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 7px;
+    border-radius: 4px;
+    font-size: 7pt;
+    font-weight: bold;
+    line-height: 1.2;
+  }
+  .cal-chip .chip-dot {
+    width: 6px; height: 6px; border-radius: 1.5px; flex-shrink: 0;
+  }
+  .cal-empty-label {
+    font-size: 8pt; color: #C8C5C0;
+    margin-top: 8px;
+    text-align: center;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* cal legend */
+  .cal-legend {
+    display: flex; gap: 14px; flex-wrap: wrap;
+    margin-top: 8px; padding-top: 6px;
+    border-top: 1px solid #EEECEA;
+    font-size: 6.5pt; color: #6A6560;
+    align-items: center;
+  }
+  .leg-item { display: flex; align-items: center; gap: 4px; }
+  .leg-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <div>
-    <h1>สรุปข้อมูลเงินปันผล — หุ้นไทย &amp; กองทุนรวม</h1>
-    <div class="sub">Dividend Payment Dates, Frequency &amp; Average Yields &nbsp;|&nbsp; คำนวณจากประวัติย้อนหลังจริง</div>
+<!-- ══════════════════════════════════════════════ -->
+<!-- PAGE 1 — DIVIDEND SUMMARY TABLE               -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="page">
+
+  <div class="pg-header">
+    <div>
+      <div class="pg-title">สรุปข้อมูลเงินปันผล — หุ้นไทย &amp; กองทุนรวม</div>
+      <div class="pg-sub">Dividend Payment Dates, Frequency &amp; Average Yields &nbsp;|&nbsp; คำนวณจากประวัติย้อนหลังจริง (ไม่ใช่ปันผลรอบล่าสุด)</div>
+    </div>
+    <div class="pg-badge">ข้อมูล ณ มิ.ย. 2569</div>
   </div>
-  <div class="badge">ข้อมูล ณ มิ.ย. 2569</div>
-</div>
 
-<!-- ═══ FUNDS TABLE ═══ -->
-<div class="section-title funds">
-  <div>&#9646; ฝั่งกองทุนรวม (Mutual Funds)</div>
-  <span>NAV: SCBS&amp;P500=31.09 ฿ &nbsp;|&nbsp; SCBBANKING=13.07 ฿ &nbsp;|&nbsp; K-GINFRA-A(D)=11.14 ฿</span>
-</div>
-<table class="main">
-  <thead>
-    <tr>
-      <th class="left" style="width:130px">กองทุน</th>
-      <th style="width:55px">จ่าย/ปี</th>
-      <th style="width:52px">รอบ</th>
-      <th style="width:115px">วันปิดสมุด (ช่วง)</th>
-      <th style="width:115px">วันจ่ายปันผล (ช่วง)</th>
-      <th style="width:80px">ปันผลเฉลี่ย/รอบ ฿</th>
-      <th style="width:70px">Yield TTM</th>
-      <th style="width:90px">Yield เฉลี่ย</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- SCBS&P500 -->
-    <tr>
-      <td class="name-cell b-sp500" rowspan="2">
-        <span class="c-sp500">SCBS&amp;P500</span><br>
-        <span class="badge-fund">กองทุน · US Equity</span>
-      </td>
-      <td class="center" rowspan="2" style="font-weight:bold; color:#555">2 ครั้ง/ปี</td>
-      <td class="round-cell c-sp500">มิ.ย.</td>
-      <td class="date-cell">
-        <span class="date-range">10–13 มิ.ย.</span>
-        <span class="date-note">จากข้อมูล 2562–2568</span>
-      </td>
-      <td class="date-cell">
-        <span class="date-range">22–25 มิ.ย.</span>
-      </td>
-      <td class="amount-cell c-sp500">0.39 ฿</td>
-      <td class="yield-cell c-sp500" rowspan="2">6.24%</td>
-      <td class="avg-cell" rowspan="2">3.18%<br><span style="font-size:6.5pt;color:#aaa">(เฉลี่ย 7ปี)</span></td>
-    </tr>
-    <tr class="sub-row">
-      <td class="round-cell c-sp500">ธ.ค.</td>
-      <td class="date-cell">
-        <span class="date-range">11–14 ธ.ค.</span>
-        <span class="date-note">จากข้อมูล 2562–2568</span>
-      </td>
-      <td class="date-cell">
-        <span class="date-range">24–27 ธ.ค.</span>
-      </td>
-      <td class="amount-cell c-sp500">0.60 ฿</td>
-    </tr>
-
-    <!-- SCBBANKING -->
-    <tr>
-      <td class="name-cell b-banking" rowspan="2">
-        <span class="c-banking">SCBBANKING</span><br>
-        <span class="badge-fund">กองทุน · Banking Index</span>
-      </td>
-      <td class="center" rowspan="2" style="font-weight:bold; color:#555">2 ครั้ง/ปี</td>
-      <td class="round-cell c-banking">ก.พ.</td>
-      <td class="date-cell">
-        <span class="date-range">7–10 ก.พ.</span>
-        <span class="date-note">จากข้อมูล 2555–2568</span>
-      </td>
-      <td class="date-cell">
-        <span class="date-range">17–21 ก.พ.</span>
-      </td>
-      <td class="amount-cell c-banking">0.26 ฿</td>
-      <td class="yield-cell c-banking" rowspan="2">8.80%</td>
-      <td class="avg-cell" rowspan="2">3.91%<br><span style="font-size:6.5pt;color:#aaa">(เฉลี่ย 14ปี)</span></td>
-    </tr>
-    <tr class="sub-row">
-      <td class="round-cell c-banking">ส.ค.</td>
-      <td class="date-cell">
-        <span class="date-range">8–9 ส.ค.</span>
-        <span class="date-note">จากข้อมูล 2557–2568</span>
-      </td>
-      <td class="date-cell">
-        <span class="date-range">18–22 ส.ค.</span>
-      </td>
-      <td class="amount-cell c-banking">0.26 ฿</td>
-    </tr>
-
-    <!-- K-GINFRA -->
-    <tr>
-      <td class="name-cell b-ginfra" rowspan="4">
-        <span class="c-ginfra">K-GINFRA-A(D)</span><br>
-        <span class="badge-fund">กองทุน · Global Infra</span>
-      </td>
-      <td class="center" rowspan="4" style="font-weight:bold; color:#555">4 ครั้ง/ปี<br><span style="font-size:6.5pt;color:#aaa">(ราย ไตรมาส)</span></td>
-      <td class="round-cell c-ginfra">มี.ค. (Q1)</td>
-      <td class="date-cell">
-        <span class="date-range">ปลาย ก.พ. – ต้น มี.ค.</span>
-        <span class="date-note">28ก.พ.–2มี.ค. (2562–2568)</span>
-      </td>
-      <td class="date-cell">
-        <span class="date-range">13–16 มี.ค.</span>
-      </td>
-      <td class="amount-cell c-ginfra">0.20 ฿</td>
-      <td class="yield-cell c-ginfra" rowspan="4">7.18%</td>
-      <td class="avg-cell" rowspan="4">3.53%<br><span style="font-size:6.5pt;color:#aaa">(เฉลี่ย 7ปี)</span></td>
-    </tr>
-    <tr class="sub-row">
-      <td class="round-cell c-ginfra">มิ.ย. (Q2)</td>
-      <td class="date-cell">
-        <span class="date-range">ปลาย พ.ค. – ต้น มิ.ย.</span>
-        <span class="date-note">31พ.ค.–4มิ.ย. (2562–2568)</span>
-      </td>
-      <td class="date-cell">
-        <span class="date-range">13–14 มิ.ย.</span>
-      </td>
-      <td class="amount-cell c-ginfra upcoming">~0.20 ฿*</td>
-    </tr>
-    <tr>
-      <td class="round-cell c-ginfra">ก.ย. (Q3)</td>
-      <td class="date-cell">
-        <span class="date-range">ปลาย ส.ค. – ต้น ก.ย.</span>
-        <span class="date-note">31ส.ค.–3ก.ย. (2562–2568)</span>
-      </td>
-      <td class="date-cell">
-        <span class="date-range">12–14 ก.ย.</span>
-      </td>
-      <td class="amount-cell c-ginfra">0.20 ฿</td>
-    </tr>
-    <tr class="sub-row">
-      <td class="round-cell c-ginfra">ธ.ค. (Q4)</td>
-      <td class="date-cell">
-        <span class="date-range">ปลาย พ.ย. – ต้น ธ.ค.</span>
-        <span class="date-note">30พ.ย.–2ธ.ค. (2562–2568)</span>
-      </td>
-      <td class="date-cell">
-        <span class="date-range">12–16 ธ.ค.</span>
-      </td>
-      <td class="amount-cell c-ginfra">0.20 ฿</td>
-    </tr>
-  </tbody>
-</table>
-
-<!-- ═══ STOCKS TABLE ═══ -->
-<div class="section-title stocks">
-  <div>&#9646; ฝั่งหุ้น (Stocks)</div>
-  <span>ราคา: SCB=137.00 ฿ &nbsp;|&nbsp; TISCO=113.50 ฿ &nbsp;|&nbsp; KTB=35.25 ฿ &nbsp;(SET, 9 มิ.ย. 2569)</span>
-</div>
-<table class="main">
-  <thead>
-    <tr>
-      <th class="left" style="width:130px">หุ้น</th>
-      <th style="width:55px">จ่าย/ปี</th>
-      <th style="width:52px">รอบ</th>
-      <th style="width:115px">วันปิดสมุด (ช่วง)</th>
-      <th style="width:115px">วันจ่ายปันผล (ช่วง)</th>
-      <th style="width:80px">ปันผลเฉลี่ย/รอบ ฿</th>
-      <th style="width:70px">Yield TTM</th>
-      <th style="width:90px">Yield เฉลี่ย</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- SCB -->
-    <tr>
-      <td class="name-cell b-scb" rowspan="2">
-        <span class="c-scb">SCB</span><br>
-        <span class="badge-stock">หุ้น · ธนาคาร</span>
-      </td>
-      <td class="center" rowspan="2" style="font-weight:bold; color:#555">2 ครั้ง/ปี</td>
-      <td class="round-cell c-scb">พ.ค.<br><span style="font-size:6pt;color:#888">(ปันผลประจำปี)</span></td>
-      <td class="date-cell">
-        <span class="date-range">16–20 เม.ย.</span>
-        <span class="date-note">จากข้อมูล 2565–2568</span>
-      </td>
-      <td class="date-cell">
-        <span class="date-range">02–07 พ.ค.</span>
-      </td>
-      <td class="amount-cell c-scb">7.69 ฿</td>
-      <td class="yield-cell c-scb" rowspan="2">8.23%</td>
-      <td class="avg-cell" rowspan="2">7.07%<br><span style="font-size:6.5pt;color:#aaa">(เฉลี่ย 4ปี)</span></td>
-    </tr>
-    <tr class="sub-row">
-      <td class="round-cell c-scb">พ.ย.*<br><span style="font-size:6pt;color:#888">(ระหว่างกาล)</span></td>
-      <td class="date-cell">
-        <span class="date-range">ก.ย.–ต.ค.</span>
-        <span class="date-note">*วันที่แตกต่างกันในแต่ละปี</span>
-      </td>
-      <td class="date-cell">
-        <span class="date-range">ก.ย.–พ.ย.</span>
-        <span class="date-note">*ปี 67=ก.ย., ปี 68=พ.ย.</span>
-      </td>
-      <td class="amount-cell c-scb">2.00 ฿</td>
-    </tr>
-
-    <!-- TISCO -->
-    <tr>
-      <td class="name-cell b-tisco" rowspan="2">
-        <span class="c-tisco">TISCO</span><br>
-        <span class="badge-stock">หุ้น · ธนาคาร</span>
-      </td>
-      <td class="center" rowspan="2" style="font-weight:bold; color:#555">2 ครั้ง/ปี</td>
-      <td class="round-cell c-tisco">ก.ย.<br><span style="font-size:6pt;color:#888">(ระหว่างกาล)</span></td>
-      <td class="date-cell">
-        <span class="date-range">10–11 ก.ย.</span>
-        <span class="date-note">จากข้อมูล 2567–2568</span>
-      </td>
-      <td class="date-cell">
-        <span class="date-range">25–27 ก.ย.</span>
-      </td>
-      <td class="amount-cell c-tisco">2.00 ฿</td>
-      <td class="yield-cell c-tisco" rowspan="2">6.83%</td>
-      <td class="avg-cell" rowspan="2">5.97%<br><span style="font-size:6.5pt;color:#aaa">(เฉลี่ย 6ปี)</span></td>
-    </tr>
-    <tr class="sub-row">
-      <td class="round-cell c-tisco">พ.ค.<br><span style="font-size:6pt;color:#888">(ปันผลประจำปี)</span></td>
-      <td class="date-cell">
-        <span class="date-range">25–29 เม.ย.</span>
-        <span class="date-note">จากข้อมูล 2566–2568</span>
-      </td>
-      <td class="date-cell">
-        <span class="date-range">15–19 พ.ค.</span>
-      </td>
-      <td class="amount-cell c-tisco">5.75 ฿</td>
-    </tr>
-
-    <!-- KTB -->
-    <tr>
-      <td class="name-cell b-ktb">
-        <span class="c-ktb">KTB</span><br>
-        <span class="badge-stock">หุ้น · ธนาคาร</span>
-      </td>
-      <td class="center" style="font-weight:bold; color:#555">1–2 ครั้ง/ปี</td>
-      <td class="round-cell c-ktb">เม.ย.<br><span style="font-size:6pt;color:#888">(ปันผลประจำปี)</span></td>
-      <td class="date-cell">
-        <span class="date-range">10–21 เม.ย.</span>
-        <span class="date-note">จากข้อมูล 2564–2568</span>
-      </td>
-      <td class="date-cell">
-        <span class="date-range">30 เม.ย.–07 พ.ค.</span>
-      </td>
-      <td class="amount-cell c-ktb">1.01 ฿</td>
-      <td class="yield-cell c-ktb">6.35%</td>
-      <td class="avg-cell">3.05%<br><span style="font-size:6.5pt;color:#aaa">(เฉลี่ย 6ปี)</span></td>
-    </tr>
-  </tbody>
-</table>
-
-<!-- ═══ 12-MONTH TIMELINE ═══ -->
-<div class="timeline-wrap">
-  <div class="tl-title">12-Month Dividend Cash Flow Timeline &nbsp;(ก.ค. 2568 – มิ.ย. 2569)</div>
-  <div class="months-grid">
-
-    <!-- Jul 68 — ไม่มีการจ่าย -->
-    <div class="month-col">
-      <div class="month-name">ก.ค. 68</div>
-      <div class="pill-empty"></div>
-    </div>
-
-    <!-- Aug 68 — SCBBANKING 0.75 -->
-    <div class="month-col">
-      <div class="month-name has-pay">ส.ค. 68</div>
-      <div class="pay-pill pill-banking">SCBBANKING<br>+0.26 ฿/หน่วย</div>
-    </div>
-
-    <!-- Sep 68 — K-GINFRA + TISCO -->
-    <div class="month-col">
-      <div class="month-name has-pay">ก.ย. 68</div>
-      <div class="pay-pill pill-ginfra">K-GINFRA<br>+0.20 ฿/หน่วย</div>
-      <div style="height:2px"></div>
-      <div class="pay-pill pill-tisco">TISCO<br>+2.00 ฿/หุ้น</div>
-    </div>
-
-    <!-- Oct 68 — ไม่มี -->
-    <div class="month-col">
-      <div class="month-name">ต.ค. 68</div>
-      <div class="pill-empty"></div>
-    </div>
-
-    <!-- Nov 68 — SCB -->
-    <div class="month-col">
-      <div class="month-name has-pay">พ.ย. 68</div>
-      <div class="pay-pill pill-scb">SCB<br>+2.00 ฿/หุ้น</div>
-    </div>
-
-    <!-- Dec 68 — SCBS&P500 + K-GINFRA -->
-    <div class="month-col">
-      <div class="month-name has-pay">ธ.ค. 68</div>
-      <div class="pay-pill pill-sp500">SCBS&amp;P500<br>+0.60 ฿/หน่วย</div>
-      <div style="height:2px"></div>
-      <div class="pay-pill pill-ginfra">K-GINFRA<br>+0.20 ฿/หน่วย</div>
-    </div>
-
-    <!-- Jan 69 — ไม่มี -->
-    <div class="month-col">
-      <div class="month-name">ม.ค. 69</div>
-      <div class="pill-empty"></div>
-    </div>
-
-    <!-- Feb 69 — SCBBANKING -->
-    <div class="month-col">
-      <div class="month-name has-pay">ก.พ. 69</div>
-      <div class="pay-pill pill-banking">SCBBANKING<br>+0.26 ฿/หน่วย</div>
-    </div>
-
-    <!-- Mar 69 — K-GINFRA -->
-    <div class="month-col">
-      <div class="month-name has-pay">มี.ค. 69</div>
-      <div class="pay-pill pill-ginfra">K-GINFRA<br>+0.20 ฿/หน่วย</div>
-    </div>
-
-    <!-- Apr 69 — KTB -->
-    <div class="month-col">
-      <div class="month-name has-pay">เม.ย. 69</div>
-      <div class="pay-pill pill-ktb">KTB<br>+1.01 ฿/หุ้น</div>
-    </div>
-
-    <!-- May 69 — SCB + TISCO -->
-    <div class="month-col">
-      <div class="month-name has-pay">พ.ค. 69</div>
-      <div class="pay-pill pill-scb">SCB<br>+7.69 ฿/หุ้น</div>
-      <div style="height:2px"></div>
-      <div class="pay-pill pill-tisco">TISCO<br>+5.75 ฿/หุ้น</div>
-    </div>
-
-    <!-- Jun 69 — SCBS&P500* + K-GINFRA* (คาด) -->
-    <div class="month-col">
-      <div class="month-name has-pay">มิ.ย. 69</div>
-      <div class="pay-pill pill-sp500">SCBS&amp;P500<br>+0.39 ฿/หน่วย</div>
-      <div style="height:2px"></div>
-      <div class="pay-pill pill-ginfra">K-GINFRA<br>+0.20 ฿/หน่วย</div>
-    </div>
-
-  </div><!-- /months-grid -->
-
-  <div class="tl-legend">
-    <span style="font-weight:bold; color:#444; margin-right:2px">สัญลักษณ์:</span>
-    <span><span class="legend-dot" style="background:#C0392B"></span>SCBS&amp;P500</span>
-    <span><span class="legend-dot" style="background:#D35400"></span>SCBBANKING</span>
-    <span><span class="legend-dot" style="background:#1A8A3A"></span>K-GINFRA-A(D)</span>
-    <span><span class="legend-dot" style="background:#1A5CA8"></span>SCB</span>
-    <span><span class="legend-dot" style="background:#6C3483"></span>TISCO</span>
-    <span><span class="legend-dot" style="background:#0E7B6A"></span>KTB</span>
-    <span style="color:#888">| ตัวเลขทุกช่อง = ค่าเฉลี่ย/รอบจากประวัติย้อนหลังจริง ไม่ใช่ปันผลรอบล่าสุด</span>
-    <span style="color:#888">| ช่วงวันที่สรุปจากรูปภาพที่แนบชุดแรก</span>
+  <!-- FUNDS -->
+  <div class="sec-label">
+    กองทุนรวม (Mutual Funds)
+    <span class="sec-nav-note">NAV: SCBS&amp;P500 = 31.09 ฿ &nbsp;·&nbsp; SCBBANKING = 13.07 ฿ &nbsp;·&nbsp; K-GINFRA-A(D) = 11.14 ฿</span>
   </div>
-</div>
 
-<div class="footnote">
-  <strong>ปันผลเฉลี่ย/รอบ</strong>: SCBS&amp;P500 มิ.ย.=(0.65+0.66+0.14+0.34+0.36+0.32+0.23)/7=0.39฿ | ธ.ค.=(1.29+0.71+0.32+0.32+0.89+0.36+0.32)/7=0.60฿ &nbsp;·&nbsp;
-  SCBBANKING=(ปันผลรวม 14ปี)/14ปี/2รอบ=0.26฿/รอบ &nbsp;·&nbsp;
-  K-GINFRA=ส่วนใหญ่คงที่ที่ 0.20฿/ไตรมาส &nbsp;·&nbsp;
-  SCB Final=(5.19+7.84+8.44+9.28)/4=7.69฿ | SCB Interim=(1.50+2.50+2.00+2.00)/4=2.00฿ &nbsp;·&nbsp;
-  TISCO Interim=2.00฿ (ปี 67-68) | TISCO Final=5.75฿ (ปี 67-68) &nbsp;·&nbsp;
-  KTB=(0.275+0.418+0.682+0.868+1.545+2.24)/6=1.01฿ &nbsp;·&nbsp;
-  <strong>Yield TTM</strong> = ปันผลรวม 12 เดือน (ก.ค.68–มิ.ย.69) ÷ NAV/ราคาล่าสุด &nbsp;·&nbsp;
-  SCB interim: วันที่แตกต่างกันในแต่ละปี (ปี 2567=ก.ย., ปี 2568=พ.ย.) &nbsp;·&nbsp;
-  ข้อมูลปันผลและวันที่ทั้งหมดมาจากประวัติการจ่ายจริงในรูปภาพที่แนบชุดแรกสุด
-</div>
+  <table class="data">
+    <thead>
+      <tr>
+        <th style="width:140px">กองทุน</th>
+        <th class="c" style="width:58px">จ่าย/ปี</th>
+        <th class="c" style="width:56px">รอบ</th>
+        <th class="c" style="width:118px">วันปิดสมุด</th>
+        <th class="c" style="width:118px">วันจ่ายปันผล</th>
+        <th class="r" style="width:78px">ปันผลเฉลี่ย/รอบ</th>
+        <th class="c" style="width:72px">Yield TTM</th>
+        <th class="c" style="width:88px">Yield เฉลี่ย</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- SCBS&P500 -->
+      <tr>
+        <td rowspan="2">
+          <div class="asset-name"><span class="dot d-sp500"></span><span class="c-sp500">SCBS&amp;P500</span></div>
+          <span class="asset-type-tag">กองทุน · US Equity</span>
+        </td>
+        <td class="round-tag c" rowspan="2">2 ครั้ง<br>ต่อปี</td>
+        <td class="round-tag">มิ.ย.<span class="round-sub">June</span></td>
+        <td class="date-range">10–13 มิ.ย.<span class="sub">จากข้อมูล 2562–2568</span></td>
+        <td class="date-range">22–25 มิ.ย.</td>
+        <td class="amount c-sp500">0.39 ฿</td>
+        <td class="c" rowspan="2"><span class="yield-pill bg-sp500">6.24%</span></td>
+        <td class="yield-avg" rowspan="2"><span class="c-sp500">3.18%</span><span class="years-tag">เฉลี่ย 7 ปี</span></td>
+      </tr>
+      <tr class="alt">
+        <td class="round-tag">ธ.ค.<span class="round-sub">December</span></td>
+        <td class="date-range">11–14 ธ.ค.<span class="sub">จากข้อมูล 2562–2568</span></td>
+        <td class="date-range">24–27 ธ.ค.</td>
+        <td class="amount c-sp500">0.60 ฿</td>
+      </tr>
+
+      <!-- SCBBANKING -->
+      <tr>
+        <td rowspan="2">
+          <div class="asset-name"><span class="dot d-banking"></span><span class="c-banking">SCBBANKING</span></div>
+          <span class="asset-type-tag">กองทุน · Banking Index</span>
+        </td>
+        <td class="round-tag c" rowspan="2">2 ครั้ง<br>ต่อปี</td>
+        <td class="round-tag">ก.พ.<span class="round-sub">February</span></td>
+        <td class="date-range">7–10 ก.พ.<span class="sub">จากข้อมูล 2555–2568</span></td>
+        <td class="date-range">17–21 ก.พ.</td>
+        <td class="amount c-banking">0.26 ฿</td>
+        <td class="c" rowspan="2"><span class="yield-pill bg-banking">8.80%</span></td>
+        <td class="yield-avg" rowspan="2"><span class="c-banking">3.91%</span><span class="years-tag">เฉลี่ย 14 ปี</span></td>
+      </tr>
+      <tr class="alt">
+        <td class="round-tag">ส.ค.<span class="round-sub">August</span></td>
+        <td class="date-range">8–9 ส.ค.<span class="sub">จากข้อมูล 2557–2568</span></td>
+        <td class="date-range">18–22 ส.ค.</td>
+        <td class="amount c-banking">0.26 ฿</td>
+      </tr>
+
+      <!-- K-GINFRA -->
+      <tr>
+        <td rowspan="4">
+          <div class="asset-name"><span class="dot d-ginfra"></span><span class="c-ginfra">K-GINFRA-A(D)</span></div>
+          <span class="asset-type-tag">กองทุน · Global Infrastructure</span>
+        </td>
+        <td class="round-tag c" rowspan="4">4 ครั้ง<br>ต่อปี<span class="round-sub">ราย ไตรมาส</span></td>
+        <td class="round-tag">มี.ค. (Q1)<span class="round-sub">March</span></td>
+        <td class="date-range">28 ก.พ.–2 มี.ค.<span class="sub">จากข้อมูล 2562–2568</span></td>
+        <td class="date-range">13–16 มี.ค.</td>
+        <td class="amount c-ginfra">0.20 ฿</td>
+        <td class="c" rowspan="4"><span class="yield-pill bg-ginfra">7.18%</span></td>
+        <td class="yield-avg" rowspan="4"><span class="c-ginfra">3.53%</span><span class="years-tag">เฉลี่ย 7 ปี</span></td>
+      </tr>
+      <tr class="alt">
+        <td class="round-tag">มิ.ย. (Q2)<span class="round-sub">June</span></td>
+        <td class="date-range">31 พ.ค.–4 มิ.ย.<span class="sub">จากข้อมูล 2562–2568</span></td>
+        <td class="date-range">13–14 มิ.ย.</td>
+        <td class="amount c-ginfra">0.20 ฿</td>
+      </tr>
+      <tr>
+        <td class="round-tag">ก.ย. (Q3)<span class="round-sub">September</span></td>
+        <td class="date-range">31 ส.ค.–3 ก.ย.<span class="sub">จากข้อมูล 2562–2568</span></td>
+        <td class="date-range">12–14 ก.ย.</td>
+        <td class="amount c-ginfra">0.20 ฿</td>
+      </tr>
+      <tr class="alt">
+        <td class="round-tag">ธ.ค. (Q4)<span class="round-sub">December</span></td>
+        <td class="date-range">30 พ.ย.–2 ธ.ค.<span class="sub">จากข้อมูล 2562–2568</span></td>
+        <td class="date-range">12–16 ธ.ค.</td>
+        <td class="amount c-ginfra">0.20 ฿</td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <!-- STOCKS -->
+  <div class="sec-label stock">
+    หุ้น (Stocks)
+    <span class="sec-nav-note">ราคา: SCB = 137.00 ฿ &nbsp;·&nbsp; TISCO = 113.50 ฿ &nbsp;·&nbsp; KTB = 35.25 ฿ &nbsp;(SET, 9 มิ.ย. 2569)</span>
+  </div>
+
+  <table class="data">
+    <thead>
+      <tr>
+        <th style="width:140px">หุ้น</th>
+        <th class="c" style="width:58px">จ่าย/ปี</th>
+        <th class="c" style="width:56px">รอบ</th>
+        <th class="c" style="width:118px">วันปิดสมุด</th>
+        <th class="c" style="width:118px">วันจ่ายปันผล</th>
+        <th class="r" style="width:78px">ปันผลเฉลี่ย/รอบ</th>
+        <th class="c" style="width:72px">Yield TTM</th>
+        <th class="c" style="width:88px">Yield เฉลี่ย</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- SCB -->
+      <tr>
+        <td rowspan="2">
+          <div class="asset-name"><span class="dot d-scb"></span><span class="c-scb">SCB</span></div>
+          <span class="asset-type-tag">หุ้น · ธนาคารไทยพาณิชย์</span>
+        </td>
+        <td class="round-tag c" rowspan="2">2 ครั้ง<br>ต่อปี</td>
+        <td class="round-tag">พ.ค.<span class="round-sub">ปันผลประจำปี</span></td>
+        <td class="date-range">16–20 เม.ย.<span class="sub">จากข้อมูล 2565–2568</span></td>
+        <td class="date-range">02–07 พ.ค.</td>
+        <td class="amount c-scb">7.69 ฿</td>
+        <td class="c" rowspan="2"><span class="yield-pill bg-scb">8.23%</span></td>
+        <td class="yield-avg" rowspan="2"><span class="c-scb">7.07%</span><span class="years-tag">เฉลี่ย 4 ปี</span></td>
+      </tr>
+      <tr class="alt">
+        <td class="round-tag">ก.ย.–พ.ย.*<span class="round-sub">ระหว่างกาล*</span></td>
+        <td class="date-range">ก.ย.–ต.ค.<span class="sub">*แตกต่างกันในแต่ละปี</span></td>
+        <td class="date-range">ก.ย.–พ.ย.*</td>
+        <td class="amount c-scb">2.00 ฿</td>
+      </tr>
+
+      <!-- TISCO -->
+      <tr>
+        <td rowspan="2">
+          <div class="asset-name"><span class="dot d-tisco"></span><span class="c-tisco">TISCO</span></div>
+          <span class="asset-type-tag">หุ้น · ธนาคารทิสโก้</span>
+        </td>
+        <td class="round-tag c" rowspan="2">2 ครั้ง<br>ต่อปี</td>
+        <td class="round-tag">ก.ย.<span class="round-sub">ระหว่างกาล</span></td>
+        <td class="date-range">10–11 ก.ย.<span class="sub">จากข้อมูล 2567–2568</span></td>
+        <td class="date-range">25–27 ก.ย.</td>
+        <td class="amount c-tisco">2.00 ฿</td>
+        <td class="c" rowspan="2"><span class="yield-pill bg-tisco">6.83%</span></td>
+        <td class="yield-avg" rowspan="2"><span class="c-tisco">5.97%</span><span class="years-tag">เฉลี่ย 6 ปี</span></td>
+      </tr>
+      <tr class="alt">
+        <td class="round-tag">พ.ค.<span class="round-sub">ปันผลประจำปี</span></td>
+        <td class="date-range">25–29 เม.ย.<span class="sub">จากข้อมูล 2566–2568</span></td>
+        <td class="date-range">15–19 พ.ค.</td>
+        <td class="amount c-tisco">5.75 ฿</td>
+      </tr>
+
+      <!-- KTB -->
+      <tr>
+        <td>
+          <div class="asset-name"><span class="dot d-ktb"></span><span class="c-ktb">KTB</span></div>
+          <span class="asset-type-tag">หุ้น · ธนาคารกรุงไทย</span>
+        </td>
+        <td class="round-tag c">1–2 ครั้ง<br>ต่อปี</td>
+        <td class="round-tag">เม.ย.<span class="round-sub">ปันผลประจำปี</span></td>
+        <td class="date-range">10–21 เม.ย.<span class="sub">จากข้อมูล 2564–2568</span></td>
+        <td class="date-range">30 เม.ย.–7 พ.ค.</td>
+        <td class="amount c-ktb">1.01 ฿</td>
+        <td class="c"><span class="yield-pill bg-ktb">6.35%</span></td>
+        <td class="yield-avg"><span class="c-ktb">3.05%</span><span class="years-tag">เฉลี่ย 6 ปี</span></td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <div class="footnote">
+    <strong>ปันผลเฉลี่ย/รอบ</strong> คำนวณจากประวัติย้อนหลังจริงในรูปภาพที่แนบชุดแรก &nbsp;·&nbsp;
+    <strong>Yield TTM</strong> = ปันผลรวม 12 เดือน (ก.ค.68–มิ.ย.69) ÷ NAV/ราคาปัจจุบัน &nbsp;·&nbsp;
+    <strong>Yield เฉลี่ย</strong> = ปันผลเฉลี่ยต่อปีจากประวัติทั้งหมด ÷ NAV/ราคาปัจจุบัน &nbsp;·&nbsp;
+    * SCB interim: ปี 2567 = ก.ย., ปี 2568 = พ.ย. (วันที่อาจแตกต่างกันในแต่ละปี) &nbsp;·&nbsp;
+    NAV: SCBS&P500 = 31.0946 (SCBAM, 4 มิ.ย.69) · SCBBANKING = 13.0706 (SCBAM, 12 พ.ค.69) · K-GINFRA-A(D) = 11.1410 (Finnomena, 5 มิ.ย.69)
+  </div>
+
+</div><!-- /page 1 -->
+
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PAGE 2 — DIVIDEND CALENDAR                    -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="page">
+
+  <div class="cal-header">
+    <div>
+      <div class="pg-title">Dividend Calendar 2568–2569</div>
+      <div class="pg-sub">ปฏิทินปันผล 12 เดือน &nbsp;|&nbsp; ก.ค. 2568 – มิ.ย. 2569 &nbsp;|&nbsp; สีแสดงสินทรัพย์ที่จ่ายปันผลในเดือนนั้น</div>
+    </div>
+    <div class="pg-badge">6 สินทรัพย์</div>
+  </div>
+
+  <div class="cal-grid">
+
+    <!-- ก.ค. 68 — empty -->
+    <div class="cal-month empty">
+      <div class="cal-month-head">
+        <div class="cal-month-name">ก.ค.</div>
+        <div class="cal-month-year">2568 &nbsp;·&nbsp; Jul</div>
+      </div>
+      <div class="cal-empty-label">— ไม่มีปันผล —</div>
+    </div>
+
+    <!-- ส.ค. 68 — SCBBANKING -->
+    <div class="cal-month active">
+      <div class="cal-month-head">
+        <div class="cal-month-name">ส.ค.</div>
+        <div class="cal-month-year">2568 &nbsp;·&nbsp; Aug</div>
+      </div>
+      <div class="cal-chips">
+        <div class="cal-chip bg-banking"><span class="chip-dot d-banking"></span>SCBBANKING</div>
+      </div>
+    </div>
+
+    <!-- ก.ย. 68 — K-GINFRA + TISCO -->
+    <div class="cal-month active">
+      <div class="cal-month-head">
+        <div class="cal-month-name">ก.ย.</div>
+        <div class="cal-month-year">2568 &nbsp;·&nbsp; Sep</div>
+      </div>
+      <div class="cal-chips">
+        <div class="cal-chip bg-ginfra"><span class="chip-dot d-ginfra"></span>K-GINFRA-A(D)</div>
+        <div class="cal-chip bg-tisco"><span class="chip-dot d-tisco"></span>TISCO</div>
+      </div>
+    </div>
+
+    <!-- ต.ค. 68 — empty -->
+    <div class="cal-month empty">
+      <div class="cal-month-head">
+        <div class="cal-month-name">ต.ค.</div>
+        <div class="cal-month-year">2568 &nbsp;·&nbsp; Oct</div>
+      </div>
+      <div class="cal-empty-label">— ไม่มีปันผล —</div>
+    </div>
+
+    <!-- พ.ย. 68 — SCB -->
+    <div class="cal-month active">
+      <div class="cal-month-head">
+        <div class="cal-month-name">พ.ย.</div>
+        <div class="cal-month-year">2568 &nbsp;·&nbsp; Nov</div>
+      </div>
+      <div class="cal-chips">
+        <div class="cal-chip bg-scb"><span class="chip-dot d-scb"></span>SCB</div>
+      </div>
+    </div>
+
+    <!-- ธ.ค. 68 — SCBS&P500 + K-GINFRA -->
+    <div class="cal-month active">
+      <div class="cal-month-head">
+        <div class="cal-month-name">ธ.ค.</div>
+        <div class="cal-month-year">2568 &nbsp;·&nbsp; Dec</div>
+      </div>
+      <div class="cal-chips">
+        <div class="cal-chip bg-sp500"><span class="chip-dot d-sp500"></span>SCBS&amp;P500</div>
+        <div class="cal-chip bg-ginfra"><span class="chip-dot d-ginfra"></span>K-GINFRA-A(D)</div>
+      </div>
+    </div>
+
+    <!-- ม.ค. 69 — empty -->
+    <div class="cal-month empty">
+      <div class="cal-month-head">
+        <div class="cal-month-name">ม.ค.</div>
+        <div class="cal-month-year">2569 &nbsp;·&nbsp; Jan</div>
+      </div>
+      <div class="cal-empty-label">— ไม่มีปันผล —</div>
+    </div>
+
+    <!-- ก.พ. 69 — SCBBANKING -->
+    <div class="cal-month active">
+      <div class="cal-month-head">
+        <div class="cal-month-name">ก.พ.</div>
+        <div class="cal-month-year">2569 &nbsp;·&nbsp; Feb</div>
+      </div>
+      <div class="cal-chips">
+        <div class="cal-chip bg-banking"><span class="chip-dot d-banking"></span>SCBBANKING</div>
+      </div>
+    </div>
+
+    <!-- มี.ค. 69 — K-GINFRA -->
+    <div class="cal-month active">
+      <div class="cal-month-head">
+        <div class="cal-month-name">มี.ค.</div>
+        <div class="cal-month-year">2569 &nbsp;·&nbsp; Mar</div>
+      </div>
+      <div class="cal-chips">
+        <div class="cal-chip bg-ginfra"><span class="chip-dot d-ginfra"></span>K-GINFRA-A(D)</div>
+      </div>
+    </div>
+
+    <!-- เม.ย. 69 — KTB -->
+    <div class="cal-month active">
+      <div class="cal-month-head">
+        <div class="cal-month-name">เม.ย.</div>
+        <div class="cal-month-year">2569 &nbsp;·&nbsp; Apr</div>
+      </div>
+      <div class="cal-chips">
+        <div class="cal-chip bg-ktb"><span class="chip-dot d-ktb"></span>KTB</div>
+      </div>
+    </div>
+
+    <!-- พ.ค. 69 — SCB + TISCO -->
+    <div class="cal-month active">
+      <div class="cal-month-head">
+        <div class="cal-month-name">พ.ค.</div>
+        <div class="cal-month-year">2569 &nbsp;·&nbsp; May</div>
+      </div>
+      <div class="cal-chips">
+        <div class="cal-chip bg-scb"><span class="chip-dot d-scb"></span>SCB</div>
+        <div class="cal-chip bg-tisco"><span class="chip-dot d-tisco"></span>TISCO</div>
+      </div>
+    </div>
+
+    <!-- มิ.ย. 69 — SCBS&P500 + K-GINFRA -->
+    <div class="cal-month active">
+      <div class="cal-month-head">
+        <div class="cal-month-name">มิ.ย.</div>
+        <div class="cal-month-year">2569 &nbsp;·&nbsp; Jun</div>
+      </div>
+      <div class="cal-chips">
+        <div class="cal-chip bg-sp500"><span class="chip-dot d-sp500"></span>SCBS&amp;P500</div>
+        <div class="cal-chip bg-ginfra"><span class="chip-dot d-ginfra"></span>K-GINFRA-A(D)</div>
+      </div>
+    </div>
+
+  </div><!-- /cal-grid -->
+
+  <div class="cal-legend">
+    <div class="leg-item"><div class="leg-dot d-sp500"></div>SCBS&amp;P500 — US Equity</div>
+    <div class="leg-item"><div class="leg-dot d-banking"></div>SCBBANKING — Banking Index</div>
+    <div class="leg-item"><div class="leg-dot d-ginfra"></div>K-GINFRA-A(D) — Global Infrastructure</div>
+    <div class="leg-item"><div class="leg-dot d-scb"></div>SCB — ธนาคารไทยพาณิชย์</div>
+    <div class="leg-item"><div class="leg-dot d-tisco"></div>TISCO — ธนาคารทิสโก้</div>
+    <div class="leg-item"><div class="leg-dot d-ktb"></div>KTB — ธนาคารกรุงไทย</div>
+  </div>
+
+</div><!-- /page 2 -->
 
 </body>
 </html>
