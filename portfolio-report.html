@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>รายงานพอร์ตการลงทุน</title>
+<style>
+@page { size: 1280px 720px; margin: 0; }
+* { box-sizing: border-box; }
+html, body { margin:0; padding:0; }
+body {
+  font-family: 'Noto Sans Thai', 'Noto Sans', sans-serif;
+  background: #0b1220;
+  color: #e2e8f0;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.page {
+  width: 1280px;
+  height: 720px;
+  padding: 30px 46px;
+  position: relative;
+  overflow: hidden;
+  page-break-after: always;
+  background: #0b1220;
+}
+.page:last-child { page-break-after: avoid; }
+
+.eyebrow { color:#38bdf8; font-size:13px; letter-spacing:2px; text-transform:uppercase; font-weight:700; margin:0; }
+.title { font-size:34px; font-weight:800; margin:4px 0 6px; color:#f8fafc; }
+.subtitle { font-size:15px; color:#94a3b8; margin:0 0 14px; }
+
+.kpi-row { display:flex; gap:14px; margin-bottom:14px; }
+.kpi { flex:1; background:#141d2f; border:1px solid #2a3650; border-radius:10px; padding:12px 16px; }
+.kpi .label { font-size:11.5px; color:#94a3b8; }
+.kpi .value { font-size:25px; font-weight:800; margin-top:4px; color:#f8fafc; }
+.kpi .sub { font-size:11px; color:#64748b; margin-top:2px; }
+
+.pos { color:#34d399 !important; }
+.neg { color:#f87171 !important; }
+.accent { color:#38bdf8 !important; }
+
+.badge { display:inline-block; padding:3px 11px; border-radius:999px; font-size:11px; font-weight:700; }
+.badge-blue { background:rgba(56,189,248,0.15); color:#38bdf8; border:1px solid rgba(56,189,248,0.35); }
+.badge-green { background:rgba(52,211,153,0.15); color:#34d399; border:1px solid rgba(52,211,153,0.35); }
+.badge-red { background:rgba(248,113,113,0.15); color:#f87171; border:1px solid rgba(248,113,113,0.35); }
+.badge-amber { background:rgba(251,191,36,0.15); color:#fbbf24; border:1px solid rgba(251,191,36,0.35); }
+.badge-purple { background:rgba(167,139,250,0.15); color:#a78bfa; border:1px solid rgba(167,139,250,0.35); }
+.badge-gray { background:rgba(148,163,184,0.15); color:#94a3b8; border:1px solid rgba(148,163,184,0.35); }
+
+table { width:100%; border-collapse:collapse; font-size:12.5px; }
+th { text-align:left; color:#94a3b8; font-weight:600; padding:5px 8px; border-bottom:1px solid #2a3650; font-size:11.5px; white-space:nowrap; }
+td { padding:5px 8px; border-bottom:1px solid #1c2940; }
+tr:last-child td { border-bottom:none; }
+.tnum { text-align:right; font-variant-numeric:tabular-nums; }
+
+.card { background:#141d2f; border:1px solid #2a3650; border-radius:12px; padding:14px 16px; }
+.section-title { font-size:17px; font-weight:800; margin:0 0 10px; display:flex; align-items:center; gap:10px; color:#f8fafc; }
+.num-badge { background:#38bdf8; color:#0b1220; min-width:24px; height:24px; border-radius:6px; display:inline-flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; padding:0 6px; }
+
+.insight-box { background:rgba(52,211,153,0.07); border:1px solid rgba(52,211,153,0.25); border-radius:10px; padding:12px 14px; }
+.insight-box .h { color:#34d399; font-weight:800; font-size:13px; margin:0 0 6px; }
+.insight-box ul { margin:0; padding-left:18px; }
+.insight-box li { margin-bottom:5px; font-size:12.5px; color:#cbd5e1; }
+
+.warn-box { background:rgba(251,191,36,0.07); border:1px solid rgba(251,191,36,0.25); border-radius:10px; padding:12px 14px; font-size:12.5px; color:#cbd5e1; }
+
+.row { display:flex; gap:16px; }
+.col { flex:1; min-width:0; }
+
+.seg-bar { display:flex; width:100%; height:16px; border-radius:8px; overflow:hidden; border:1px solid #2a3650; }
+.seg-bar > div { height:100%; }
+
+.hbar-track { background:#1c2940; border-radius:5px; height:9px; overflow:hidden; width:100%; }
+.hbar-fill { height:100%; border-radius:5px; }
+
+.legend { display:flex; flex-wrap:wrap; gap:10px; font-size:11.5px; color:#cbd5e1; margin-top:8px; }
+.legend .sw { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:5px; vertical-align:middle; }
+
+.foot { position:absolute; bottom:14px; left:46px; right:46px; display:flex; justify-content:space-between; font-size:10.5px; color:#475569; border-top:1px solid #1c2940; padding-top:8px; }
+
+.fund-head { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+.fund-code { font-size:24px; font-weight:800; padding:6px 16px; border-radius:10px; }
+.fund-meta { font-size:12px; color:#94a3b8; }
+.fund-meta b { color:#e2e8f0; }
+
+.chips { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 12px; }
+.chip { background:#1c2940; border:1px solid #2a3650; border-radius:8px; padding:6px 12px; font-size:11.5px; }
+.chip b { color:#f8fafc; display:block; font-size:14px; }
+.chip span { color:#94a3b8; }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- PAGE 1: COVER -->
+<!-- ============================================================ -->
+<div class="page">
+  <p class="eyebrow">รายงานสรุปพอร์ตการลงทุน &middot; ลูกค้าบุคคล</p>
+  <h1 class="title">พอร์ตกองทุนรวมผสม 5 กองทุน</h1>
+  <p class="subtitle">
+    TLUS500-H 35% &middot; B-INNOTECH 15% &middot; A-GRID 10% &middot; SCBGOLDH 15% &middot; K-GDBOND-A(A) 25%
+    &nbsp;|&nbsp; ข้อมูล ณ 15 มิถุนายน 2569 (2026)
+  </p>
+
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="label">เงินลงทุนตัวอย่าง</div>
+      <div class="value">฿1,000,000</div>
+      <div class="sub">แบ่งตามสัดส่วน 5 กองทุน</div>
+    </div>
+    <div class="kpi">
+      <div class="label">ผลตอบแทนถ่วงน้ำหนัก 1 ปี</div>
+      <div class="value pos">+30.59%</div>
+      <div class="sub">เทียบ Benchmark ถ่วงน้ำหนัก +31.16%</div>
+    </div>
+    <div class="kpi">
+      <div class="label">มูลค่าพอร์ตประมาณการ (1 ปี)</div>
+      <div class="value">฿1,305,900</div>
+      <div class="sub">กำไรประมาณ +305,900 บาท</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Sharpe Ratio (1Y, ประมาณการ)</div>
+      <div class="value accent">1.89</div>
+      <div class="sub">(1Y Return − 2.5%) / SD</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Max Drawdown (ประมาณการ)</div>
+      <div class="value neg">-20.6%</div>
+      <div class="sub">SD ถ่วงน้ำหนัก ~14.9%</div>
+    </div>
+  </div>
+
+  <div class="warn-box" style="margin-bottom:16px;">
+    <b style="color:#fbbf24;">หมายเหตุข้อมูล:</b>
+    ตัวเลขผลตอบแทน ความเสี่ยง (SD/Max Drawdown) และข้อมูล Top Holdings บางส่วนเป็น
+    <b>ข้อมูลโดยประมาณ/อ้างอิงจากกองทุนหลักหรือดัชนีอ้างอิง (Proxy)</b> โดยเฉพาะ
+    <b>TLUS500-H</b> (อ้างอิง iShares Core S&amp;P 500 ETF) และ <b>A-GRID</b> (อ้างอิง GRID ETF) ซึ่งเป็นกองทุนจัดตั้งใหม่
+    และยังไม่มีข้อมูลย้อนหลังของตนเองครบทุกช่วงเวลา ควรตรวจสอบกับ Fund Fact Sheet ฉบับล่าสุดก่อนใช้งานจริง
+    เอกสารนี้จัดทำเพื่อการนำเสนอข้อมูลเบื้องต้นเท่านั้น ไม่ถือเป็นคำเสนอซื้อขายหลักทรัพย์
+  </div>
+
+  <div class="section-title"><span class="num-badge">1</span> ภาพรวมการจัดสรรเงินลงทุน (Asset Allocation)</div>
+
+  <div class="row">
+    <div class="col" style="flex:1.3;">
+      <div class="seg-bar">
+        <div style="width:35%; background:#1f6feb;"></div>
+        <div style="width:15%; background:#2ca58d;"></div>
+        <div style="width:10%; background:#e07a5f;"></div>
+        <div style="width:15%; background:#f2b134;"></div>
+        <div style="width:25%; background:#7c3aed;"></div>
+      </div>
+      <div class="legend">
+        <span><span class="sw" style="background:#1f6feb;"></span>TLUS500-H 35% (US Equity Hedged)</span>
+        <span><span class="sw" style="background:#2ca58d;"></span>B-INNOTECH 15% (Global Tech Equity)</span>
+        <span><span class="sw" style="background:#e07a5f;"></span>A-GRID 10% (Smart Grid Equity)</span>
+        <span><span class="sw" style="background:#f2b134;"></span>SCBGOLDH 15% (Gold Hedged)</span>
+        <span><span class="sw" style="background:#7c3aed;"></span>K-GDBOND-A(A) 25% (Global Bond)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top:16px; gap:16px;">
+    <div class="col card">
+      <div style="font-weight:800; color:#34d399; margin-bottom:4px;">&#9650; Growth Zone &mdash; 60%</div>
+      <div style="font-size:12.5px; color:#cbd5e1;">
+        TLUS500-H 35% + B-INNOTECH 15% + A-GRID 10% &mdash; สินทรัพย์เสี่ยงสูงเน้นหุ้นสหรัฐฯ เทคโนโลยีโลก
+        และโครงสร้างพื้นฐานพลังงาน/Smart Grid เพื่อสร้างการเติบโตของเงินทุนในระยะยาว
+      </div>
+    </div>
+    <div class="col card">
+      <div style="font-weight:800; color:#fbbf24; margin-bottom:4px;">&#9670; Hedge / Income Zone &mdash; 40%</div>
+      <div style="font-size:12.5px; color:#cbd5e1;">
+        SCBGOLDH 15% + K-GDBOND-A(A) 25% &mdash; ทองคำ (Hedged) ป้องกันความเสี่ยงเงินเฟ้อ/ตลาดผันผวน
+        และตราสารหนี้โลกเพื่อลดความผันผวนรวมของพอร์ตและสร้างกระแสรายได้สม่ำเสมอ
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>รายงานนี้จัดทำขึ้นเพื่อการนำเสนอข้อมูลเบื้องต้น &mdash; Mutual Fund Portfolio Report</span>
+    <span>หน้า 1 / 11</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 2: PORTFOLIO STRUCTURE & HOLDINGS -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="section-title"><span class="num-badge">2</span> โครงสร้างพอร์ตและตารางการลงทุน (Portfolio Structure &amp; Holdings)</div>
+
+  <table style="margin-bottom:16px;">
+    <tr>
+      <th>กองทุน</th>
+      <th>กองทุนหลัก / ดัชนีอ้างอิง</th>
+      <th>ประเภทสินทรัพย์</th>
+      <th>นโยบาย FX</th>
+      <th class="tnum">น้ำหนัก</th>
+      <th class="tnum">เงินลงทุน (฿)</th>
+    </tr>
+    <tr>
+      <td><span class="badge" style="background:rgba(31,111,235,0.15); color:#1f6feb; border:1px solid rgba(31,111,235,0.35);">TLUS500-H</span></td>
+      <td>iShares Core S&amp;P 500 ETF (BlackRock)</td>
+      <td>หุ้นสหรัฐฯ ขนาดใหญ่ (US Large Cap)</td>
+      <td>Hedge &ge;90%</td>
+      <td class="tnum">35%</td>
+      <td class="tnum">350,000</td>
+    </tr>
+    <tr>
+      <td><span class="badge" style="background:rgba(44,165,141,0.15); color:#2ca58d; border:1px solid rgba(44,165,141,0.35);">B-INNOTECH</span></td>
+      <td>Fidelity Funds - Global Technology Fund (Y-ACC-USD)</td>
+      <td>หุ้นเทคโนโลยีและนวัตกรรมโลก</td>
+      <td>Discretionary</td>
+      <td class="tnum">15%</td>
+      <td class="tnum">150,000</td>
+    </tr>
+    <tr>
+      <td><span class="badge" style="background:rgba(224,122,95,0.15); color:#e07a5f; border:1px solid rgba(224,122,95,0.35);">A-GRID</span> <span class="badge badge-amber" style="margin-left:4px;">กองใหม่</span></td>
+      <td>First Trust NASDAQ Clean Edge Smart Grid Infra ETF (GRID)</td>
+      <td>หุ้นธีม Smart Grid / โครงข่ายไฟฟ้าโลก</td>
+      <td>&mdash; (ETF)</td>
+      <td class="tnum">10%</td>
+      <td class="tnum">100,000</td>
+    </tr>
+    <tr>
+      <td><span class="badge" style="background:rgba(242,177,52,0.15); color:#f2b134; border:1px solid rgba(242,177,52,0.35);">SCBGOLDH</span></td>
+      <td>SPDR Gold Shares (SPDR Gold Trust)</td>
+      <td>ทองคำ (Gold, THB Hedged)</td>
+      <td>Hedge &ge;90%</td>
+      <td class="tnum">15%</td>
+      <td class="tnum">150,000</td>
+    </tr>
+    <tr>
+      <td><span class="badge" style="background:rgba(124,58,237,0.15); color:#a78bfa; border:1px solid rgba(124,58,237,0.35);">K-GDBOND-A(A)</span></td>
+      <td>PIMCO GIS Income Fund (Class INST USD Acc)</td>
+      <td>ตราสารหนี้โลก (Global Bond)</td>
+      <td>Discretionary</td>
+      <td class="tnum">25%</td>
+      <td class="tnum">250,000</td>
+    </tr>
+    <tr style="font-weight:800;">
+      <td colspan="4">รวมพอร์ต (Total Portfolio)</td>
+      <td class="tnum">100%</td>
+      <td class="tnum">1,000,000</td>
+    </tr>
+  </table>
+
+  <div class="row" style="gap:16px;">
+    <div class="col card">
+      <div style="font-weight:800; margin-bottom:8px; color:#f8fafc;">ระดับความเสี่ยงรายกองทุน (Risk Level 1-8)</div>
+      <table>
+        <tr><th>กองทุน</th><th class="tnum">Risk Level</th><th>ระดับ</th></tr>
+        <tr><td>TLUS500-H</td><td class="tnum">6</td><td><div class="hbar-track"><div class="hbar-fill" style="width:75%; background:#1f6feb;"></div></div></td></tr>
+        <tr><td>B-INNOTECH</td><td class="tnum">7</td><td><div class="hbar-track"><div class="hbar-fill" style="width:87.5%; background:#2ca58d;"></div></div></td></tr>
+        <tr><td>A-GRID</td><td class="tnum">6</td><td><div class="hbar-track"><div class="hbar-fill" style="width:75%; background:#e07a5f;"></div></div></td></tr>
+        <tr><td>SCBGOLDH</td><td class="tnum">8</td><td><div class="hbar-track"><div class="hbar-fill" style="width:100%; background:#f2b134;"></div></div></td></tr>
+        <tr><td>K-GDBOND-A(A)</td><td class="tnum">5</td><td><div class="hbar-track"><div class="hbar-fill" style="width:62.5%; background:#7c3aed;"></div></div></td></tr>
+        <tr style="font-weight:800;"><td>พอร์ตรวม (ถ่วงน้ำหนัก)</td><td class="tnum accent">6.2</td><td><div class="hbar-track"><div class="hbar-fill" style="width:77.5%; background:#38bdf8;"></div></div></td></tr>
+      </table>
+    </div>
+    <div class="col card">
+      <div style="font-weight:800; margin-bottom:8px; color:#f8fafc;">สรุปลักษณะพอร์ต</div>
+      <div class="chips">
+        <div class="chip"><b>75%</b><span>สัดส่วนสินทรัพย์เสี่ยงสูง (หุ้น+ทอง)</span></div>
+        <div class="chip"><b>60%</b><span>สัดส่วนหุ้น (Equity)</span></div>
+        <div class="chip"><b>15%</b><span>สัดส่วนทองคำ (Gold Hedged)</span></div>
+        <div class="chip"><b>25%</b><span>สัดส่วนตราสารหนี้โลก</span></div>
+        <div class="chip"><b>5 ธีม</b><span>US Equity / Global Tech / Smart Grid / Gold / Global Bond</span></div>
+        <div class="chip"><b>6.20 / 8</b><span>ระดับความเสี่ยงถ่วงน้ำหนักของพอร์ต</span></div>
+      </div>
+      <div style="font-size:12px; color:#94a3b8; margin-top:10px;">
+        พอร์ตมีลักษณะ <b style="color:#e2e8f0;">เติบโต (Growth-tilted)</b> โดยมีสัดส่วนสินทรัพย์เสี่ยงสูง 75% และตราสารหนี้/เครื่องมือลดความผันผวน 25%
+        เหมาะกับผู้ลงทุนที่รับความเสี่ยงได้ระดับสูง (Risk Level 5-8) และมีระยะเวลาลงทุนระยะยาว (&gt; 5 ปี)
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>รายงานนี้จัดทำขึ้นเพื่อการนำเสนอข้อมูลเบื้องต้น &mdash; Mutual Fund Portfolio Report</span>
+    <span>หน้า 2 / 11</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 3: TLUS500-H -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="fund-head">
+    <div class="fund-code" style="background:rgba(31,111,235,0.15); color:#1f6feb; border:1px solid rgba(31,111,235,0.35);">TLUS500-H</div>
+    <div>
+      <div style="font-weight:800; font-size:16px; color:#f8fafc;">กองทุนเปิดทาลิส หุ้นยูเอส 500-HEDGE</div>
+      <div class="fund-meta">บลจ. ทาลิส (Talis AM) &nbsp;|&nbsp; น้ำหนักในพอร์ต <b>35%</b> (350,000 บาท) &nbsp;|&nbsp; กองทุนหลัก: <b>iShares Core S&amp;P 500 ETF</b></div>
+    </div>
+    <div style="flex:1;"></div>
+    <span class="badge badge-blue">Global Active &mdash; 35%</span>
+  </div>
+
+  <div class="chips">
+    <div class="chip"><b>~0.75%*</b><span>TER ต่อปี (ประมาณการ)</span></div>
+    <div class="chip"><b>~144.7 ลบ.</b><span>ขนาดกองทุน (AUM)</span></div>
+    <div class="chip"><b>Risk 6</b><span>ระดับความเสี่ยง</span></div>
+    <div class="chip"><b>Hedge &ge;90%</b><span>นโยบายป้องกันความเสี่ยง FX</span></div>
+    <div class="chip"><b>12 มี.ค. 2568</b><span>วันจัดตั้งกองทุน</span></div>
+    <div class="chip"><b>S&amp;P 500 TR (USD,H)</b><span>Benchmark</span></div>
+  </div>
+
+  <div class="row" style="gap:16px;">
+    <div class="col" style="flex:1.15;">
+      <div class="card" style="margin-bottom:12px;">
+        <div class="section-title" style="font-size:14px; margin-bottom:6px;">นโยบายการลงทุน</div>
+        <div style="font-size:12.5px; color:#cbd5e1;">
+          ลงทุนใน <b>iShares Core S&amp;P 500 ETF</b> (บริหารโดย BlackRock) เฉลี่ยไม่น้อยกว่า 80% ของ NAV ต่อปี
+          ซึ่งลงทุนในหุ้นบริษัทขนาดใหญ่ของสหรัฐฯ ในดัชนี S&amp;P 500 ครอบคลุมทุกอุตสาหกรรม นำโดยกลุ่มเทคโนโลยี
+          มีนโยบาย<b>ป้องกันความเสี่ยงอัตราแลกเปลี่ยนไม่น้อยกว่า 90%</b> ของมูลค่าเงินลงทุนต่างประเทศ
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title" style="font-size:14px; margin-bottom:6px;">Top Holdings (ของ iShares Core S&amp;P 500 ETF)</div>
+        <table>
+          <tr><th>หลักทรัพย์</th><th>กลุ่มอุตสาหกรรม</th><th class="tnum">น้ำหนัก</th></tr>
+          <tr><td>NVIDIA Corp</td><td>Information Technology</td><td class="tnum">7.31%</td></tr>
+          <tr><td>Apple Inc</td><td>Information Technology</td><td class="tnum">6.63%</td></tr>
+          <tr><td>Microsoft Corp</td><td>Information Technology</td><td class="tnum">4.96%</td></tr>
+          <tr><td>Amazon.com Inc</td><td>Consumer Discretionary</td><td class="tnum">3.47%</td></tr>
+          <tr><td>Alphabet Inc Class A</td><td>Communication Services</td><td class="tnum">3.08%</td></tr>
+          <tr><td>Broadcom Inc</td><td>Information Technology</td><td class="tnum">2.56%</td></tr>
+          <tr><td>Alphabet Inc Class C</td><td>Communication Services</td><td class="tnum">2.46%</td></tr>
+          <tr><td>Meta Platforms Inc</td><td>Communication Services</td><td class="tnum">2.40%</td></tr>
+          <tr><td>Tesla Inc</td><td>Consumer Discretionary</td><td class="tnum">1.92%</td></tr>
+          <tr><td>Berkshire Hathaway Cl. B</td><td>Financials</td><td class="tnum">1.57%</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" style="margin-bottom:12px;">
+        <div class="section-title" style="font-size:14px; margin-bottom:6px;">ผลตอบแทนย้อนหลัง เทียบ Benchmark (%)</div>
+        <table>
+          <tr><th>ช่วงเวลา</th><th class="tnum">กองทุน*</th><th class="tnum">Benchmark</th></tr>
+          <tr><td>YTD 2569</td><td class="tnum pos">+7.80%</td><td class="tnum">+8.30%</td></tr>
+          <tr><td>3 เดือน</td><td class="tnum pos">+5.33%</td><td class="tnum">+5.80%</td></tr>
+          <tr><td>6 เดือน</td><td class="tnum pos">+7.77%</td><td class="tnum">+8.30%</td></tr>
+          <tr><td>1 ปี</td><td class="tnum pos">+27.25%</td><td class="tnum">+28.50%</td></tr>
+          <tr><td>3 ปี (Ann.)</td><td class="tnum">N/A**</td><td class="tnum">+18.00%</td></tr>
+          <tr><td>5 ปี (Ann.)</td><td class="tnum">N/A**</td><td class="tnum">+17.50%</td></tr>
+        </table>
+        <div style="font-size:10.5px; color:#64748b; margin-top:6px;">
+          * ตั้งแต่จัดตั้งกองทุน (มี.ค. 2568) ผลตอบแทน 1 ปีรวมผลของอัตราแลกเปลี่ยน Hedge<br/>
+          ** กองทุนจัดตั้งใหม่ ยังไม่มีข้อมูลย้อนหลัง 3/5 ปีของตนเอง (Benchmark = S&amp;P 500 TR Hedged)
+        </div>
+      </div>
+      <div class="insight-box">
+        <div class="h">มุมมอง / Outlook ตลาดหุ้นสหรัฐฯ ปี 2569</div>
+        <ul>
+          <li>Goldman Sachs คาดกำไร S&amp;P 500 (EPS) เติบโต ~12% หนุนดัชนีปรับขึ้นต่อ</li>
+          <li>Morgan Stanley: &ldquo;Constructive, Not Complacent&rdquo; &mdash; เชิงบวกแต่เตือน Valuation ตึงตัว</li>
+          <li>J.P. Morgan Private Bank คงมุมมองเชิงบวกแม้อาจเผชิญความผันผวนระยะสั้น</li>
+          <li>กลุ่มเทคโนโลยีและการลงทุนด้าน AI ยังเป็นแรงขับเคลื่อนหลักของดัชนี</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>รายงานนี้จัดทำขึ้นเพื่อการนำเสนอข้อมูลเบื้องต้น &mdash; Mutual Fund Portfolio Report</span>
+    <span>หน้า 3 / 11</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 4: B-INNOTECH -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="fund-head">
+    <div class="fund-code" style="background:rgba(44,165,141,0.15); color:#2ca58d; border:1px solid rgba(44,165,141,0.35);">B-INNOTECH</div>
+    <div>
+      <div style="font-weight:800; font-size:16px; color:#f8fafc;">กองทุนเปิดบัวหลวงโกลบอลอินโนเวชั่นและเทคโนโลยี</div>
+      <div class="fund-meta">บลจ. บัวหลวง (BBLAM) &nbsp;|&nbsp; น้ำหนักในพอร์ต <b>15%</b> (150,000 บาท) &nbsp;|&nbsp; กองทุนหลัก: <b>Fidelity Funds - Global Technology Fund (Y-ACC-USD)</b></div>
+    </div>
+    <div style="flex:1;"></div>
+    <span class="badge" style="background:rgba(44,165,141,0.15); color:#2ca58d; border:1px solid rgba(44,165,141,0.35);">Global Tech Equity &mdash; 15%</span>
+  </div>
+
+  <div class="chips">
+    <div class="chip"><b>1.42%</b><span>TER ต่อปี (มจก. 1.07%)</span></div>
+    <div class="chip"><b>~14,858 ลบ.</b><span>ขนาดกองทุน (AUM)</span></div>
+    <div class="chip"><b>Risk 7</b><span>ระดับความเสี่ยง</span></div>
+    <div class="chip"><b>Discretionary</b><span>นโยบายป้องกันความเสี่ยง FX</span></div>
+    <div class="chip"><b>10 มี.ค. 2560</b><span>วันจัดตั้งกองทุน</span></div>
+    <div class="chip"><b>MSCI ACWI IT</b><span>Benchmark</span></div>
+  </div>
+
+  <div class="row" style="gap:16px;">
+    <div class="col" style="flex:1.15;">
+      <div class="card" style="margin-bottom:12px;">
+        <div class="section-title" style="font-size:14px; margin-bottom:6px;">นโยบายการลงทุน</div>
+        <div style="font-size:12.5px; color:#cbd5e1;">
+          ลงทุนใน <b>Fidelity Funds - Global Technology Fund (Class Y-ACC-USD)</b> เฉลี่ยไม่น้อยกว่า 80% ของ NAV ต่อปี
+          กองทุนหลักใช้แนวทาง Bottom-up เลือกหุ้นเทคโนโลยี/นวัตกรรมทั่วโลก ครอบคลุม Semiconductor, Software, Hardware,
+          Internet Services, Fintech และ AI Value Chain (แนวทาง &ldquo;AI-basket&rdquo;) ไม่กระจุกตัวเฉพาะหุ้นเทคฯ ขนาดใหญ่กลุ่มเดียว
+          นโยบายป้องกันความเสี่ยง FX เป็นไปตามดุลยพินิจผู้จัดการกองทุน
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title" style="font-size:14px; margin-bottom:6px;">Top Holdings (ของ Fidelity Global Technology Fund) &mdash; แยกตามประเทศ</div>
+        <table>
+          <tr><th>หลักทรัพย์</th><th>ประเทศ</th><th class="tnum">น้ำหนัก</th></tr>
+          <tr><td>Taiwan Semiconductor (TSMC)</td><td>ไต้หวัน</td><td class="tnum">7.10%</td></tr>
+          <tr><td>Microsoft Corp</td><td>สหรัฐอเมริกา</td><td class="tnum">5.65%</td></tr>
+          <tr><td>Apple Inc</td><td>สหรัฐอเมริกา</td><td class="tnum">4.17%</td></tr>
+          <tr><td>Telefonaktiebolaget LM Ericsson</td><td>สวีเดน</td><td class="tnum">3.24%</td></tr>
+          <tr><td>Amazon.com Inc</td><td>สหรัฐอเมริกา</td><td class="tnum">3.05%</td></tr>
+          <tr><td>Alphabet Inc</td><td>สหรัฐอเมริกา</td><td class="tnum">2.91%</td></tr>
+          <tr><td>Workday Inc</td><td>สหรัฐอเมริกา</td><td class="tnum">2.14%</td></tr>
+          <tr><td>Meta Platforms Inc</td><td>สหรัฐอเมริกา</td><td class="tnum">1.77%</td></tr>
+        </table>
+        <div style="font-size:10.5px; color:#64748b; margin-top:6px;">
+          การกระจายตามประเทศของกองทุนหลัก (โดยประมาณ): สหรัฐฯ 57.1% &middot; ไต้หวัน 8.1% &middot; จีน 7.8% &middot;
+          เนเธอร์แลนด์ 4.3% &middot; ฝรั่งเศส 3.9% &middot; เกาหลีใต้ 3.8% &middot; ญี่ปุ่น 3.4% &middot; สวีเดน 3.3% &middot; อังกฤษ 2.6% &middot; อื่นๆ 5.7%
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" style="margin-bottom:12px;">
+        <div class="section-title" style="font-size:14px; margin-bottom:6px;">ผลตอบแทนย้อนหลัง เทียบ Benchmark (%)</div>
+        <table>
+          <tr><th>ช่วงเวลา</th><th class="tnum">กองทุน</th><th class="tnum">Benchmark</th></tr>
+          <tr><td>YTD 2569</td><td class="tnum pos">+19.70%</td><td class="tnum">+20.00%</td></tr>
+          <tr><td>3 เดือน</td><td class="tnum pos">+16.74%</td><td class="tnum">+17.00%</td></tr>
+          <tr><td>6 เดือน</td><td class="tnum pos">+19.74%</td><td class="tnum">+20.00%</td></tr>
+          <tr><td>1 ปี</td><td class="tnum pos">+36.47%</td><td class="tnum">+38.00%</td></tr>
+          <tr><td>3 ปี (Ann.)</td><td class="tnum pos">+15.85%</td><td class="tnum">+20.00%</td></tr>
+          <tr><td>5 ปี (Ann.)</td><td class="tnum pos">+9.43%</td><td class="tnum">+22.00%</td></tr>
+        </table>
+        <div style="font-size:10.5px; color:#64748b; margin-top:6px;">
+          กองทุนเน้นแนวทาง Lower-volatility tech &mdash; Max Drawdown (3Y, ประมาณการ) ~-18.4% / SD (3Y, ประมาณการ) ~19.3%
+        </div>
+      </div>
+      <div class="insight-box">
+        <div class="h">มุมมอง / Outlook ธีมเทคโนโลยีและ AI</div>
+        <ul>
+          <li>BBLAM จัดเป็นกองทุนแนะนำ (B-SELECT) สำหรับครึ่งปีหลัง 2569</li>
+          <li>Fidelity คาดการลงทุนด้าน AI Infrastructure จาก Hyperscaler เติบโตต่อเนื่อง นำโดยกลุ่ม Semiconductor</li>
+          <li>ใช้แนวทาง &ldquo;AI-basket&rdquo; กระจายความเสี่ยงในหุ้นกลุ่ม Semiconductor, Hardware, Software, Services</li>
+          <li>ตลาดยังแบ่งขั้วระหว่าง &ldquo;AI Winners&rdquo; และ &ldquo;AI Losers&rdquo; โดยเฉพาะ Application Software</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>รายงานนี้จัดทำขึ้นเพื่อการนำเสนอข้อมูลเบื้องต้น &mdash; Mutual Fund Portfolio Report</span>
+    <span>หน้า 4 / 11</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 5: A-GRID -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="fund-head">
+    <div class="fund-code" style="background:rgba(224,122,95,0.15); color:#e07a5f; border:1px solid rgba(224,122,95,0.35);">A-GRID</div>
+    <div>
+      <div style="font-weight:800; font-size:16px; color:#f8fafc;">กองทุนเปิดเอแทรคเกอร์ส สมาร์ท กริด</div>
+      <div class="fund-meta">บลจ. แอสเซท พลัส (Asset Plus AM) &nbsp;|&nbsp; น้ำหนักในพอร์ต <b>10%</b> (100,000 บาท) &nbsp;|&nbsp; กองทุนหลัก: <b>First Trust NASDAQ Clean Edge Smart Grid Infra ETF (GRID)</b></div>
+    </div>
+    <div style="flex:1;"></div>
+    <span class="badge badge-amber">กองทุนใหม่ (IPO ก.พ. 2569) &mdash; 10%</span>
+  </div>
+
+  <div class="chips">
+    <div class="chip"><b>~1.85%*</b><span>TER ต่อปี (มจก. 1.61% + Front-end 1.25%)</span></div>
+    <div class="chip"><b>~1,000 ลบ.*</b><span>ขนาดกองทุน (เป้าหมาย IPO)</span></div>
+    <div class="chip"><b>Risk 6</b><span>ระดับความเสี่ยง</span></div>
+    <div class="chip"><b>&mdash; (ETF)</b><span>นโยบายป้องกันความเสี่ยง FX</span></div>
+    <div class="chip"><b>5-12 ก.พ. 2569</b><span>IPO กองทุนใหม่</span></div>
+    <div class="chip"><b>Nasdaq Clean Edge Smart Grid</b><span>Benchmark</span></div>
+  </div>
+
+  <div class="warn-box" style="margin-bottom:12px;">
+    <b style="color:#fbbf24;">หมายเหตุ:</b> A-GRID เป็นกองทุนที่จัดตั้งใหม่ (IPO ก.พ. 2569) ยังไม่มีข้อมูลผลตอบแทนย้อนหลังของตนเอง
+    ตัวเลขผลตอบแทน/ความเสี่ยงในหน้านี้ใช้ <b>GRID ETF (กองทุนหลักอ้างอิง)</b> เป็นข้อมูล Proxy ย้อนหลังแทน
+  </div>
+
+  <div class="row" style="gap:16px;">
+    <div class="col" style="flex:1.15;">
+      <div class="card" style="margin-bottom:12px;">
+        <div class="section-title" style="font-size:14px; margin-bottom:6px;">นโยบายการลงทุน</div>
+        <div style="font-size:12.5px; color:#cbd5e1;">
+          ลงทุนใน <b>First Trust NASDAQ Clean Edge Smart Grid Infrastructure Index Fund (GRID ETF)</b> ซึ่งเป็น ETF เชิง Passive
+          ลงทุนในหุ้นบริษัททั่วโลก (~114-128 บริษัท เน้นสหรัฐฯ และยุโรป) ที่มีรายได้หลัก (&ge;50%) จากธุรกิจ Smart Grid
+          และโครงสร้างพื้นฐานไฟฟ้า ครอบคลุม Grid Infrastructure, Energy Storage, Smart Meter และซอฟต์แวร์บริหารโครงข่ายไฟฟ้า<br/><br/>
+          <b>แนวคิด:</b> ไฟฟ้าเป็น 1 ใน 4 เสาหลักของ AI Data Center &mdash; การขยายตัวของ AI/Data Center ผลักดันความต้องการไฟฟ้า
+          และการลงทุนปรับปรุงโครงข่ายไฟฟ้าทั่วโลก GRID ETF จัดตั้งมาตั้งแต่ปี 2009 ขนาดสินทรัพย์ ~5.9 พันล้านดอลลาร์ และได้ Morningstar 5 ดาว
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title" style="font-size:14px; margin-bottom:6px;">Top Holdings (ของ GRID ETF) &mdash; แยกตามประเทศ</div>
+        <table>
+          <tr><th>หลักทรัพย์</th><th>ประเทศ</th><th class="tnum">น้ำหนัก</th></tr>
+          <tr><td>ABB Ltd</td><td>สวิตเซอร์แลนด์</td><td class="tnum">8.37%</td></tr>
+          <tr><td>Eaton Corporation</td><td>ไอร์แลนด์ / สหรัฐฯ</td><td class="tnum">7.89%</td></tr>
+          <tr><td>Johnson Controls Intl</td><td>ไอร์แลนด์</td><td class="tnum">7.63%</td></tr>
+          <tr><td>Schneider Electric S.E.</td><td>ฝรั่งเศส</td><td class="tnum">7.12%</td></tr>
+          <tr><td>National Grid plc</td><td>สหราชอาณาจักร</td><td class="tnum">6.76%</td></tr>
+          <tr><td>Quanta Services</td><td>สหรัฐอเมริกา</td><td class="tnum">4.35%</td></tr>
+          <tr><td>E.ON SE</td><td>เยอรมนี</td><td class="tnum">4.10%</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" style="margin-bottom:12px;">
+        <div class="section-title" style="font-size:14px; margin-bottom:6px;">ผลตอบแทนย้อนหลัง เทียบ Benchmark (%) &mdash; Proxy: GRID ETF</div>
+        <table>
+          <tr><th>ช่วงเวลา</th><th class="tnum">GRID ETF*</th><th class="tnum">Benchmark</th></tr>
+          <tr><td>YTD 2569</td><td class="tnum pos">+27.60%</td><td class="tnum">+27.90%</td></tr>
+          <tr><td>3 เดือน</td><td class="tnum pos">+14.00%</td><td class="tnum">+14.20%</td></tr>
+          <tr><td>6 เดือน</td><td class="tnum pos">+22.00%</td><td class="tnum">+22.30%</td></tr>
+          <tr><td>1 ปี</td><td class="tnum pos">+43.32%</td><td class="tnum">+43.60%</td></tr>
+          <tr><td>3 ปี (Ann.)</td><td class="tnum pos">+18.70%</td><td class="tnum">+19.00%</td></tr>
+          <tr><td>5 ปี (Ann.)</td><td class="tnum pos">+16.10%</td><td class="tnum">+16.40%</td></tr>
+        </table>
+        <div style="font-size:10.5px; color:#64748b; margin-top:6px;">
+          * ข้อมูลผลตอบแทนของ GRID ETF ใช้เป็น Proxy แทน A-GRID เนื่องจากกองทุนยังไม่มีข้อมูลย้อนหลังของตนเอง<br/>
+          Max Drawdown (ประมาณการ) ~-32% (ปี 2565 หุ้นกลุ่ม Clean Energy ปรับฐานแรง) / SD (3Y, ประมาณการ) ~24%
+        </div>
+      </div>
+      <div class="insight-box">
+        <div class="h">มุมมอง / Outlook ธีม Smart Grid</div>
+        <ul>
+          <li>ความต้องการไฟฟ้าจาก Data Center และ AI เพิ่มขึ้นอย่างก้าวกระโดด</li>
+          <li>การลงทุนปรับปรุงโครงข่ายไฟฟ้าเก่าในสหรัฐฯ และยุโรป (Grid Modernization)</li>
+          <li>การเปลี่ยนผ่านสู่พลังงานสะอาดและการขยายตัวของยานยนต์ไฟฟ้า (Electrification)</li>
+          <li>เหมาะเป็นส่วนเสริมพอร์ตเพื่อกระจายความเสี่ยงจากหุ้นเทคโนโลยีกลุ่มเดิม</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>รายงานนี้จัดทำขึ้นเพื่อการนำเสนอข้อมูลเบื้องต้น &mdash; Mutual Fund Portfolio Report</span>
+    <span>หน้า 5 / 11</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 6: SCBGOLDH -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="fund-head">
+    <div class="fund-code" style="background:rgba(242,177,52,0.15); color:#f2b134; border:1px solid rgba(242,177,52,0.35);">SCBGOLDH</div>
+    <div>
+      <div style="font-weight:800; font-size:16px; color:#f8fafc;">กองทุนเปิดไทยพาณิชย์โกลด์ THB เฮดจ์ (ชนิดสะสมมูลค่า)</div>
+      <div class="fund-meta">บลจ. ไทยพาณิชย์ (SCBAM) &nbsp;|&nbsp; น้ำหนักในพอร์ต <b>15%</b> (150,000 บาท) &nbsp;|&nbsp; กองทุนหลัก: <b>SPDR Gold Shares (SPDR Gold Trust)</b></div>
+    </div>
+    <div style="flex:1;"></div>
+    <span class="badge" style="background:rgba(242,177,52,0.15); color:#f2b134; border:1px solid rgba(242,177,52,0.35);">Gold (THB Hedged) &mdash; 15%</span>
+  </div>
+
+  <div class="chips">
+    <div class="chip"><b>0.54%</b><span>TER ต่อปี (มจก. 0.436%)</span></div>
+    <div class="chip"><b>~9,500 ลบ.*</b><span>ขนาดกองทุน (AUM, ประมาณการ)</span></div>
+    <div class="chip"><b>Risk 8</b><span>ระดับความเสี่ยง</span></div>
+    <div class="chip"><b>Hedge &ge;90%</b><span>นโยบายป้องกันความเสี่ยง FX</span></div>
+    <div class="chip"><b>สะสมมูลค่า</b><span>ไม่จ่ายเงินปันผล</span></div>
+    <div class="chip"><b>LBMA Gold (THB Hedged)</b><span>Benchmark</span></div>
+  </div>
+
+  <div class="row" style="gap:16px;">
+    <div class="col" style="flex:1.15;">
+      <div class="card" style="margin-bottom:12px;">
+        <div class="section-title" style="font-size:14px; margin-bottom:6px;">นโยบายการลงทุน</div>
+        <div style="font-size:12.5px; color:#cbd5e1;">
+          ลงทุนในกองทุน <b>SPDR Gold Shares (SPDR Gold Trust)</b> ประมาณ 99-100% ของ NAV ซึ่งถือทองคำแท่ง
+          (Physical Gold Bullion) เป็นสินทรัพย์หลัก มีนโยบาย<b>ป้องกันความเสี่ยงอัตราแลกเปลี่ยนไม่น้อยกว่า 90%</b>
+          ของมูลค่าเงินลงทุนต่างประเทศ (THB Hedged) ทำให้ผลตอบแทนสะท้อนการเปลี่ยนแปลงของราคาทองคำในตลาดโลก (USD)
+          โดยลดผลกระทบจากความผันผวนค่าเงินบาท/ดอลลาร์สหรัฐฯ เหมาะใช้เป็นส่วนหนึ่งของพอร์ตเพื่อกระจายความเสี่ยง
+          ป้องกันเงินเฟ้อ และถือครองสินทรัพย์ปลอดภัย (Safe Haven) ในภาวะตลาดผันผวน
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title" style="font-size:14px; margin-bottom:6px;">โครงสร้างการลงทุน</div>
+        <table>
+          <tr><th>สินทรัพย์</th><th class="tnum">น้ำหนัก</th></tr>
+          <tr><td>SPDR Gold Shares (Gold Bullion ETF)</td><td class="tnum">99.0%</td></tr>
+          <tr><td>เงินสดและรายการเทียบเท่าเงินสด</td><td class="tnum">1.0%</td></tr>
+        </table>
+        <div style="margin-top:14px;">
+          <div class="seg-bar" style="height:24px;">
+            <div style="width:99%; background:#f2b134;"></div>
+            <div style="width:1%; background:#475569;"></div>
+          </div>
+          <div class="legend">
+            <span><span class="sw" style="background:#f2b134;"></span>ทองคำแท่ง (Physical Gold) 99%</span>
+            <span><span class="sw" style="background:#475569;"></span>เงินสด 1%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" style="margin-bottom:12px;">
+        <div class="section-title" style="font-size:14px; margin-bottom:6px;">ผลตอบแทนย้อนหลัง เทียบ Benchmark (%)</div>
+        <table>
+          <tr><th>ช่วงเวลา</th><th class="tnum">กองทุน</th><th class="tnum">Benchmark</th></tr>
+          <tr><td>YTD 2569</td><td class="tnum pos">+42.00%</td><td class="tnum">+41.00%</td></tr>
+          <tr><td>3 เดือน</td><td class="tnum pos">+21.33%</td><td class="tnum">+20.80%</td></tr>
+          <tr><td>6 เดือน</td><td class="tnum pos">+42.07%</td><td class="tnum">+41.00%</td></tr>
+          <tr><td>1 ปี</td><td class="tnum pos">+68.66%</td><td class="tnum">+67.50%</td></tr>
+          <tr><td>3 ปี (Ann.)</td><td class="tnum pos">+34.78%</td><td class="tnum">+34.00%</td></tr>
+          <tr><td>5 ปี (Ann.)</td><td class="tnum pos">+20.74%</td><td class="tnum">+20.20%</td></tr>
+        </table>
+        <div style="font-size:10.5px; color:#64748b; margin-top:6px;">
+          Max Drawdown (ประมาณการ จากราคาทองคำ) ~-18% / SD (3Y, ประมาณการ) ~14%
+        </div>
+      </div>
+      <div class="insight-box">
+        <div class="h">มุมมอง / Outlook ราคาทองคำ ปี 2569</div>
+        <ul>
+          <li><b>ธนาคารกลางซื้อทองต่อเนื่อง:</b> จีน โปแลนด์ อินเดีย ตุรกี เป็นผู้ซื้อหลัก จีนซื้อต่อเนื่อง 15 เดือน
+          (ถึง ม.ค. 2569) ธนาคารกลางทั่วโลกซื้อสุทธิ 244 ตัน ใน Q1/2569</li>
+          <li><b>เป้าราคาทองปี 2569:</b> Goldman Sachs $5,400 / JPMorgan ~$6,000 / Morgan Stanley $5,200 /
+          UBS $5,500 / Wells Fargo $6,100-6,300 (ราคาปัจจุบัน ~$4,290)</li>
+          <li><b>ความเสี่ยงระยะสั้น:</b> ทองคำพักฐานราว 9% ใน 1 เดือนที่ผ่านมาหลังปรับขึ้นแรง แต่แนวโน้มหลักยังเป็นบวก
+          จากความต้องการสินทรัพย์ปลอดภัยและการกระจายเงินสำรองออกจากดอลลาร์</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>รายงานนี้จัดทำขึ้นเพื่อการนำเสนอข้อมูลเบื้องต้น &mdash; Mutual Fund Portfolio Report</span>
+    <span>หน้า 6 / 11</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 7: K-GDBOND-A(A) -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="fund-head">
+    <div class="fund-code" style="background:rgba(124,58,237,0.15); color:#a78bfa; border:1px solid rgba(124,58,237,0.35);">K-GDBOND-A(A)</div>
+    <div>
+      <div style="font-weight:800; font-size:16px; color:#f8fafc;">กองทุนเปิดเค โกลบอล ไดนามิก บอนด์-A ชนิดสะสมมูลค่า</div>
+      <div class="fund-meta">บลจ. กสิกรไทย (KAsset) &nbsp;|&nbsp; น้ำหนักในพอร์ต <b>25%</b> (250,000 บาท) &nbsp;|&nbsp; กองทุนหลัก: <b>PIMCO GIS Income Fund (Class INST USD Acc)</b></div>
+    </div>
+    <div style="flex:1;"></div>
+    <span class="badge badge-purple">Global Bond &mdash; 25%</span>
+  </div>
+
+  <div class="chips">
+    <div class="chip"><b>0.88%</b><span>TER ต่อปี (มจก. 0.80%, Front-end ~0.50%)</span></div>
+    <div class="chip"><b>~12,504 ลบ.</b><span>ขนาดกองทุน (AUM)</span></div>
+    <div class="chip"><b>Risk 5</b><span>ระดับความเสี่ยง</span></div>
+    <div class="chip"><b>Discretionary</b><span>นโยบายป้องกันความเสี่ยง FX</span></div>
+    <div class="chip"><b>ก.ย.-ต.ค. 2564</b><span>เปิด IPO</span></div>
+    <div class="chip"><b>Bloomberg Global Agg. Bond (H)</b><span>Benchmark</span></div>
+  </div>
+
+  <div class="row" style="gap:16px;">
+    <div class="col" style="flex:1.15;">
+      <div class="card" style="margin-bottom:12px;">
+        <div class="section-title" style="font-size:14px; margin-bottom:6px;">นโยบายการลงทุน</div>
+        <div style="font-size:12.5px; color:#cbd5e1;">
+          ลงทุนในหน่วยลงทุนของ <b>PIMCO GIS Income Fund (Class INST USD Acc)</b> ไม่น้อยกว่า 80% ของ NAV
+          ซึ่งเป็นกองทุนตราสารหนี้ Global Multi-Sector กระจายลงทุนในตราสารหนี้ทั่วโลกหลากหลาย ทั้งพันธบัตรรัฐบาล
+          ตราสารหนี้ภาคเอกชนระดับ Investment Grade และตราสารหนี้ที่มีสินทรัพย์ค้ำประกัน (MBS/ABS/Securitized)
+          ซึ่งเป็นสัดส่วนหลักของพอร์ต กองทุนหลักลงทุนใน High Yield ได้สูงสุด 50% และมี Duration ทั่วไป 0-8 ปี
+          จัดอยู่ในกลุ่ม &ldquo;Global Bond Discretionary FX Hedge or Unhedge&rdquo;
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title" style="font-size:14px; margin-bottom:6px;">โครงสร้างการลงทุน (ของ PIMCO GIS Income Fund)</div>
+        <table>
+          <tr><th>ประเภทตราสาร</th><th class="tnum">น้ำหนัก</th></tr>
+          <tr><td>Securitized (MBS / ABS / CMBS)</td><td class="tnum">45%</td></tr>
+          <tr><td>ตราสารหนี้ภาครัฐ (Government Bonds)</td><td class="tnum">25%</td></tr>
+          <tr><td>ตราสารหนี้ภาคเอกชน (Corporate Bonds)</td><td class="tnum">25%</td></tr>
+          <tr><td>เงินสดและอื่นๆ</td><td class="tnum">5%</td></tr>
+        </table>
+        <div style="margin-top:14px;">
+          <div class="seg-bar" style="height:24px;">
+            <div style="width:45%; background:#7c3aed;"></div>
+            <div style="width:25%; background:#a78bfa;"></div>
+            <div style="width:25%; background:#c4b5fd;"></div>
+            <div style="width:5%; background:#475569;"></div>
+          </div>
+          <div class="legend">
+            <span><span class="sw" style="background:#7c3aed;"></span>Securitized 45%</span>
+            <span><span class="sw" style="background:#a78bfa;"></span>Government 25%</span>
+            <span><span class="sw" style="background:#c4b5fd;"></span>Corporate 25%</span>
+            <span><span class="sw" style="background:#475569;"></span>เงินสด 5%</span>
+          </div>
+        </div>
+        <div style="font-size:10.5px; color:#64748b; margin-top:10px;">
+          การกระจายตามประเทศ (โดยประมาณ): สหรัฐฯ 83.4% &middot; สหราชอาณาจักร 4.5% &middot; เม็กซิโก 1.5% &middot; กองทุนอื่นๆ 2.6% &middot; อื่นๆ ~8%
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card" style="margin-bottom:12px;">
+        <div class="section-title" style="font-size:14px; margin-bottom:6px;">ผลตอบแทนย้อนหลัง เทียบ Benchmark (%)</div>
+        <table>
+          <tr><th>ช่วงเวลา</th><th class="tnum">กองทุน</th><th class="tnum">Benchmark</th></tr>
+          <tr><td>YTD 2569</td><td class="tnum pos">+0.33%</td><td class="tnum">+1.00%</td></tr>
+          <tr><td>3 เดือน</td><td class="tnum neg">-0.35%</td><td class="tnum">0.00%</td></tr>
+          <tr><td>6 เดือน</td><td class="tnum pos">+0.33%</td><td class="tnum">+1.00%</td></tr>
+          <tr><td>1 ปี</td><td class="tnum pos">+3.80%</td><td class="tnum">+4.00%</td></tr>
+          <tr><td>3 ปี (Ann.)</td><td class="tnum pos">+4.00%</td><td class="tnum">+2.00%</td></tr>
+          <tr><td>5 ปี (Ann.)</td><td class="tnum pos">+3.00%</td><td class="tnum">+1.00%</td></tr>
+        </table>
+        <div style="font-size:10.5px; color:#64748b; margin-top:6px;">
+          Max Drawdown (ประมาณการ จากวิกฤตพันธบัตรปี 2565) ~-12% / SD (3Y, ประมาณการ) ~5.5%
+        </div>
+      </div>
+      <div class="insight-box">
+        <div class="h">มุมมอง / Outlook ตราสารหนี้โลก ปี 2569</div>
+        <ul>
+          <li><b>PIMCO (&ldquo;Rupture and Resilience&rdquo;):</b> คาด Fed ลดดอกเบี้ยปี 2569 โดยเฉพาะครึ่งปีหลัง
+          แนะนำลงทุนใน Duration ระดับกลาง (5-10 ปี) เพื่อ Lock-in ผลตอบแทนก่อนดอกเบี้ยลด</li>
+          <li><b>มุมมองด้าน Credit:</b> ระมัดระวัง Spread ตราสารหนี้ภาคเอกชนที่แคบ และคาดวงจร Credit Loss
+          เริ่มปรากฏในกลุ่มเครดิตคุณภาพต่ำ</li>
+          <li><b>มุมมอง KAsset:</b> อัตราผลตอบแทนพันธบัตรโลกปรับตัวขึ้นจากเงินเฟ้อ/การคลัง เป็นโอกาสทยอยสะสม
+          ตราสารหนี้ต่างประเทศระยะยาว</li>
+          <li>เหมาะเป็นส่วนลดความผันผวนของพอร์ตและสร้างกระแสรายได้สม่ำเสมอในระยะยาว</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>รายงานนี้จัดทำขึ้นเพื่อการนำเสนอข้อมูลเบื้องต้น &mdash; Mutual Fund Portfolio Report</span>
+    <span>หน้า 7 / 11</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 8: PORTFOLIO RETURNS & GROWTH -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="section-title"><span class="num-badge">3</span> ผลตอบแทนถ่วงน้ำหนักของพอร์ต และมูลค่าเงินลงทุน 1,000,000 บาท</div>
+
+  <div class="row" style="gap:16px;">
+    <div class="col" style="flex:1.3;">
+      <div class="card" style="margin-bottom:12px;">
+        <div class="section-title" style="font-size:14px; margin-bottom:6px;">ผลตอบแทนถ่วงน้ำหนักของพอร์ต เทียบ Benchmark</div>
+        <table>
+          <tr><th>ช่วงเวลา</th><th class="tnum">พอร์ตเรา</th><th class="tnum">Benchmark ถ่วงน้ำหนัก</th><th class="tnum">ส่วนต่าง</th></tr>
+          <tr><td>YTD 2569</td><td class="tnum pos">+14.83%</td><td class="tnum">+15.10%</td><td class="tnum neg">-0.27pp</td></tr>
+          <tr><td>1 ปี</td><td class="tnum pos">+30.59%</td><td class="tnum">+31.16%</td><td class="tnum neg">-0.57pp</td></tr>
+          <tr><td>3 ปี (Ann.)*</td><td class="tnum pos">+10.46%</td><td class="tnum">+16.80%</td><td class="tnum neg">-6.34pp</td></tr>
+          <tr><td>5 ปี (Ann.)*</td><td class="tnum pos">+6.89%</td><td class="tnum">&mdash;</td><td class="tnum">&mdash;</td></tr>
+        </table>
+        <div style="font-size:10.5px; color:#64748b; margin-top:6px;">
+          * ผลตอบแทน 3 ปี/5 ปี ถ่วงน้ำหนักของพอร์ตคำนวณรวม TLUS500-H และ A-GRID ซึ่งเป็นกองทุนใหม่และยังไม่มีข้อมูลย้อนหลัง 3/5 ปีของตนเอง
+          (นับน้ำหนักของกองทุนดังกล่าวเป็น 0 ในช่วงเวลานั้น) จึงอาจต่ำกว่าค่าเฉลี่ยของ Benchmark ที่มีข้อมูลครบทุกกองทุน
+          ส่วนต่างที่ต่ำกว่า Benchmark ยังรวมผลของค่าธรรมเนียมกองทุน (TER)
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:12px;">
+        <div class="section-title" style="font-size:14px; margin-bottom:6px;">มูลค่าพอร์ต ฿1,000,000 ตามระยะเวลาถือครอง (ประมาณการ)</div>
+        <table>
+          <tr><th>ช่วงเวลา</th><th class="tnum">ผลตอบแทนสะสม</th><th class="tnum">มูลค่าพอร์ต (฿)</th><th class="tnum">กำไร/ขาดทุน (฿)</th></tr>
+          <tr><td>เริ่มต้น</td><td class="tnum">0.00%</td><td class="tnum">1,000,000</td><td class="tnum">0</td></tr>
+          <tr><td>YTD 2569</td><td class="tnum pos">+14.83%</td><td class="tnum">1,148,300</td><td class="tnum pos">+148,300</td></tr>
+          <tr><td>1 ปี</td><td class="tnum pos">+30.59%</td><td class="tnum">1,305,900</td><td class="tnum pos">+305,900</td></tr>
+          <tr><td>3 ปี (ทบต้นจาก Ann. 10.46%)</td><td class="tnum pos">+34.80%</td><td class="tnum">1,348,000</td><td class="tnum pos">+348,000</td></tr>
+          <tr><td>5 ปี (ทบต้นจาก Ann. 6.89%)</td><td class="tnum pos">+39.53%</td><td class="tnum">1,395,300</td><td class="tnum pos">+395,300</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card" style="margin-bottom:12px; height:230px;">
+        <div class="section-title" style="font-size:14px; margin-bottom:14px;">การเติบโตของเงินลงทุน (ผลตอบแทนสะสม %)</div>
+        <div style="display:flex; align-items:flex-end; gap:18px; height:200px; padding-left:6px;">
+          <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-end; flex:1;">
+            <div style="font-size:12px; font-weight:800; color:#34d399; margin-bottom:4px;">+14.83%</div>
+            <div style="width:36px; height:75px; background:linear-gradient(180deg,#38bdf8,#1f6feb); border-radius:6px 6px 0 0;"></div>
+            <div style="font-size:11px; color:#94a3b8; margin-top:6px;">YTD</div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-end; flex:1;">
+            <div style="font-size:12px; font-weight:800; color:#34d399; margin-bottom:4px;">+30.59%</div>
+            <div style="width:36px; height:155px; background:linear-gradient(180deg,#38bdf8,#1f6feb); border-radius:6px 6px 0 0;"></div>
+            <div style="font-size:11px; color:#94a3b8; margin-top:6px;">1 ปี</div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-end; flex:1;">
+            <div style="font-size:12px; font-weight:800; color:#34d399; margin-bottom:4px;">+34.80%</div>
+            <div style="width:36px; height:176px; background:linear-gradient(180deg,#38bdf8,#1f6feb); border-radius:6px 6px 0 0;"></div>
+            <div style="font-size:11px; color:#94a3b8; margin-top:6px;">3 ปี</div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-end; flex:1;">
+            <div style="font-size:12px; font-weight:800; color:#34d399; margin-bottom:4px;">+39.53%</div>
+            <div style="width:36px; height:200px; background:linear-gradient(180deg,#38bdf8,#1f6feb); border-radius:6px 6px 0 0;"></div>
+            <div style="font-size:11px; color:#94a3b8; margin-top:6px;">5 ปี</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title" style="font-size:14px; margin-bottom:6px;">สัดส่วนกำไร 1 ปี (+305,900 บาท) แยกตามกองทุน</div>
+        <table>
+          <tr><th>กองทุน</th><th class="tnum">ผลตอบแทน 1Y</th><th class="tnum">เงินลงทุน (฿)</th><th class="tnum">กำไร (฿)</th></tr>
+          <tr><td><span class="sw" style="background:#1f6feb;"></span>TLUS500-H</td><td class="tnum pos">+27.25%</td><td class="tnum">350,000</td><td class="tnum pos">+95,375</td></tr>
+          <tr><td><span class="sw" style="background:#2ca58d;"></span>B-INNOTECH</td><td class="tnum pos">+36.47%</td><td class="tnum">150,000</td><td class="tnum pos">+54,705</td></tr>
+          <tr><td><span class="sw" style="background:#e07a5f;"></span>A-GRID</td><td class="tnum pos">+43.32%</td><td class="tnum">100,000</td><td class="tnum pos">+43,320</td></tr>
+          <tr><td><span class="sw" style="background:#f2b134;"></span>SCBGOLDH</td><td class="tnum pos">+68.66%</td><td class="tnum">150,000</td><td class="tnum pos">+102,990</td></tr>
+          <tr><td><span class="sw" style="background:#7c3aed;"></span>K-GDBOND-A(A)</td><td class="tnum pos">+3.80%</td><td class="tnum">250,000</td><td class="tnum pos">+9,500</td></tr>
+          <tr style="font-weight:800;"><td>รวม</td><td class="tnum pos">+30.59%</td><td class="tnum">1,000,000</td><td class="tnum pos">+305,890</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>รายงานนี้จัดทำขึ้นเพื่อการนำเสนอข้อมูลเบื้องต้น &mdash; Mutual Fund Portfolio Report</span>
+    <span>หน้า 8 / 11</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 9: FEES & RISK METRICS -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="section-title"><span class="num-badge">4</span> ค่าธรรมเนียมและตัวชี้วัดความเสี่ยง (Fees &amp; Risk Metrics)</div>
+
+  <div class="row" style="gap:16px;">
+    <div class="col">
+      <div class="card" style="margin-bottom:12px;">
+        <div class="section-title" style="font-size:14px; margin-bottom:6px;">สรุปค่าธรรมเนียมรายปี (TER)</div>
+        <table>
+          <tr><th>กองทุน</th><th class="tnum">ค่าธรรมเนียมจัดการ</th><th class="tnum">TER</th><th class="tnum">น้ำหนัก</th></tr>
+          <tr><td>TLUS500-H</td><td class="tnum">~0.60%*</td><td class="tnum">~0.75%*</td><td class="tnum">35%</td></tr>
+          <tr><td>B-INNOTECH</td><td class="tnum">1.07%</td><td class="tnum">1.42%</td><td class="tnum">15%</td></tr>
+          <tr><td>A-GRID</td><td class="tnum">1.61%</td><td class="tnum">~1.85%*</td><td class="tnum">10%</td></tr>
+          <tr><td>SCBGOLDH</td><td class="tnum">0.436%</td><td class="tnum">0.54%</td><td class="tnum">15%</td></tr>
+          <tr><td>K-GDBOND-A(A)</td><td class="tnum">0.80%</td><td class="tnum">0.88%</td><td class="tnum">25%</td></tr>
+          <tr style="font-weight:800;"><td>TER ถ่วงน้ำหนักของพอร์ต</td><td class="tnum" colspan="2">~0.96% ต่อปี</td><td class="tnum">100%</td></tr>
+        </table>
+        <div style="font-size:10.5px; color:#64748b; margin-top:6px;">
+          * TLUS500-H และ A-GRID เป็นกองทุนใหม่ &mdash; ค่าธรรมเนียม TER เป็นค่าประมาณการจากระดับค่าธรรมเนียมของกองทุนประเภทเดียวกัน
+          ควรตรวจสอบกับ Fund Fact Sheet ฉบับล่าสุด นอกจากนี้ A-GRID มีค่าธรรมเนียม Front-end 1.25% และ K-GDBOND-A(A) มี Front-end ~0.50% (จ่ายครั้งเดียวตอนซื้อ)
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title" style="font-size:14px; margin-bottom:6px;">ตารางตัวชี้วัดความเสี่ยง (Risk Metrics, ประมาณการ)</div>
+        <table>
+          <tr><th>กองทุน</th><th class="tnum">SD (3Y, Ann.)</th><th class="tnum">Max Drawdown</th><th class="tnum">น้ำหนัก</th></tr>
+          <tr><td>TLUS500-H</td><td class="tnum">17.5%</td><td class="tnum neg">-25.4%</td><td class="tnum">35%</td></tr>
+          <tr><td>B-INNOTECH</td><td class="tnum">19.3%</td><td class="tnum neg">-18.4%</td><td class="tnum">15%</td></tr>
+          <tr><td>A-GRID</td><td class="tnum">24.0%</td><td class="tnum neg">-32.0%</td><td class="tnum">10%</td></tr>
+          <tr><td>SCBGOLDH</td><td class="tnum">14.0%</td><td class="tnum neg">-18.0%</td><td class="tnum">15%</td></tr>
+          <tr><td>K-GDBOND-A(A)</td><td class="tnum">5.5%</td><td class="tnum neg">-12.0%</td><td class="tnum">25%</td></tr>
+          <tr style="font-weight:800;"><td>พอร์ตรวม (ถ่วงน้ำหนัก)</td><td class="tnum accent">14.9%</td><td class="tnum neg">-20.6%</td><td class="tnum">100%</td></tr>
+        </table>
+        <div style="font-size:10.5px; color:#64748b; margin-top:6px;">
+          SD และ Max Drawdown ของแต่ละกองทุนเป็นค่าประมาณการจากกองทุนหลัก/ดัชนีอ้างอิงในรอบ ~3 ปีที่ผ่านมา
+          ค่าของพอร์ตรวมคำนวณแบบถ่วงน้ำหนักอย่างง่าย (Simple Weighted Average) ซึ่ง<b>ไม่ได้คำนึงถึง Correlation</b>
+          ระหว่างสินทรัพย์ &mdash; ในทางปฏิบัติ Max Drawdown ของพอร์ตจริงมักจะ<b>ต่ำกว่า</b>ค่าที่แสดงนี้ เนื่องจากผลการกระจายความเสี่ยง (Diversification)
+        </div>
+      </div>
+    </div>
+
+    <div class="col" style="flex:0.85;">
+      <div class="card" style="margin-bottom:12px;">
+        <div class="section-title" style="font-size:14px; margin-bottom:8px;">Sharpe Ratio ของพอร์ต</div>
+        <div style="font-size:11.5px; color:#94a3b8; margin-bottom:10px;">สูตร: (ผลตอบแทน &minus; Risk-free 2.5%) / SD</div>
+        <div class="kpi" style="margin-bottom:10px;">
+          <div class="label">Sharpe Ratio (1Y)</div>
+          <div class="value accent">1.89</div>
+          <div class="sub">(30.59% &minus; 2.5%) / 14.9%</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Sharpe Ratio (3Y, Ann.)</div>
+          <div class="value accent">0.53</div>
+          <div class="sub">(10.46% &minus; 2.5%) / 14.9%</div>
+        </div>
+      </div>
+
+      <div class="warn-box">
+        <b style="color:#fbbf24;">ข้อสังเกต:</b>
+        <ul style="margin:6px 0 0; padding-left:18px; font-size:12px;">
+          <li style="margin-bottom:5px;">ค่าธรรมเนียม TER ถ่วงน้ำหนักของพอร์ตอยู่ที่ <b>~0.96% ต่อปี</b> ซึ่งเป็นต้นทุนที่ฉุดผลตอบแทนเทียบกับ Benchmark
+          (อธิบายส่วนต่าง -0.27pp ถึง -0.57pp ในตาราง YTD/1Y)</li>
+          <li style="margin-bottom:5px;">กองทุนที่มี SD สูงสุดคือ <b>A-GRID (~24%)</b> และ <b>B-INNOTECH (~19.3%)</b> สอดคล้องกับการเป็นหุ้นธีมเฉพาะทาง</li>
+          <li>กองทุน <b>K-GDBOND-A(A)</b> มี SD ต่ำสุด (~5.5%) ช่วยลดความผันผวนรวมของพอร์ตได้อย่างมีนัยสำคัญ</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>รายงานนี้จัดทำขึ้นเพื่อการนำเสนอข้อมูลเบื้องต้น &mdash; Mutual Fund Portfolio Report</span>
+    <span>หน้า 9 / 11</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 10: COUNTRY & SECTOR EXPOSURE -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="section-title"><span class="num-badge">5</span> การกระจายตามประเทศ และกลุ่มอุตสาหกรรม/สินทรัพย์ของพอร์ต (ประมาณการ)</div>
+  <div style="font-size:11.5px; color:#94a3b8; margin-bottom:10px;">
+    คำนวณจากสัดส่วนเงินลงทุนของแต่ละกองทุน (35/15/10/15/25) คูณด้วยสัดส่วนประเทศ/กลุ่มอุตสาหกรรมของกองทุนหลัก/ดัชนีอ้างอิงแต่ละกอง (ตัวเลขโดยประมาณ ปัดเศษ)
+  </div>
+
+  <div class="row" style="gap:16px;">
+    <div class="col">
+      <div class="card">
+        <div class="section-title" style="font-size:14px; margin-bottom:8px;">การกระจายตามประเทศ / ภูมิภาค (Country Exposure)</div>
+        <table>
+          <tr><th>ประเทศ / ภูมิภาค</th><th class="tnum">สัดส่วน</th><th>&nbsp;</th></tr>
+          <tr><td>สหรัฐอเมริกา</td><td class="tnum">68%</td><td><div class="hbar-track"><div class="hbar-fill" style="width:68%; background:#38bdf8;"></div></div></td></tr>
+          <tr><td>ทองคำ / สินค้าโภคภัณฑ์ (Global)</td><td class="tnum">15%</td><td><div class="hbar-track"><div class="hbar-fill" style="width:15%; background:#f2b134;"></div></div></td></tr>
+          <tr><td>ยุโรป (UK, ฝรั่งเศส, เยอรมนี, สวิตเซอร์แลนด์ ฯลฯ)</td><td class="tnum">9%</td><td><div class="hbar-track"><div class="hbar-fill" style="width:9%; background:#2ca58d;"></div></div></td></tr>
+          <tr><td>อื่นๆ (เม็กซิโก, เงินสด, กองทุนผสม)</td><td class="tnum">5%</td><td><div class="hbar-track"><div class="hbar-fill" style="width:5%; background:#64748b;"></div></div></td></tr>
+          <tr><td>ไต้หวัน</td><td class="tnum">1%</td><td><div class="hbar-track"><div class="hbar-fill" style="width:1%; background:#a78bfa;"></div></div></td></tr>
+          <tr><td>จีน</td><td class="tnum">1%</td><td><div class="hbar-track"><div class="hbar-fill" style="width:1%; background:#e07a5f;"></div></div></td></tr>
+          <tr><td>ญี่ปุ่น / เกาหลีใต้</td><td class="tnum">1%</td><td><div class="hbar-track"><div class="hbar-fill" style="width:1%; background:#fbbf24;"></div></div></td></tr>
+          <tr style="font-weight:800;"><td>รวม</td><td class="tnum">100%</td><td></td></tr>
+        </table>
+        <div style="font-size:11px; color:#94a3b8; margin-top:10px;">
+          พอร์ตมีน้ำหนักไปทางสหรัฐฯ ค่อนข้างมาก (~68%) ตามโครงสร้างของ TLUS500-H, B-INNOTECH และ K-GDBOND-A(A)
+          ขณะที่ทองคำ (15%) ทำหน้าที่กระจายความเสี่ยงในรูปสินทรัพย์ Global ที่ไม่ผูกกับตลาดหุ้นประเทศใดประเทศหนึ่ง
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card">
+        <div class="section-title" style="font-size:14px; margin-bottom:8px;">การกระจายตามกลุ่มอุตสาหกรรม / ประเภทสินทรัพย์ (Sector Exposure)</div>
+        <table>
+          <tr><th>กลุ่มอุตสาหกรรม / สินทรัพย์</th><th class="tnum">สัดส่วน</th><th>&nbsp;</th></tr>
+          <tr><td>เทคโนโลยี &amp; กึ่งตัวนำ (Tech &amp; Semiconductors)</td><td class="tnum">24%</td><td><div class="hbar-track"><div class="hbar-fill" style="width:24%; background:#2ca58d;"></div></div></td></tr>
+          <tr><td>ตราสารหนี้ (Fixed Income: Govt/Securitized/Corp)</td><td class="tnum">24%</td><td><div class="hbar-track"><div class="hbar-fill" style="width:24%; background:#7c3aed;"></div></div></td></tr>
+          <tr><td>ทองคำ / สินค้าโภคภัณฑ์ (Gold/Commodity)</td><td class="tnum">15%</td><td><div class="hbar-track"><div class="hbar-fill" style="width:15%; background:#f2b134;"></div></div></td></tr>
+          <tr><td>อุตสาหกรรม &amp; Smart Grid Infrastructure</td><td class="tnum">12%</td><td><div class="hbar-track"><div class="hbar-fill" style="width:12%; background:#e07a5f;"></div></div></td></tr>
+          <tr><td>สินค้าอุปโภคบริโภค (Consumer Disc./Staples)</td><td class="tnum">6%</td><td><div class="hbar-track"><div class="hbar-fill" style="width:6%; background:#38bdf8;"></div></div></td></tr>
+          <tr><td>การเงิน (Financials)</td><td class="tnum">5%</td><td><div class="hbar-track"><div class="hbar-fill" style="width:5%; background:#94a3b8;"></div></div></td></tr>
+          <tr><td>สาธารณสุข (Healthcare)</td><td class="tnum">4%</td><td><div class="hbar-track"><div class="hbar-fill" style="width:4%; background:#34d399;"></div></div></td></tr>
+          <tr><td>สื่อสาร (Communication Services)</td><td class="tnum">3%</td><td><div class="hbar-track"><div class="hbar-fill" style="width:3%; background:#f87171;"></div></div></td></tr>
+          <tr><td>อื่นๆ / เงินสด (พลังงาน, สาธารณูปโภค, วัสดุ)</td><td class="tnum">7%</td><td><div class="hbar-track"><div class="hbar-fill" style="width:7%; background:#64748b;"></div></div></td></tr>
+          <tr style="font-weight:800;"><td>รวม</td><td class="tnum">100%</td><td></td></tr>
+        </table>
+        <div style="font-size:11px; color:#94a3b8; margin-top:10px;">
+          พอร์ตมีความสมดุลระหว่างสินทรัพย์เติบโต (เทคโนโลยี + Smart Grid ~36%) สินทรัพย์ป้องกันความเสี่ยง
+          (ทองคำ + ตราสารหนี้ ~39%) และหุ้นกลุ่มอื่นๆ ที่กระจายตามดัชนี S&amp;P 500 (~25%)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>รายงานนี้จัดทำขึ้นเพื่อการนำเสนอข้อมูลเบื้องต้น &mdash; Mutual Fund Portfolio Report</span>
+    <span>หน้า 10 / 11</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 11: PORTFOLIO SUMMARY, STRENGTHS/RISKS, REBALANCING, DISCLAIMER -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="section-title"><span class="num-badge">6</span> สรุปภาพรวมพอร์ต จุดเด่น/ความเสี่ยง และแนวทาง Rebalancing</div>
+
+  <div class="kpi-row" style="margin-bottom:14px;">
+    <div class="kpi">
+      <div class="label">ผลตอบแทนถ่วงน้ำหนัก 1 ปี</div>
+      <div class="value pos">+30.59%</div>
+    </div>
+    <div class="kpi">
+      <div class="label">ระดับความเสี่ยงถ่วงน้ำหนัก</div>
+      <div class="value accent">6.20 / 8</div>
+    </div>
+    <div class="kpi">
+      <div class="label">SD / Max Drawdown (ประมาณการ)</div>
+      <div class="value">14.9% / <span class="neg">-20.6%</span></div>
+    </div>
+    <div class="kpi">
+      <div class="label">Sharpe Ratio (1Y)</div>
+      <div class="value accent">1.89</div>
+    </div>
+    <div class="kpi">
+      <div class="label">TER ถ่วงน้ำหนักของพอร์ต</div>
+      <div class="value">~0.96%</div>
+    </div>
+  </div>
+
+  <div class="row" style="gap:16px; margin-bottom:14px;">
+    <div class="col insight-box">
+      <div class="h">จุดเด่นของพอร์ต</div>
+      <ul>
+        <li>กระจายการลงทุนครอบคลุม 5 ธีมหลัก: US Equity, Global Tech, Smart Grid Infrastructure, Gold, Global Bond</li>
+        <li>มีสัดส่วน Hedge/Income Zone (ทองคำ + ตราสารหนี้โลก) 40% ช่วยลดความผันผวนในภาวะตลาดผันผวน</li>
+        <li>ผลตอบแทน 1 ปีถ่วงน้ำหนัก +30.59% พร้อม Sharpe Ratio ~1.89 สะท้อนผลตอบแทนต่อความเสี่ยงที่ค่อนข้างดี</li>
+        <li>TER ถ่วงน้ำหนักของพอร์ตอยู่ในระดับสมเหตุสมผล (~0.96% ต่อปี)</li>
+      </ul>
+    </div>
+    <div class="col warn-box">
+      <div style="font-weight:800; color:#fbbf24; margin-bottom:6px;">ความเสี่ยงที่ควรพิจารณา</div>
+      <ul style="margin:0; padding-left:18px;">
+        <li style="margin-bottom:5px;">น้ำหนักกระจุกตัวในสหรัฐฯ ค่อนข้างสูง (~68% ของพอร์ต) เสี่ยงต่อความผันผวนเฉพาะตลาดสหรัฐฯ</li>
+        <li style="margin-bottom:5px;">A-GRID และ TLUS500-H เป็นกองทุนจัดตั้งใหม่ ยังไม่มีผลการดำเนินงานของตนเองครบทุกช่วงเวลา (ใช้ข้อมูล Proxy)</li>
+        <li style="margin-bottom:5px;">SD ถ่วงน้ำหนัก ~14.9% และ Max Drawdown ประมาณ -20.6% ยังถือว่าผันผวนสูง เหมาะผู้รับความเสี่ยงระดับ 5-8 ระยะยาว (&gt;5 ปี)</li>
+        <li>ความเสี่ยงเฉพาะกองทุน: ทองคำพักฐานหลังปรับขึ้นแรง (SCBGOLDH) และ Fed อาจไม่ลดดอกเบี้ยตามคาด (K-GDBOND-A(A))</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:14px;">
+    <div class="section-title" style="font-size:14px; margin-bottom:8px;">แนวทาง Rebalancing</div>
+    <div class="row" style="gap:14px;">
+      <div class="col chip" style="padding:10px 14px;">
+        <b style="font-size:14px;">ทุก 6 เดือน</b>
+        <span>รอบทบทวนสัดส่วนพอร์ตตามปกติ เทียบกับเป้าหมาย 35/15/10/15/25</span>
+      </div>
+      <div class="col chip" style="padding:10px 14px;">
+        <b style="font-size:14px;">น้ำหนักเบี่ยง &plusmn;5%</b>
+        <span>เกณฑ์ Rebalance &mdash; หากกองทุนใดมีน้ำหนักจริงต่างจากเป้าหมายเกิน &plusmn;5% ให้ปรับคืนสู่สัดส่วนเดิม</span>
+      </div>
+      <div class="col chip" style="padding:10px 14px;">
+        <b style="font-size:14px;">SCBGOLDH / A-GRID / B-INNOTECH</b>
+        <span>หากปรับขึ้นแรงเกินเป้า ให้ขายทำกำไรส่วนเกินกลับเข้า K-GDBOND-A(A) เพื่อคุมความเสี่ยงรวมของพอร์ต</span>
+      </div>
+      <div class="col chip" style="padding:10px 14px;">
+        <b style="font-size:14px;">ติดตาม A-GRID</b>
+        <span>ติดตาม AUM และผลการดำเนินงานจริงของ A-GRID อย่างใกล้ชิดในช่วง 6-12 เดือนแรกหลัง IPO</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="warn-box">
+    <b style="color:#fbbf24;">คำเตือนความเสี่ยงมาตรฐาน:</b>
+    การลงทุนมีความเสี่ยง ผู้ลงทุนควรศึกษาข้อมูลในหนังสือชี้ชวนก่อนตัดสินใจลงทุน ผลการดำเนินงานในอดีตของกองทุนรวมมิได้เป็นสิ่งยืนยันถึงผลการดำเนินงานในอนาคต
+    กองทุนที่มีการลงทุนในต่างประเทศมิได้มีนโยบายป้องกันความเสี่ยงจากอัตราแลกเปลี่ยนทั้งหมดหรือเกือบทั้งหมด ผู้ลงทุนอาจขาดทุนหรือได้รับกำไรจากอัตราแลกเปลี่ยน
+    หรือได้รับเงินคืนต่ำกว่าเงินลงทุนเริ่มแรกได้ ตัวเลขในรายงานนี้เป็นข้อมูลโดยประมาณเพื่อการนำเสนอเบื้องต้น
+    บางส่วนเป็นข้อมูล Proxy จากกองทุนหลัก/ดัชนีอ้างอิง (โดยเฉพาะ TLUS500-H และ A-GRID ซึ่งเป็นกองทุนจัดตั้งใหม่) ไม่ถือเป็นคำแนะนำการลงทุน
+    ควรปรึกษาผู้แนะนำการลงทุนและตรวจสอบข้อมูลกับ Fund Fact Sheet ฉบับล่าสุดของแต่ละกองทุนก่อนตัดสินใจลงทุนจริง
+  </div>
+
+  <div class="foot">
+    <span>รายงานนี้จัดทำขึ้นเพื่อการนำเสนอข้อมูลเบื้องต้น &mdash; Mutual Fund Portfolio Report &mdash; ข้อมูล ณ 15 มิถุนายน 2569</span>
+    <span>หน้า 11 / 11</span>
+  </div>
+</div>
+
+</body>
+</html>
