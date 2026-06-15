@@ -52,6 +52,8 @@ th { text-align:left; color:#94a3b8; font-weight:600; padding:5px 8px; border-bo
 td { padding:5px 8px; border-bottom:1px solid #1c2940; }
 tr:last-child td { border-bottom:none; }
 .tnum { text-align:right; font-variant-numeric:tabular-nums; }
+.table-compact { font-size:11px; }
+.table-compact th, .table-compact td { padding:3px 8px; }
 
 .card { background:#141d2f; border:1px solid #2a3650; border-radius:12px; padding:14px 16px; }
 .section-title { font-size:17px; font-weight:800; margin:0 0 10px; display:flex; align-items:center; gap:10px; color:#f8fafc; }
@@ -141,26 +143,39 @@ tr:last-child td { border-bottom:none; }
 
   <div class="section-title"><span class="num-badge">1</span> ภาพรวมการจัดสรรเงินลงทุน (Asset Allocation)</div>
 
-  <div class="row">
+  <div class="row" style="gap:20px; align-items:center;">
+    <div class="col" style="flex:0.7; display:flex; justify-content:center;">
+      <div style="position:relative; width:160px; height:160px;">
+        <svg width="160" height="160" viewBox="0 0 200 200">
+          <g transform="rotate(-90 100 100)">
+            <circle cx="100" cy="100" r="80" fill="none" stroke="#1f6feb" stroke-width="40" stroke-dasharray="175.93 326.73" stroke-dashoffset="0"/>
+            <circle cx="100" cy="100" r="80" fill="none" stroke="#2ca58d" stroke-width="40" stroke-dasharray="75.40 427.26" stroke-dashoffset="-175.93"/>
+            <circle cx="100" cy="100" r="80" fill="none" stroke="#e07a5f" stroke-width="40" stroke-dasharray="50.27 452.39" stroke-dashoffset="-251.33"/>
+            <circle cx="100" cy="100" r="80" fill="none" stroke="#f2b134" stroke-width="40" stroke-dasharray="75.40 427.26" stroke-dashoffset="-301.59"/>
+            <circle cx="100" cy="100" r="80" fill="none" stroke="#7c3aed" stroke-width="40" stroke-dasharray="125.66 376.99" stroke-dashoffset="-376.99"/>
+          </g>
+          <circle cx="100" cy="100" r="50" fill="#0b1220"/>
+        </svg>
+        <div style="position:absolute; top:0; left:0; width:160px; height:160px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+          <div style="font-size:13px; font-weight:800; color:#f8fafc;">฿1,000,000</div>
+          <div style="font-size:9.5px; color:#94a3b8; margin-top:2px; text-align:center;">เงินลงทุนรวม<br/>5 กองทุน</div>
+        </div>
+      </div>
+    </div>
     <div class="col" style="flex:1.3;">
-      <div class="seg-bar">
-        <div style="width:35%; background:#1f6feb;"></div>
-        <div style="width:15%; background:#2ca58d;"></div>
-        <div style="width:10%; background:#e07a5f;"></div>
-        <div style="width:15%; background:#f2b134;"></div>
-        <div style="width:25%; background:#7c3aed;"></div>
-      </div>
-      <div class="legend">
-        <span><span class="sw" style="background:#1f6feb;"></span>TLUS500-H 35% (US Equity Hedged)</span>
-        <span><span class="sw" style="background:#2ca58d;"></span>B-INNOTECH 15% (Global Tech Equity)</span>
-        <span><span class="sw" style="background:#e07a5f;"></span>A-GRID 10% (Smart Grid Equity)</span>
-        <span><span class="sw" style="background:#f2b134;"></span>SCBGOLDH 15% (Gold Hedged)</span>
-        <span><span class="sw" style="background:#7c3aed;"></span>K-GDBOND-A(A) 25% (Global Bond)</span>
-      </div>
+      <table class="table-compact">
+        <tr><th></th><th>กองทุน (ธีมการลงทุน)</th><th class="tnum">น้ำหนัก</th><th class="tnum">เงินลงทุน (฿)</th></tr>
+        <tr><td><span class="sw" style="background:#1f6feb;"></span></td><td>TLUS500-H (US Equity Hedged)</td><td class="tnum">35%</td><td class="tnum">350,000</td></tr>
+        <tr><td><span class="sw" style="background:#2ca58d;"></span></td><td>B-INNOTECH (Global Tech Equity)</td><td class="tnum">15%</td><td class="tnum">150,000</td></tr>
+        <tr><td><span class="sw" style="background:#e07a5f;"></span></td><td>A-GRID (Smart Grid Equity)</td><td class="tnum">10%</td><td class="tnum">100,000</td></tr>
+        <tr><td><span class="sw" style="background:#f2b134;"></span></td><td>SCBGOLDH (Gold Hedged)</td><td class="tnum">15%</td><td class="tnum">150,000</td></tr>
+        <tr><td><span class="sw" style="background:#7c3aed;"></span></td><td>K-GDBOND-A(A) (Global Bond)</td><td class="tnum">25%</td><td class="tnum">250,000</td></tr>
+        <tr style="font-weight:800;"><td></td><td>รวม</td><td class="tnum">100%</td><td class="tnum">1,000,000</td></tr>
+      </table>
     </div>
   </div>
 
-  <div class="row" style="margin-top:16px; gap:16px;">
+  <div class="row" style="margin-top:12px; gap:16px;">
     <div class="col card">
       <div style="font-weight:800; color:#34d399; margin-bottom:4px;">&#9650; Growth Zone &mdash; 60%</div>
       <div style="font-size:12.5px; color:#cbd5e1;">
@@ -340,8 +355,8 @@ tr:last-child td { border-bottom:none; }
           <tr><td>3 เดือน</td><td class="tnum pos">+5.33%</td><td class="tnum">+5.80%</td></tr>
           <tr><td>6 เดือน</td><td class="tnum pos">+7.77%</td><td class="tnum">+8.30%</td></tr>
           <tr><td>1 ปี</td><td class="tnum pos">+27.25%</td><td class="tnum">+28.50%</td></tr>
-          <tr><td>3 ปี (Ann.)</td><td class="tnum">N/A**</td><td class="tnum">+18.00%</td></tr>
-          <tr><td>5 ปี (Ann.)</td><td class="tnum">N/A**</td><td class="tnum">+17.50%</td></tr>
+          <tr><td>3 ปี (CAGR)</td><td class="tnum">N/A**</td><td class="tnum">+18.00%</td></tr>
+          <tr><td>5 ปี (CAGR)</td><td class="tnum">N/A**</td><td class="tnum">+17.50%</td></tr>
         </table>
         <div style="font-size:10.5px; color:#64748b; margin-top:6px;">
           * ตั้งแต่จัดตั้งกองทุน (มี.ค. 2568) ผลตอบแทน 1 ปีรวมผลของอัตราแลกเปลี่ยน Hedge<br/>
@@ -428,8 +443,8 @@ tr:last-child td { border-bottom:none; }
           <tr><td>3 เดือน</td><td class="tnum pos">+16.74%</td><td class="tnum">+17.00%</td></tr>
           <tr><td>6 เดือน</td><td class="tnum pos">+19.74%</td><td class="tnum">+20.00%</td></tr>
           <tr><td>1 ปี</td><td class="tnum pos">+36.47%</td><td class="tnum">+38.00%</td></tr>
-          <tr><td>3 ปี (Ann.)</td><td class="tnum pos">+15.85%</td><td class="tnum">+20.00%</td></tr>
-          <tr><td>5 ปี (Ann.)</td><td class="tnum pos">+9.43%</td><td class="tnum">+22.00%</td></tr>
+          <tr><td>3 ปี (CAGR)</td><td class="tnum pos">+15.85%</td><td class="tnum">+20.00%</td></tr>
+          <tr><td>5 ปี (CAGR)</td><td class="tnum pos">+9.43%</td><td class="tnum">+22.00%</td></tr>
         </table>
         <div style="font-size:10.5px; color:#64748b; margin-top:6px;">
           กองทุนเน้นแนวทาง Lower-volatility tech &mdash; Max Drawdown (3Y, ประมาณการ) ~-18.4% / SD (3Y, ประมาณการ) ~19.3%
@@ -516,8 +531,8 @@ tr:last-child td { border-bottom:none; }
           <tr><td>3 เดือน</td><td class="tnum pos">+14.00%</td><td class="tnum">+14.20%</td></tr>
           <tr><td>6 เดือน</td><td class="tnum pos">+22.00%</td><td class="tnum">+22.30%</td></tr>
           <tr><td>1 ปี</td><td class="tnum pos">+43.32%</td><td class="tnum">+43.60%</td></tr>
-          <tr><td>3 ปี (Ann.)</td><td class="tnum pos">+18.70%</td><td class="tnum">+19.00%</td></tr>
-          <tr><td>5 ปี (Ann.)</td><td class="tnum pos">+16.10%</td><td class="tnum">+16.40%</td></tr>
+          <tr><td>3 ปี (CAGR)</td><td class="tnum pos">+18.70%</td><td class="tnum">+19.00%</td></tr>
+          <tr><td>5 ปี (CAGR)</td><td class="tnum pos">+16.10%</td><td class="tnum">+16.40%</td></tr>
         </table>
         <div style="font-size:10.5px; color:#64748b; margin-top:6px;">
           * ข้อมูลผลตอบแทนของ GRID ETF ใช้เป็น Proxy แทน A-GRID เนื่องจากกองทุนยังไม่มีข้อมูลย้อนหลังของตนเอง<br/>
@@ -605,8 +620,8 @@ tr:last-child td { border-bottom:none; }
           <tr><td>3 เดือน</td><td class="tnum pos">+21.33%</td><td class="tnum">+20.80%</td></tr>
           <tr><td>6 เดือน</td><td class="tnum pos">+42.07%</td><td class="tnum">+41.00%</td></tr>
           <tr><td>1 ปี</td><td class="tnum pos">+68.66%</td><td class="tnum">+67.50%</td></tr>
-          <tr><td>3 ปี (Ann.)</td><td class="tnum pos">+34.78%</td><td class="tnum">+34.00%</td></tr>
-          <tr><td>5 ปี (Ann.)</td><td class="tnum pos">+20.74%</td><td class="tnum">+20.20%</td></tr>
+          <tr><td>3 ปี (CAGR)</td><td class="tnum pos">+34.78%</td><td class="tnum">+34.00%</td></tr>
+          <tr><td>5 ปี (CAGR)</td><td class="tnum pos">+20.74%</td><td class="tnum">+20.20%</td></tr>
         </table>
         <div style="font-size:10.5px; color:#64748b; margin-top:6px;">
           Max Drawdown (ประมาณการ จากราคาทองคำ) ~-18% / SD (3Y, ประมาณการ) ~14%
@@ -704,8 +719,8 @@ tr:last-child td { border-bottom:none; }
           <tr><td>3 เดือน</td><td class="tnum neg">-0.35%</td><td class="tnum">0.00%</td></tr>
           <tr><td>6 เดือน</td><td class="tnum pos">+0.33%</td><td class="tnum">+1.00%</td></tr>
           <tr><td>1 ปี</td><td class="tnum pos">+3.80%</td><td class="tnum">+4.00%</td></tr>
-          <tr><td>3 ปี (Ann.)</td><td class="tnum pos">+4.00%</td><td class="tnum">+2.00%</td></tr>
-          <tr><td>5 ปี (Ann.)</td><td class="tnum pos">+3.00%</td><td class="tnum">+1.00%</td></tr>
+          <tr><td>3 ปี (CAGR)</td><td class="tnum pos">+4.00%</td><td class="tnum">+2.00%</td></tr>
+          <tr><td>5 ปี (CAGR)</td><td class="tnum pos">+3.00%</td><td class="tnum">+1.00%</td></tr>
         </table>
         <div style="font-size:10.5px; color:#64748b; margin-top:6px;">
           Max Drawdown (ประมาณการ จากวิกฤตพันธบัตรปี 2565) ~-12% / SD (3Y, ประมาณการ) ~5.5%
@@ -746,8 +761,8 @@ tr:last-child td { border-bottom:none; }
           <tr><th>ช่วงเวลา</th><th class="tnum">พอร์ตเรา</th><th class="tnum">Benchmark ถ่วงน้ำหนัก</th><th class="tnum">ส่วนต่าง</th></tr>
           <tr><td>YTD 2569</td><td class="tnum pos">+14.83%</td><td class="tnum">+15.10%</td><td class="tnum neg">-0.27pp</td></tr>
           <tr><td>1 ปี</td><td class="tnum pos">+30.59%</td><td class="tnum">+31.16%</td><td class="tnum neg">-0.57pp</td></tr>
-          <tr><td>3 ปี (Ann.)*</td><td class="tnum pos">+10.46%</td><td class="tnum">+16.80%</td><td class="tnum neg">-6.34pp</td></tr>
-          <tr><td>5 ปี (Ann.)*</td><td class="tnum pos">+6.89%</td><td class="tnum">&mdash;</td><td class="tnum">&mdash;</td></tr>
+          <tr><td>3 ปี (CAGR)*</td><td class="tnum pos">+10.46%</td><td class="tnum">+16.80%</td><td class="tnum neg">-6.34pp</td></tr>
+          <tr><td>5 ปี (CAGR)*</td><td class="tnum pos">+6.89%</td><td class="tnum">&mdash;</td><td class="tnum">&mdash;</td></tr>
         </table>
         <div style="font-size:10.5px; color:#64748b; margin-top:6px;">
           * ผลตอบแทน 3 ปี/5 ปี ถ่วงน้ำหนักของพอร์ตคำนวณรวม TLUS500-H และ A-GRID ซึ่งเป็นกองทุนใหม่และยังไม่มีข้อมูลย้อนหลัง 3/5 ปีของตนเอง
@@ -763,8 +778,8 @@ tr:last-child td { border-bottom:none; }
           <tr><td>เริ่มต้น</td><td class="tnum">0.00%</td><td class="tnum">1,000,000</td><td class="tnum">0</td></tr>
           <tr><td>YTD 2569</td><td class="tnum pos">+14.83%</td><td class="tnum">1,148,300</td><td class="tnum pos">+148,300</td></tr>
           <tr><td>1 ปี</td><td class="tnum pos">+30.59%</td><td class="tnum">1,305,900</td><td class="tnum pos">+305,900</td></tr>
-          <tr><td>3 ปี (ทบต้นจาก Ann. 10.46%)</td><td class="tnum pos">+34.80%</td><td class="tnum">1,348,000</td><td class="tnum pos">+348,000</td></tr>
-          <tr><td>5 ปี (ทบต้นจาก Ann. 6.89%)</td><td class="tnum pos">+39.53%</td><td class="tnum">1,395,300</td><td class="tnum pos">+395,300</td></tr>
+          <tr><td>3 ปี (ทบต้นจาก CAGR 10.46%)</td><td class="tnum pos">+34.80%</td><td class="tnum">1,348,000</td><td class="tnum pos">+348,000</td></tr>
+          <tr><td>5 ปี (ทบต้นจาก CAGR 6.89%)</td><td class="tnum pos">+39.53%</td><td class="tnum">1,395,300</td><td class="tnum pos">+395,300</td></tr>
         </table>
       </div>
     </div>
@@ -1056,8 +1071,8 @@ tr:last-child td { border-bottom:none; }
       <tr><td>3 เดือน</td><td class="tnum pos">+8.89%</td><td class="tnum">+4.7%*</td><td class="tnum">+9.0%*</td><td class="tnum">+5.0%*</td><td class="tnum">+13.0%*</td></tr>
       <tr><td>6 เดือน</td><td class="tnum pos">+14.27%</td><td class="tnum">+9.1%</td><td class="tnum">+17.6%</td><td class="tnum">+10.1%</td><td class="tnum">+24.0%*</td></tr>
       <tr><td>1 ปี</td><td class="tnum pos">+30.59%</td><td class="tnum">+24.3%</td><td class="tnum">+35.4%</td><td class="tnum">+25.0%</td><td class="tnum">+38.3%</td></tr>
-      <tr><td>3 ปี (Ann.)**</td><td class="tnum pos">+10.46%</td><td class="tnum">+21.5%</td><td class="tnum">+26.9%</td><td class="tnum">+20.5%</td><td class="tnum">+1.7%*</td></tr>
-      <tr><td>5 ปี (Ann.)**</td><td class="tnum pos">+6.89%</td><td class="tnum">+12.9%</td><td class="tnum">+17.0%</td><td class="tnum">+10.8%</td><td class="tnum">+0.9%*</td></tr>
+      <tr><td>3 ปี (CAGR)**</td><td class="tnum pos">+10.46%</td><td class="tnum">+21.5%</td><td class="tnum">+26.9%</td><td class="tnum">+20.5%</td><td class="tnum">+1.7%*</td></tr>
+      <tr><td>5 ปี (CAGR)**</td><td class="tnum pos">+6.89%</td><td class="tnum">+12.9%</td><td class="tnum">+17.0%</td><td class="tnum">+10.8%</td><td class="tnum">+0.9%*</td></tr>
     </table>
     <div style="font-size:10.5px; color:#64748b; margin-top:6px;">
       * ค่าประมาณการจากข้อมูลล่าสุดที่หาได้ (มิ.ย. 2569) &nbsp;|&nbsp; ** ผลตอบแทน 3 ปี/5 ปี ถ่วงน้ำหนักของพอร์ตนับน้ำหนัก TLUS500-H เป็น 0 (กองทุนใหม่ ไม่มีข้อมูลย้อนหลังของตนเอง) ตามหมายเหตุหน้า 8 จึงต่ำกว่าค่าที่ควรจะเป็นหากมีข้อมูลครบ<br/>
@@ -1077,7 +1092,7 @@ tr:last-child td { border-bottom:none; }
           <tr><td>Sharpe Ratio (3Y, Ann.)</td><td class="tnum accent">0.53</td><td class="tnum">1.36</td><td class="tnum">1.28</td><td class="tnum">1.20</td><td class="tnum">-0.05</td></tr>
         </table>
         <div style="font-size:10.5px; color:#64748b; margin-top:6px;">
-          Sharpe Ratio = (ผลตอบแทน &minus; Risk-free 2.5%) / SD &mdash; ใช้ผลตอบแทน 1Y และ 3Y (Ann.) ของแต่ละรายการตามตารางด้านบน
+          Sharpe Ratio = (ผลตอบแทน &minus; Risk-free 2.5%) / SD &mdash; ใช้ผลตอบแทน 1Y และ 3Y (CAGR) ของแต่ละรายการตามตารางด้านบน
         </div>
       </div>
     </div>
