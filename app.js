@@ -101,7 +101,7 @@ function renderPerformanceSummary() {
     ${rows}
   `;
   document.getElementById("perf-note").innerHTML =
-    "ผลตอบแทนถ่วงน้ำหนักคำนวณจากสัดส่วนการลงทุนของแต่ละกองทุน (30/20/10/20/20) " +
+    "ผลตอบแทนถ่วงน้ำหนักคำนวณจากสัดส่วนการลงทุนของแต่ละกองทุน (35/15/10/15/25) " +
     "สำหรับ A-GRID ซึ่งเป็นกองทุนจัดตั้งใหม่ ใช้ผลตอบแทนของ GRID ETF (กองทุนหลักอ้างอิง) แทนข้อมูลย้อนหลัง " +
     "ตัวเลขทั้งหมดเป็นข้อมูลโดยประมาณ ณ วันที่ระบุ และไม่ได้รวมค่าธรรมเนียมการซื้อขายหน่วยลงทุน";
 
@@ -148,10 +148,14 @@ function renderAssetClassAndRisk() {
   });
 
   const weightedRisk = computeWeightedRisk();
+  const equityPct = PORTFOLIO.funds.filter(f => f.assetClass.includes("หุ้น")).reduce((s, f) => s + f.weight, 0) * 100;
+  const goldPct = PORTFOLIO.funds.filter(f => f.code === "SCBGOLDH").reduce((s, f) => s + f.weight, 0) * 100;
+  const bondPct = PORTFOLIO.funds.filter(f => f.code === "K-GDBOND-A(A)").reduce((s, f) => s + f.weight, 0) * 100;
+  const riskAssetPct = equityPct + goldPct;
   const kpis = [
     { label: "ระดับความเสี่ยงถ่วงน้ำหนัก", value: weightedRisk.toFixed(1) + " / 8", sub: "ระดับความเสี่ยงเฉลี่ยตามสัดส่วนเงินลงทุน" },
-    { label: "สัดส่วนสินทรัพย์เสี่ยงสูง (หุ้น+ทอง)", value: ((PORTFOLIO.funds.filter(f=>f.code!=="K-GDBOND-A(A)").reduce((s,f)=>s+f.weight,0))*100).toFixed(0) + "%", sub: "หุ้น 60% + ทองคำ 20%" },
-    { label: "สัดส่วนตราสารหนี้", value: "20%", sub: "K-GDBOND-A(A)" },
+    { label: "สัดส่วนสินทรัพย์เสี่ยงสูง (หุ้น+ทอง)", value: riskAssetPct.toFixed(0) + "%", sub: `หุ้น ${equityPct.toFixed(0)}% + ทองคำ ${goldPct.toFixed(0)}%` },
+    { label: "สัดส่วนตราสารหนี้", value: bondPct.toFixed(0) + "%", sub: "K-GDBOND-A(A)" },
     { label: "การกระจายภูมิภาค/ธีม", value: "5 ธีม", sub: "US Equity, Global Tech, Smart Grid, Gold, Global Bond" },
   ];
   document.getElementById("portfolio-kpis").innerHTML = `<div class="kpi-row">${
@@ -159,7 +163,7 @@ function renderAssetClassAndRisk() {
   }</div>`;
 
   document.getElementById("risk-note").innerHTML =
-    "พอร์ตนี้เน้นการเติบโตของสินทรัพย์เสี่ยง (หุ้น 60% และทองคำ 20%) ผสมกับตราสารหนี้โลก 20% เพื่อช่วยลดความผันผวนโดยรวม " +
+    `พอร์ตนี้เน้นการเติบโตของสินทรัพย์เสี่ยง (หุ้น ${equityPct.toFixed(0)}% และทองคำ ${goldPct.toFixed(0)}%) ผสมกับตราสารหนี้โลก ${bondPct.toFixed(0)}% เพื่อช่วยลดความผันผวนโดยรวม ` +
     "ความเสี่ยงหลักมาจากความผันผวนของตลาดหุ้นสหรัฐฯ/เทคโนโลยี อัตราแลกเปลี่ยน และราคาทองคำ";
 }
 
@@ -253,10 +257,11 @@ function renderFundSlides() {
 
 // ---------- Summary slide ----------
 function renderSummary() {
+  const w = code => (PORTFOLIO.funds.find(f => f.code === code).weight * 100).toFixed(0);
   const points = [
-    `พอร์ตกระจายการลงทุนใน 5 ธีมหลัก: หุ้นสหรัฐฯ (S&amp;P 500 Hedged) 30%, หุ้นเทคโนโลยีโลก 20%, หุ้นธีม Smart Grid 10%, ทองคำ (Hedged) 20%, และตราสารหนี้โลก 20%`,
+    `พอร์ตกระจายการลงทุนใน 5 ธีมหลัก: หุ้นสหรัฐฯ (S&amp;P 500 Hedged) ${w("TLUS500-H")}%, หุ้นเทคโนโลยีโลก ${w("B-INNOTECH")}%, หุ้นธีม Smart Grid ${w("A-GRID")}%, ทองคำ (Hedged) ${w("SCBGOLDH")}%, และตราสารหนี้โลก ${w("K-GDBOND-A(A)")}%`,
     `ระดับความเสี่ยงถ่วงน้ำหนักของพอร์ตอยู่ที่ประมาณ ${computeWeightedRisk().toFixed(1)} จาก 8 ซึ่งจัดอยู่ในกลุ่มความเสี่ยงสูง เหมาะกับผู้ลงทุนที่รับความผันผวนได้และมีระยะเวลาลงทุนปานกลางถึงยาว`,
-    `สัดส่วนทองคำ 20% และตราสารหนี้โลก 20% ช่วยกระจายความเสี่ยงจากความผันผวนของตลาดหุ้น`,
+    `สัดส่วนทองคำ ${w("SCBGOLDH")}% และตราสารหนี้โลก ${w("K-GDBOND-A(A)")}% ช่วยกระจายความเสี่ยงจากความผันผวนของตลาดหุ้น`,
     `A-GRID เป็นกองทุนใหม่ที่ลงทุนตามธีม AI/Data Center และ Smart Grid ซึ่งเป็นเมกะเทรนด์ระยะยาว แต่ยังไม่มีผลการดำเนินงานจริงในระยะยาว`,
     `ควรติดตามมุมมองอัตราดอกเบี้ยสหรัฐฯ ทิศทางราคาทองคำ และผลประกอบการกลุ่มเทคโนโลยีอย่างใกล้ชิด เพื่อปรับสัดส่วนพอร์ตตามความเหมาะสม`,
   ];
