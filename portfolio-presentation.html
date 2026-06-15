@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>พอร์ตการลงทุนกองทุนรวม - Investment Portfolio Review</title>
+
+<link rel="stylesheet" href="vendor/revealjs/reveal.css">
+<link rel="stylesheet" href="vendor/revealjs/theme/white.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="vendor/chartjs/chart.umd.js"></script>
+
+<style>
+  :root{
+    --navy:#0b2545;
+    --navy2:#13315c;
+    --gold:#d4af37;
+    --accent1:#1f6feb;
+    --accent2:#2ca58d;
+    --accent3:#e07a5f;
+    --accent4:#f2b134;
+    --accent5:#7c3aed;
+    --grey:#6b7280;
+    --bg:#f7f8fa;
+  }
+  * { box-sizing: border-box; }
+  html, body { font-family:'Sarabun', sans-serif; }
+  .reveal { font-family:'Sarabun', sans-serif; color:#1a1a2e; }
+  .reveal .slides section{
+    text-align:left;
+    height:100%;
+    padding: 28px 48px;
+    display:flex;
+    flex-direction:column;
+  }
+  .reveal h1, .reveal h2, .reveal h3, .reveal h4 { font-family:'Sarabun', sans-serif; text-transform:none; color:var(--navy); }
+  .reveal h1{ font-size:1.9em; }
+  .reveal h2{ font-size:1.45em; border-bottom:4px solid var(--gold); padding-bottom:8px; margin-bottom:14px;}
+  .reveal h3{ font-size:1.05em; color:var(--navy2); }
+  .reveal p, .reveal li, .reveal td, .reveal th { font-size:0.62em; line-height:1.45; }
+  .reveal table { font-size:0.62em; width:100%; border-collapse:collapse; margin:8px 0; }
+  .reveal table th{ background:var(--navy); color:#fff; padding:6px 8px; text-align:center;}
+  .reveal table td{ padding:5px 8px; border-bottom:1px solid #e2e6ec; text-align:center;}
+  .reveal table td:first-child, .reveal table th:first-child{ text-align:left; }
+  .reveal table tr:nth-child(even){ background:#f4f6fa; }
+  .pos{ color:#0a8a3e; font-weight:600;}
+  .neg{ color:#c0392b; font-weight:600;}
+
+  .cover{
+    background:linear-gradient(135deg, var(--navy) 0%, var(--navy2) 60%, #1c4f8c 100%);
+    color:#fff;
+    justify-content:center;
+    align-items:flex-start;
+  }
+  .cover h1{ color:#fff; font-size:2.3em; margin-bottom:6px;}
+  .cover .sub{ color:var(--gold); font-size:1.1em; font-weight:600; margin-bottom:30px;}
+  .cover .meta{ color:#cdd6e6; font-size:0.7em; line-height:1.8; }
+  .badge-row{ display:flex; gap:12px; margin-top:30px; flex-wrap:wrap; }
+  .badge{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.25);
+    border-radius:10px;
+    padding:14px 18px;
+    min-width:150px;
+  }
+  .badge .k{ font-size:0.62em; color:#cdd6e6;}
+  .badge .v{ font-size:1.1em; font-weight:700; color:#fff; margin-top:4px;}
+
+  .grid2{ display:grid; grid-template-columns:1.1fr 1fr; gap:24px; flex:1; min-height:0; }
+  .grid3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; flex:1; min-height:0; }
+  .panel{
+    background:#fff; border:1px solid #e2e6ec; border-radius:12px; padding:14px 16px;
+    box-shadow:0 2px 10px rgba(11,37,69,0.05);
+    display:flex; flex-direction:column; min-height:0;
+  }
+  .panel h3{ margin:0 0 8px 0; }
+  .chart-wrap{ position:relative; flex:1; min-height:0; }
+  .chart-wrap canvas{ max-height:100%; }
+
+  .kpi-row{ display:flex; gap:14px; margin-top:10px; flex-wrap:wrap; }
+  .kpi{
+    flex:1; min-width:130px; background:#fff; border:1px solid #e2e6ec; border-radius:10px;
+    padding:10px 14px; box-shadow:0 2px 8px rgba(11,37,69,0.04);
+  }
+  .kpi .label{ font-size:0.55em; color:var(--grey); text-transform:uppercase; letter-spacing:.5px;}
+  .kpi .value{ font-size:1.25em; font-weight:700; color:var(--navy); margin-top:2px;}
+  .kpi .sub{ font-size:0.55em; color:var(--grey); margin-top:2px;}
+
+  .tag{
+    display:inline-block; padding:2px 10px; border-radius:999px; font-size:0.55em;
+    font-weight:600; color:#fff; margin-right:6px;
+  }
+  .fund-header{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px; }
+  .fund-header .code{ font-size:1.5em; font-weight:800; color:var(--navy); }
+  .fund-header .full{ font-size:0.65em; color:var(--grey); margin-top:2px; }
+  .fund-header .risk{
+    background:var(--navy); color:#fff; border-radius:10px; padding:8px 14px; text-align:center; min-width:90px;
+  }
+  .fund-header .risk .num{ font-size:1.3em; font-weight:800; }
+  .fund-header .risk .lbl{ font-size:0.5em; }
+
+  .note{ font-size:0.5em; color:var(--grey); margin-top:auto; padding-top:6px; }
+  .twocol{ display:grid; grid-template-columns:1fr 1fr; gap:16px; flex:1; min-height:0;}
+  .threecol-uneven{ display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:14px; flex:1; min-height:0; }
+  .scroll{ overflow:auto; }
+  ul.tight{ margin:4px 0; padding-left:1.2em; }
+  ul.tight li{ margin-bottom:3px; }
+
+  .legend-pill{ display:inline-flex; align-items:center; gap:6px; font-size:0.6em; margin-right:14px; }
+  .legend-dot{ width:10px; height:10px; border-radius:50%; display:inline-block; }
+
+  .progress-outer{ width:100%; height:8px; background:#e7eaf0; border-radius:6px; overflow:hidden; }
+  .progress-inner{ height:8px; border-radius:6px; }
+
+  .footer-disclaimer{ font-size:0.42em; color:var(--grey); line-height:1.5; }
+</style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <!-- SLIDE 1: COVER -->
+    <section class="cover">
+      <h1>ภาพรวมพอร์ตการลงทุนกองทุนรวม</h1>
+      <div class="sub">Mutual Fund Portfolio Review &amp; Performance Analysis</div>
+      <div class="meta">
+        จัดทำเพื่อนำเสนอลูกค้า · ข้อมูล ณ วันที่ 15 มิถุนายน 2569 (15 June 2026)<br/>
+        พอร์ตประกอบด้วยกองทุน 5 กอง กระจายการลงทุนใน หุ้นสหรัฐฯ, หุ้นเทคโนโลยีโลก, ธีม Smart Grid, ทองคำ และตราสารหนี้โลก
+      </div>
+      <div class="badge-row" id="cover-badges"></div>
+    </section>
+
+    <!-- SLIDE 2: ASSET ALLOCATION DASHBOARD -->
+    <section>
+      <h2>โครงสร้างพอร์ตการลงทุน (Asset Allocation)</h2>
+      <div class="grid2">
+        <div class="panel">
+          <h3>สัดส่วนการลงทุนรายกองทุน</h3>
+          <div class="chart-wrap"><canvas id="chartAllocation"></canvas></div>
+        </div>
+        <div class="panel">
+          <h3>ตัวอย่างเงินลงทุน 1,000,000 บาท</h3>
+          <div class="scroll">
+            <table id="tbl-allocation"></table>
+          </div>
+          <div class="note">ตัวเลขเป็นตัวอย่างสมมติเพื่อการนำเสนอเท่านั้น มูลค่าที่แท้จริงขึ้นอยู่กับเงินลงทุนจริงของลูกค้า</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: PORTFOLIO PERFORMANCE SUMMARY -->
+    <section>
+      <h2>ผลตอบแทนพอร์ตโดยรวม (Portfolio Performance Summary)</h2>
+      <div class="grid2">
+        <div class="panel">
+          <h3>ผลตอบแทนถ่วงน้ำหนัก (Weighted Return) ตามช่วงเวลา</h3>
+          <div class="chart-wrap"><canvas id="chartPerf"></canvas></div>
+        </div>
+        <div class="panel">
+          <h3>กำไร/ขาดทุน โดยประมาณ จากเงินลงทุน 1,000,000 บาท</h3>
+          <div class="scroll">
+            <table id="tbl-perf"></table>
+          </div>
+          <div class="note" id="perf-note"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: PORTFOLIO METRICS -->
+    <section>
+      <h2>Asset Class &amp; Risk Profile ของพอร์ต</h2>
+      <div class="grid2">
+        <div class="panel">
+          <h3>สัดส่วนตาม Asset Class</h3>
+          <div class="chart-wrap"><canvas id="chartAssetClass"></canvas></div>
+        </div>
+        <div class="panel">
+          <h3>สรุป Metric สำคัญของพอร์ต</h3>
+          <div id="portfolio-kpis"></div>
+          <div class="note" id="risk-note"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FUND SLIDES (5-9) inserted via template -->
+    <div id="fund-slides-container"></div>
+
+    <!-- LAST SLIDE: DISCLAIMER -->
+    <section>
+      <h2>ข้อสังเกตและคำเตือนความเสี่ยง (Important Disclaimer)</h2>
+      <div class="grid2">
+        <div class="panel">
+          <h3>สรุปประเด็นสำคัญของพอร์ต</h3>
+          <ul class="tight" id="summary-points"></ul>
+        </div>
+        <div class="panel">
+          <h3>คำเตือนตามมาตรฐานกองทุนรวม</h3>
+          <ul class="tight footer-disclaimer">
+            <li>การลงทุนมีความเสี่ยง ผู้ลงทุนควรศึกษาข้อมูลก่อนการตัดสินใจลงทุน</li>
+            <li>ผลการดำเนินงานในอดีตของกองทุนรวมมิได้เป็นสิ่งยืนยันถึงผลการดำเนินงานในอนาคต</li>
+            <li>กองทุนที่มีนโยบายป้องกันความเสี่ยงอัตราแลกเปลี่ยนตามดุลยพินิจของผู้จัดการกองทุน อาจมีความเสี่ยงจากอัตราแลกเปลี่ยนที่อาจทำให้ผู้ลงทุนขาดทุนหรือได้รับกำไรจากอัตราแลกเปลี่ยน หรือได้รับเงินคืนต่ำกว่าเงินลงทุนเริ่มแรกได้</li>
+            <li>กองทุนที่ลงทุนกระจุกตัวในหมวดอุตสาหกรรม (Sector Fund) หรือในประเทศ/ภูมิภาคใดเป็นการเฉพาะ มีความเสี่ยงที่ผู้ลงทุนอาจสูญเสียเงินลงทุนจำนวนมากได้ เนื่องจากการกระจุกตัวดังกล่าว</li>
+            <li>กองทุนที่ลงทุนในต่างประเทศมิได้มีนโยบายป้องกันความเสี่ยงด้านอัตราแลกเปลี่ยนทั้งหมดหรือเกือบทั้งหมด ผู้ลงทุนอาจขาดทุนหรือได้รับกำไรจากอัตราแลกเปลี่ยน/หรือได้รับเงินคืนต่ำกว่าทุนเริ่มแรกได้</li>
+            <li>กองทุนทองคำและสินค้าโภคภัณฑ์มีความผันผวนสูง ราคาทองคำขึ้นอยู่กับปัจจัยเศรษฐกิจ การเงิน และภูมิรัฐศาสตร์โลก</li>
+            <li>A-GRID เป็นกองทุนจัดตั้งใหม่ ข้อมูลผลการดำเนินงานในอดีตที่แสดง อ้างอิงจากกองทุน/ดัชนีหลักที่กองทุนเข้าไปลงทุน (Reference/Proxy) มิใช่ผลการดำเนินงานจริงของกองทุน</li>
+            <li>ข้อมูลทั้งหมดในเอกสารนี้จัดทำขึ้นเพื่อการนำเสนอประกอบการให้คำปรึกษาเท่านั้น มิใช่คำเสนอขายหน่วยลงทุน โปรดศึกษา Fund Fact Sheet ฉบับเต็มก่อนการลงทุน</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script src="vendor/revealjs/reveal.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
