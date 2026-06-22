@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Tracker</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+  :root {
+    --bg: #0f1117; --card: #1a1d27; --border: #2a2d3e;
+    --green: #00c896; --red: #ff4d6d; --blue: #4d8af0;
+    --yellow: #f0c94d; --text: #e0e0e0; --muted: #8888aa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; font-size: 14px; }
+
+  header { background: var(--card); border-bottom: 1px solid var(--border); padding: 16px 24px;
+    display: flex; align-items: center; justify-content: space-between; }
+  header h1 { font-size: 18px; font-weight: 600; color: #fff; }
+  #usdthb { font-size: 13px; color: var(--muted); }
+  #last-update { font-size: 12px; color: var(--muted); }
+
+  .tabs { display: flex; gap: 4px; padding: 16px 24px 0; border-bottom: 1px solid var(--border); }
+  .tab { padding: 8px 20px; cursor: pointer; border-radius: 6px 6px 0 0; color: var(--muted);
+    border: 1px solid transparent; border-bottom: none; transition: all .2s; }
+  .tab.active { background: var(--card); color: #fff; border-color: var(--border); }
+
+  .content { padding: 24px; display: none; }
+  .content.active { display: block; }
+
+  .summary-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 12px; margin-bottom: 24px; }
+  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .stat-card .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+  .stat-card .value { font-size: 22px; font-weight: 700; color: #fff; }
+  .stat-card .sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  @media(max-width:900px){ .charts-row { grid-template-columns: 1fr; } }
+  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .chart-card h3 { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+  .chart-card canvas { max-height: 260px; }
+
+  table { width: 100%; border-collapse: collapse; }
+  thead th { background: var(--bg); color: var(--muted); font-size: 11px; text-transform: uppercase;
+    letter-spacing: .5px; padding: 10px 12px; text-align: right; border-bottom: 1px solid var(--border); }
+  thead th:first-child { text-align: left; }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+  tbody tr:hover { background: rgba(255,255,255,.03); }
+  tbody td { padding: 10px 12px; text-align: right; }
+  tbody td:first-child { text-align: left; }
+  .ticker { font-weight: 700; color: #fff; }
+  .pos { color: var(--green); }
+  .neg { color: var(--red); }
+  .neutral { color: var(--muted); }
+
+  .rebalance-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+  .overweight  { background: rgba(255,77,109,.15); color: var(--red); }
+  .underweight { background: rgba(77,138,240,.15); color: var(--blue); }
+  .balanced    { background: rgba(0,200,150,.15);  color: var(--green); }
+
+  .alert-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+  .alert-card h3 { font-size: 14px; margin-bottom: 12px; color: #fff; }
+  .alert-item { display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .alert-item:last-child { border-bottom: none; }
+  .alert-item .info { display: flex; flex-direction: column; gap: 2px; }
+  .alert-item .name { font-weight: 600; color: #fff; }
+  .alert-item .detail { font-size: 12px; color: var(--muted); }
+  .dca-amount { font-size: 16px; font-weight: 700; }
+
+  .spinner { display: flex; align-items: center; justify-content: center; height: 300px;
+    color: var(--muted); font-size: 14px; gap: 10px; }
+  .dot-pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--blue);
+    animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+  .progress-bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 2px; transition: width .5s; }
+
+  .52w-range { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); justify-content: flex-end; }
+  .52w-range .cur { color: var(--text); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📊 Portfolio Tracker</h1>
+  <div style="display:flex;gap:20px;align-items:center">
+    <div id="usdthb">USD/THB: —</div>
+    <div id="last-update">กำลังโหลด...</div>
+    <button onclick="loadData()" style="background:var(--blue);border:none;color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px">↻ รีเฟรช</button>
+  </div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('core',this)">Core Port</div>
+  <div class="tab" onclick="switchTab('satellite',this)">Satellite Port</div>
+  <div class="tab" onclick="switchTab('alerts',this)">🔔 DCA Alerts</div>
+</div>
+
+<div id="tab-core" class="content active"><div class="spinner"><div class="dot-pulse"></div>กำลังดึงราคาล่าสุด...</div></div>
+<div id="tab-satellite" class="content"><div class="spinner"><div class="dot-pulse"></div>กำลังดึงราคาล่าสุด...</div></div>
+<div id="tab-alerts" class="content"><div class="spinner"><div class="dot-pulse"></div>กำลังดึงข้อมูล...</div></div>
+
+<script>
+let portfolioData = null;
+
+function switchTab(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+}
+
+function fmt(n, dec=2) {
+  if (n == null) return '—';
+  return n.toLocaleString('en-US', {minimumFractionDigits: dec, maximumFractionDigits: dec});
+}
+function fmtThb(n) { return n == null ? '—' : n.toLocaleString('th-TH', {maximumFractionDigits: 0}) + ' ฿'; }
+function colorClass(n) { return n > 0 ? 'pos' : n < 0 ? 'neg' : 'neutral'; }
+function arrow(n) { return n > 0 ? '▲' : n < 0 ? '▼' : ''; }
+
+const CHART_COLORS = [
+  '#4d8af0','#00c896','#f0c94d','#ff4d6d','#c84df0',
+  '#4df0e8','#f07a4d','#8af04d','#f04d8a','#4df07a',
+  '#f0d44d','#4d8af0','#ff9f40'
+];
+
+function buildPortfolioTab(portId, port, usdthb) {
+  const el = document.getElementById('tab-' + portId);
+  const gainClass = colorClass(port.total_gain_usd);
+
+  // 52w position %
+  function pos52w(h) {
+    if (!h.high_52w || !h.low_52w || h.high_52w === h.low_52w) return null;
+    return ((h.price - h.low_52w) / (h.high_52w - h.low_52w) * 100).toFixed(0);
+  }
+
+  // Holdings rows
+  const rows = port.holdings.map(h => {
+    const gc = colorClass(h.gain_pct);
+    const dc = colorClass(h.change_pct);
+    const rdiff = h.rebalance_diff;
+    let badge = '';
+    if (h.target_pct > 0) {
+      if (rdiff > 1.5) badge = `<span class="rebalance-badge underweight">▼ ${fmt(Math.abs(rdiff),1)}% underweight</span>`;
+      else if (rdiff < -1.5) badge = `<span class="rebalance-badge overweight">▲ ${fmt(Math.abs(rdiff),1)}% overweight</span>`;
+      else badge = `<span class="rebalance-badge balanced">✓ balanced</span>`;
+    }
+    const pos = pos52w(h);
+    const posBar = pos != null ? `
+      <div class="progress-bar"><div class="progress-fill" style="width:${pos}%;background:${h.gain_pct>=0?'var(--green)':'var(--red)'}"></div></div>
+      <div class="52w-range"><span>${fmt(h.low_52w,2)}</span><span class="cur">${fmt(h.price,2)}</span><span>${fmt(h.high_52w,2)}</span></div>` : '';
+
+    return `<tr>
+      <td>
+        <div class="ticker">${h.ticker}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">${h.qty} shares</div>
+        ${badge}
+      </td>
+      <td>
+        <div style="font-weight:600;color:#fff">${fmt(h.price)}</div>
+        <div class="${dc}" style="font-size:11px">${arrow(h.change_pct)} ${fmt(Math.abs(h.change_pct))}%</div>
+        ${posBar}
+      </td>
+      <td>${fmtThb(h.value_thb)}<div style="font-size:11px;color:var(--muted)">${fmt(h.value_usd)} USD</div></td>
+      <td class="${gc}">
+        ${h.gain_thb >= 0 ? '+' : ''}${fmtThb(h.gain_thb)}
+        <div style="font-size:11px">${h.gain_pct >= 0 ? '+' : ''}${fmt(h.gain_pct)}%</div>
+      </td>
+      <td style="color:var(--muted)">${h.target_pct > 0 ? h.target_pct+'%' : '—'}</td>
+      <td style="color:var(--muted)">${fmt(h.current_pct)}%</td>
+      <td>${h.pe != null ? fmt(h.pe,1) : '—'}</td>
+      <td>${h.beta != null ? fmt(h.beta,2) : '—'}</td>
+    </tr>`;
+  }).join('');
+
+  el.innerHTML = `
+  <div class="summary-row">
+    <div class="stat-card">
+      <div class="label">มูลค่ารวม</div>
+      <div class="value">${fmtThb(port.total_value_thb)}</div>
+      <div class="sub">${fmt(port.total_value_usd)} USD</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">กำไร/ขาดทุน</div>
+      <div class="value ${gainClass}">${port.total_gain_thb >= 0 ? '+' : ''}${fmtThb(port.total_gain_thb)}</div>
+      <div class="sub ${gainClass}">${port.total_gain_pct >= 0 ? '+' : ''}${fmt(port.total_gain_pct)}%</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">ต้นทุนรวม</div>
+      <div class="value">${fmtThb(port.total_cost_usd * usdthb)}</div>
+      <div class="sub">${fmt(port.total_cost_usd)} USD</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">จำนวน Positions</div>
+      <div class="value">${port.holdings.length}</div>
+      <div class="sub">หุ้น/สินทรัพย์</div>
+    </div>
+  </div>
+
+  <div class="charts-row">
+    <div class="chart-card">
+      <h3>Allocation (ปัจจุบัน vs เป้าหมาย)</h3>
+      <canvas id="chart-alloc-${portId}"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>กำไร/ขาดทุน แต่ละตัว (THB)</h3>
+      <canvas id="chart-pnl-${portId}"></canvas>
+    </div>
+  </div>
+
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden">
+    <table>
+      <thead><tr>
+        <th style="text-align:left">หุ้น</th>
+        <th>ราคา / 52w</th>
+        <th>มูลค่า</th>
+        <th>P&L</th>
+        <th>Target %</th>
+        <th>ปัจจุบัน %</th>
+        <th>P/E</th>
+        <th>Beta</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
+
+  // Allocation chart
+  const allocLabels = port.holdings.map(h => h.ticker);
+  const allocCurrent = port.holdings.map(h => h.current_pct);
+  const allocTarget  = port.holdings.map(h => h.target_pct);
+
+  new Chart(document.getElementById(`chart-alloc-${portId}`), {
+    type: 'bar',
+    data: {
+      labels: allocLabels,
+      datasets: [
+        { label: 'ปัจจุบัน %', data: allocCurrent, backgroundColor: CHART_COLORS.map(c=>c+'99'), borderColor: CHART_COLORS, borderWidth: 1 },
+        { label: 'เป้าหมาย %', data: allocTarget, backgroundColor: 'transparent', borderColor: '#ffffff33', borderWidth: 1, borderDash: [4,4] }
+      ]
+    },
+    options: { responsive: true, plugins: { legend: { labels: { color: '#aaa', font: { size: 11 } } } },
+      scales: { x: { ticks: { color: '#aaa' }, grid: { color: '#2a2d3e' } }, y: { ticks: { color: '#aaa' }, grid: { color: '#2a2d3e' } } } }
+  });
+
+  // P&L chart
+  const pnlData = [...port.holdings].sort((a,b) => b.gain_thb - a.gain_thb);
+  new Chart(document.getElementById(`chart-pnl-${portId}`), {
+    type: 'bar',
+    data: {
+      labels: pnlData.map(h => h.ticker),
+      datasets: [{ label: 'P&L (THB)', data: pnlData.map(h => h.gain_thb),
+        backgroundColor: pnlData.map(h => h.gain_thb >= 0 ? 'rgba(0,200,150,.6)' : 'rgba(255,77,109,.6)'),
+        borderColor:     pnlData.map(h => h.gain_thb >= 0 ? '#00c896' : '#ff4d6d'), borderWidth: 1 }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } },
+      scales: { x: { ticks: { color: '#aaa' }, grid: { color: '#2a2d3e' } }, y: { ticks: { color: '#aaa' }, grid: { color: '#2a2d3e' } } } }
+  });
+}
+
+function buildAlertsTab(data) {
+  const el = document.getElementById('tab-alerts');
+  const usdthb = data.usdthb;
+  let underweight = [], overweight = [], topGainers = [], topLosers = [];
+
+  for (const [portId, port] of Object.entries(data.portfolios)) {
+    for (const h of port.holdings) {
+      if (h.target_pct <= 0) continue;
+      const diff = h.rebalance_diff;
+      const needUsd = (diff / 100) * port.total_value_usd;
+      if (diff > 1.5)  underweight.push({ ...h, needUsd, portName: port.name });
+      if (diff < -1.5) overweight.push({ ...h, needUsd, portName: port.name });
+    }
+    for (const h of port.holdings) {
+      if (h.gain_pct >= 20) topGainers.push({ ...h, portName: port.name });
+      if (h.gain_pct <= -10) topLosers.push({ ...h, portName: port.name });
+    }
+  }
+  underweight.sort((a,b) => b.rebalance_diff - a.rebalance_diff);
+  overweight.sort((a,b)  => a.rebalance_diff - b.rebalance_diff);
+  topGainers.sort((a,b)  => b.gain_pct - a.gain_pct);
+  topLosers.sort((a,b)   => a.gain_pct - b.gain_pct);
+
+  const makeItems = (arr, type) => arr.map(h => {
+    const needThb = Math.abs(h.needUsd) * usdthb;
+    const action = type === 'under'
+      ? `ซื้อเพิ่ม ~${fmt(needThb, 0)} ฿ (${fmt(Math.abs(h.needUsd), 0)} USD)`
+      : `Trim ~${fmt(needThb, 0)} ฿`;
+    return `<div class="alert-item">
+      <div class="info">
+        <div class="name">${h.ticker} <span style="font-size:11px;color:var(--muted)">${h.portName}</span></div>
+        <div class="detail">Target ${h.target_pct}% → ปัจจุบัน ${fmt(h.current_pct)}% (diff ${fmt(h.rebalance_diff,1)}%)</div>
+      </div>
+      <div class="dca-amount ${type==='under'?'pos':'neg'}">${action}</div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = `
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+    <div class="alert-card">
+      <h3>📉 Underweight — ควรซื้อเพิ่ม</h3>
+      ${underweight.length ? makeItems(underweight,'under') : '<div style="color:var(--muted)">ทุกตัว balanced แล้ว ✓</div>'}
+    </div>
+    <div class="alert-card">
+      <h3>📈 Overweight — พิจารณา Trim</h3>
+      ${overweight.length ? makeItems(overweight,'over') : '<div style="color:var(--muted)">ทุกตัว balanced แล้ว ✓</div>'}
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div class="alert-card">
+      <h3>🚀 Top Gainers (>+20%)</h3>
+      ${topGainers.length ? topGainers.map(h=>`<div class="alert-item">
+        <div class="info"><div class="name">${h.ticker}</div><div class="detail">${h.portName}</div></div>
+        <div class="dca-amount pos">+${fmt(h.gain_pct)}%</div>
+      </div>`).join('') : '<div style="color:var(--muted)">ไม่มี</div>'}
+    </div>
+    <div class="alert-card">
+      <h3>⚠️ Losers (&lt;-10%)</h3>
+      ${topLosers.length ? topLosers.map(h=>`<div class="alert-item">
+        <div class="info"><div class="name">${h.ticker}</div><div class="detail">${h.portName}</div></div>
+        <div class="dca-amount neg">${fmt(h.gain_pct)}%</div>
+      </div>`).join('') : '<div style="color:var(--muted)">ไม่มี</div>'}
+    </div>
+  </div>`;
+}
+
+async function loadData() {
+  document.getElementById('last-update').textContent = 'กำลังโหลด...';
+  try {
+    const res = await fetch('/api/portfolio');
+    portfolioData = await res.json();
+    document.getElementById('usdthb').textContent = `USD/THB: ${portfolioData.usdthb.toFixed(2)}`;
+    document.getElementById('last-update').textContent = 'อัปเดต: ' + new Date().toLocaleTimeString('th-TH');
+
+    // Clear old charts
+    Chart.helpers.each(Chart.instances, c => c.destroy());
+
+    buildPortfolioTab('core', portfolioData.portfolios.core, portfolioData.usdthb);
+    buildPortfolioTab('satellite', portfolioData.portfolios.satellite, portfolioData.usdthb);
+    buildAlertsTab(portfolioData);
+  } catch(e) {
+    document.getElementById('last-update').textContent = 'Error: ' + e.message;
+  }
+}
+
+loadData();
+// Auto-refresh every 5 minutes
+setInterval(loadData, 5 * 60 * 1000);
+</script>
+</body>
+</html>
